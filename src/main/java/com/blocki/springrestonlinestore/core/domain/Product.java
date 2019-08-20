@@ -1,6 +1,5 @@
 package com.blocki.springrestonlinestore.core.domain;
 
-import com.blocki.springrestonlinestore.core.enums.ProductStatus;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -15,6 +14,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Product extends BaseEntity {
+
+    public enum ProductStatus { AVALIABLE, OUT_OF_STOCK, ERROR }
 
     @Builder// Otherwise Builder will ignore the initializing expression for Set...
     public Product(Long id, User user, Category category,

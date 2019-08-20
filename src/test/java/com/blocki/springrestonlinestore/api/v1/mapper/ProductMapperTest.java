@@ -6,7 +6,6 @@ import com.blocki.springrestonlinestore.api.v1.model.UserDTO;
 import com.blocki.springrestonlinestore.core.domain.Category;
 import com.blocki.springrestonlinestore.core.domain.Product;
 import com.blocki.springrestonlinestore.core.domain.User;
-import com.blocki.springrestonlinestore.core.enums.ProductStatus;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -20,7 +19,7 @@ public class ProductMapperTest {
 
     private static final Long productID = 2L;
     private static final String productName = "Doll";
-    private static final ProductStatus productStatus = ProductStatus.AVALIABLE;
+    private static final Product.ProductStatus productStatus = Product.ProductStatus.AVALIABLE;
     private static final String description = "This is the description for the product";
     private static final BigDecimal cost = new BigDecimal(100.2);
     private static final Byte[] photo = {2,3,4};

@@ -4,7 +4,6 @@ import com.blocki.springrestonlinestore.api.v1.model.ShoppingCartDTO;
 import com.blocki.springrestonlinestore.api.v1.model.UserDTO;
 import com.blocki.springrestonlinestore.core.domain.ShoppingCart;
 import com.blocki.springrestonlinestore.core.domain.User;
-import com.blocki.springrestonlinestore.core.enums.CartStatus;
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -19,7 +18,7 @@ public class ShoppingCartMapperTest {
 
     private static final Long shoppingCartID = 2L;
     private static final LocalDate creationDate = LocalDate.of(2000, 12, 12);
-    private static final CartStatus cartStatus = CartStatus.ACTIVE;
+    private static final ShoppingCart.CartStatus cartStatus = ShoppingCart.CartStatus.ACTIVE;
     private static final String shoppingCartUrl = "/api/v1/shoppingCartItems";
 
     @Test

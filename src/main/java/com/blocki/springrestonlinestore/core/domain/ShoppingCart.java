@@ -1,6 +1,5 @@
 package com.blocki.springrestonlinestore.core.domain;
 
-import com.blocki.springrestonlinestore.core.enums.CartStatus;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,6 +18,8 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class ShoppingCart extends BaseEntity {
+
+    public enum CartStatus { ACTIVE, COMPLETED, ERROR }
 
     @Builder// Otherwise Builder will ignore the initializing expression for Set...
     public ShoppingCart(Long id, User user, Set<ShoppingCartItem> shoppingCartItems, LocalDate creationDate, CartStatus cartStatus) {

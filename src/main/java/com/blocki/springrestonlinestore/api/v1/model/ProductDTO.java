@@ -1,6 +1,6 @@
 package com.blocki.springrestonlinestore.api.v1.model;
 
-import com.blocki.springrestonlinestore.core.enums.ProductStatus;
+import com.blocki.springrestonlinestore.core.domain.Product;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,7 +38,7 @@ public class ProductDTO {
 
     @NotNull
     @JsonProperty("product_status")
-    private ProductStatus productStatus;
+    private Product.ProductStatus productStatus;
 
     @JsonProperty("creation_date")
     @NotBlank

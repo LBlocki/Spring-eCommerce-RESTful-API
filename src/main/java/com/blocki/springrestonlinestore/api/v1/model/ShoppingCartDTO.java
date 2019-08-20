@@ -1,6 +1,6 @@
 package com.blocki.springrestonlinestore.api.v1.model;
 
-import com.blocki.springrestonlinestore.core.enums.CartStatus;
+import com.blocki.springrestonlinestore.core.domain.ShoppingCart;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,7 +35,7 @@ public class ShoppingCartDTO {
 
     @JsonProperty("cart_status")
     @NotNull
-    private CartStatus cartStatus;
+    private ShoppingCart.CartStatus cartStatus;
 
     @NotBlank
     @JsonProperty("shopping_cart_url")

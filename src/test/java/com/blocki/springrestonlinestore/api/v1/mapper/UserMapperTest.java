@@ -2,7 +2,6 @@ package com.blocki.springrestonlinestore.api.v1.mapper;
 
 import com.blocki.springrestonlinestore.api.v1.model.UserDTO;
 import com.blocki.springrestonlinestore.core.domain.User;
-import com.blocki.springrestonlinestore.core.enums.Gender;
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -25,7 +24,7 @@ public class UserMapperTest {
     private static final String emailAddress = "dsadsa@asdsa.sda";
     private static final String username = "UserMyName";
     private static final char[] password = {'q','s','t'};
-    private static final Gender gender = Gender.MALE;
+    private static final User.Gender gender = User.Gender.MALE;
     private static final String userUrl = "/api/v1/users/5";
 
     @Test

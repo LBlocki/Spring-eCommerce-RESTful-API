@@ -1,6 +1,6 @@
 package com.blocki.springrestonlinestore.api.v1.model;
 
-import com.blocki.springrestonlinestore.core.enums.Gender;
+import com.blocki.springrestonlinestore.core.domain.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -71,7 +71,7 @@ public class UserDTO {
     private char[] password;
 
     @NotNull
-    private Gender gender;
+    private User.Gender gender;
 
     @NotBlank
     @JsonProperty("user_url")

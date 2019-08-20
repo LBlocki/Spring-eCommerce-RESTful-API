@@ -1,6 +1,5 @@
 package com.blocki.springrestonlinestore.core.domain;
 
-import com.blocki.springrestonlinestore.core.enums.Gender;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -17,6 +16,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User extends BaseEntity {
+
+    public enum Gender {MALE, FEMALE}
 
     @Builder
     public User(Long id, Set<Product> products, Set<ShoppingCart> shoppingCarts, String firstName, String lastName,
