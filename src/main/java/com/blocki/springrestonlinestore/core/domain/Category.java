@@ -29,6 +29,6 @@ public class Category extends BaseEntity {
     @OneToMany(mappedBy = "category")
     private Set<Product> products = new HashSet<>();
 
-    @Column(name = "name")
+    @Column(unique = true, nullable = false)
     private String name;
 }

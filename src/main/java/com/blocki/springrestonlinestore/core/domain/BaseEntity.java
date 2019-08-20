@@ -15,7 +15,7 @@ class BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column( updatable = false, nullable = false, unique = true)
     private Long id;
 
 }

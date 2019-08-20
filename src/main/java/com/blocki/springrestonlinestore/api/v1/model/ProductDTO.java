@@ -9,8 +9,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.lang.Nullable;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -44,7 +42,6 @@ public class ProductDTO {
     private  String name;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
     @JsonProperty("product_status")
     private ProductStatus productStatus;
 

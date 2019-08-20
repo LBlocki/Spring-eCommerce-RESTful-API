@@ -49,10 +49,10 @@ public class User extends BaseEntity {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "address", nullable = false)
+    @Column(nullable = false)
     private String address;  //todo Address should be refactored in the future : perhaps another table to allow control and validation for DTO
 
-    @Column(name = "country", nullable = false)
+    @Column(nullable = false)
     private String country; //todo Country should be refactored in the future : perhaps another table to allow control and validation for DTO
 
     @Column(name = "phone_number", nullable = false)
@@ -62,13 +62,14 @@ public class User extends BaseEntity {
     @Column(name = "creation_date", updatable = false, nullable = false)
     private LocalDate creationDate;
 
-    @Column(name = "email_address", nullable = false)
+    @Column(name = "email_address", nullable = false, unique = true)
     private String emailAddress;
 
-    @Column(name = "password", nullable = false)
+    @Column(nullable = false)
     private String password;    //todo Password needs refactoring for validation purposes for DTO
 
-    @Column(name = "gender", nullable = false)
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
 

@@ -33,7 +33,7 @@ public class ShoppingCartItem extends  BaseEntity {
     @JoinColumn(name = "shopping_cart_id")
     private ShoppingCart shoppingCart;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(nullable = false)
     private int quantity;
 
     @Column(name = "total_cost", nullable = false)

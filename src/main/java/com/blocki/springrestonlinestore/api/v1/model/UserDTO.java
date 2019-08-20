@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -69,7 +67,6 @@ public class UserDTO {
     private String password;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     @NotBlank

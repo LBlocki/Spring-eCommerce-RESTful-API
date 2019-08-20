@@ -46,22 +46,21 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product")
     private Set<ShoppingCartItem> shoppingCartItems  = new HashSet<>();
 
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String name;
 
     @Column(name = "product_status", nullable = false)
+    @Enumerated(EnumType.STRING)
     private ProductStatus productStatus;
 
     @CreationTimestamp
     @Column(name = "creation_date", updatable = false, nullable = false)
     private LocalDate creationDate;
 
-    @Column(name = "description")
     private String description;
 
-    @Column(name = "cost", nullable = false)
+    @Column(nullable = false)
     private BigDecimal cost;
 
-    @Column(name = "photo")
     private Byte[] photo;     //todo refactor photo for holding list of paths to the actual images instead of storing them in database
 }

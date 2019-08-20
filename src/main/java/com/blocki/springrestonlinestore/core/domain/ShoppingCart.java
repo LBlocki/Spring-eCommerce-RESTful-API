@@ -42,5 +42,6 @@ public class ShoppingCart extends BaseEntity {
     private LocalDate creationDate;
 
     @Column(name = "cart_status", nullable = false)
+    @Enumerated(EnumType.STRING)
     private CartStatus cartStatus;
 }
