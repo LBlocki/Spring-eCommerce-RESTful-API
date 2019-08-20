@@ -16,7 +16,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-class Category extends BaseEntity {
+public class Category extends BaseEntity {
 
     @Builder// Otherwise Builder will ignore the initializing expression for Set...
     public Category(Long id, Set<Product> products,String name) {

@@ -17,7 +17,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-class Product extends BaseEntity {
+public class Product extends BaseEntity {
 
     @Builder// Otherwise Builder will ignore the initializing expression for Set...
     public Product(Long id, User user, Category category, Set<ShoppingCartItem> shoppingCartItems,
@@ -46,20 +46,20 @@ class Product extends BaseEntity {
     @OneToMany(mappedBy = "product")
     private Set<ShoppingCartItem> shoppingCartItems  = new HashSet<>();
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "product_status")
+    @Column(name = "product_status", nullable = false)
     private ProductStatus productStatus;
 
     @CreationTimestamp
-    @Column(name = "creation_date", updatable = false)
+    @Column(name = "creation_date", updatable = false, nullable = false)
     private LocalDate creationDate;
 
     @Column(name = "description")
     private String description;
 
-    @Column(name = "cost")
+    @Column(name = "cost", nullable = false)
     private BigDecimal cost;
 
     @Column(name = "photo")

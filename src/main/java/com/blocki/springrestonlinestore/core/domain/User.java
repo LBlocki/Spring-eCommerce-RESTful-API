@@ -16,7 +16,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-class User extends BaseEntity {
+public class User extends BaseEntity {
 
     @Builder
     public User(Long id, Set<Product> products, Set<ShoppingCart> shoppingCarts,
@@ -43,30 +43,32 @@ class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     Set<ShoppingCart> shoppingCarts = new HashSet<>();
 
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "address")
+    @Column(name = "address", nullable = false)
     private String address;  //todo Address should be refactored in the future : perhaps another table to allow control and validation for DTO
 
-    @Column(name = "country")
+    @Column(name = "country", nullable = false)
     private String country; //todo Country should be refactored in the future : perhaps another table to allow control and validation for DTO
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber; //todo phoneNumber requires validation. Libphonenumber with Hibernate Validator seems like a good choice for DTO
 
     @CreationTimestamp
-    @Column(name = "creation_date", updatable = false)
+    @Column(name = "creation_date", updatable = false, nullable = false)
     private LocalDate creationDate;
 
-    @Column(name = "email_address")
+    @Column(name = "email_address", nullable = false)
     private String emailAddress;
 
+    @Column(name = "password", nullable = false)
     private String password;    //todo Password needs refactoring for validation purposes for DTO
 
+    @Column(name = "gender", nullable = false)
     private Gender gender;
 
 

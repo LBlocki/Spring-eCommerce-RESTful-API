@@ -18,7 +18,7 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-class ShoppingCart extends BaseEntity {
+public class ShoppingCart extends BaseEntity {
 
     @Builder// Otherwise Builder will ignore the initializing expression for Set...
     public ShoppingCart(Long id, User user, Set<ShoppingCartItem> shoppingCartItems, LocalDate creationDate, CartStatus cartStatus) {
@@ -38,9 +38,9 @@ class ShoppingCart extends BaseEntity {
     private Set<ShoppingCartItem> shoppingCartItems = new HashSet<>();
 
     @CreationTimestamp
-    @Column(name = "creation_date", updatable = false)
+    @Column(name = "creation_date", updatable = false, nullable = false)
     private LocalDate creationDate;
 
-    @Column(name = "cart_status")
+    @Column(name = "cart_status", nullable = false)
     private CartStatus cartStatus;
 }

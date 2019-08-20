@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-class ShoppingCartItem extends  BaseEntity {
+public class ShoppingCartItem extends  BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -23,9 +23,9 @@ class ShoppingCartItem extends  BaseEntity {
     @JoinColumn(name = "shopping_cart_id")
     private ShoppingCart shoppingCart;
 
-    @Column(name = "quantity")
+    @Column(name = "quantity", nullable = false)
     private int quantity;
 
-    @Column(name = "total_cost")
+    @Column(name = "total_cost", nullable = false)
     private BigDecimal totalCost;
 }
