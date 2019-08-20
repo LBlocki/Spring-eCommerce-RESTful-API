@@ -1,7 +1,10 @@
 package com.blocki.springrestonlinestore.core.domain;
 
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -10,10 +13,17 @@ import java.math.BigDecimal;
 @Table(name = "Shopping_Cart_Items")
 @Data
 @EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class ShoppingCartItem extends  BaseEntity {
+
+    @Builder
+    public ShoppingCartItem(Long id, Product product, ShoppingCart shoppingCart, int quantity, BigDecimal totalCost) {
+        super(id);
+        this.product = product;
+        this.shoppingCart = shoppingCart;
+        this.quantity = quantity;
+        this.totalCost = totalCost;
+    }
 
     @ManyToOne
     @JoinColumn(name = "product_id")
