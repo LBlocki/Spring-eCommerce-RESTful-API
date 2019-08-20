@@ -41,7 +41,7 @@ public class Product extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
-    Category category;
+    private Category category;
 
     @OneToMany(mappedBy = "product")
     private Set<ShoppingCartItem> shoppingCartItems  = new HashSet<>();

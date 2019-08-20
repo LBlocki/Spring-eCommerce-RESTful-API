@@ -38,10 +38,10 @@ public class User extends BaseEntity {
     }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    Set<Product> products = new HashSet<>();
+    private Set<Product> products = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    Set<ShoppingCart> shoppingCarts = new HashSet<>();
+    private Set<ShoppingCart> shoppingCarts = new HashSet<>();
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
