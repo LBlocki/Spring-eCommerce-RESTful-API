@@ -16,6 +16,9 @@ import java.math.BigDecimal;
 public class ShoppingCartItemDTO {
 
     @NotBlank
+    private Long id;
+
+    @NotBlank
     @JsonProperty("product")
     private ProductDTO productDTO;
 

@@ -26,6 +26,9 @@ import java.util.Set;
 public class ProductDTO {
 
     @NotBlank
+    private Long id;
+
+    @NotBlank
     @JsonProperty("user_seller")
     private UserDTO userDTO;
 

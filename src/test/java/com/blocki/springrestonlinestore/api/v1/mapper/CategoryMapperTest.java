@@ -43,10 +43,11 @@ public class CategoryMapperTest {
         //then
         assertNotNull(categoryDTO);
         assertNotNull(categoryDTO.getProducts());
-        assertEquals(2, categoryDTO.getProducts().size());
+
         assertEquals(categoryDTO.getName(), category.getName());
+        assertEquals(categoryDTO.getId(), category.getId());
+
         assertEquals(categoryDTO.getProducts().size(), category.getProducts().size());
 
-        //todo Cannot verify ID's. Need for refactoring
     }
 }

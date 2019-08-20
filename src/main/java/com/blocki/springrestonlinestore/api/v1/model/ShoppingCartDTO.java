@@ -20,6 +20,9 @@ import java.util.Set;
 @AllArgsConstructor
 public class ShoppingCartDTO {
 
+    @NotBlank
+    private Long id;
+
     @JsonProperty("user")
     @NotBlank
     private UserDTO userDTO;

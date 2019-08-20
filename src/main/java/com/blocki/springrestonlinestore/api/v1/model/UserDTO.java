@@ -22,6 +22,9 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserDTO {
 
+    @NotBlank
+    private Long id;
+
     @JsonProperty("products")
     private Set<ProductDTO> productDTOs = new HashSet<>();
 

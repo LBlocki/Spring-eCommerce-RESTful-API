@@ -14,6 +14,9 @@ import java.util.Set;
 @AllArgsConstructor
 public class CategoryDTO {
 
+    @NotBlank
+    private Long id;
+
     private Set<ProductDTO> products = new HashSet<>();
 
     @NotBlank
