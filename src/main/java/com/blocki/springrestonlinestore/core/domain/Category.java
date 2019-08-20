@@ -2,11 +2,10 @@ package com.blocki.springrestonlinestore.core.domain;
 
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -20,7 +19,7 @@ import java.util.Set;
 class Category extends BaseEntity {
 
     @Builder// Otherwise Builder will ignore the initializing expression for Set...
-    public Category(Long id, Set<Product> products, @NotBlank @Size(min = 1, max = 16) String name) {
+    public Category(Long id, Set<Product> products,String name) {
 
         super(id);
         this.products = Optional.ofNullable(products).orElse(this.products);
@@ -30,7 +29,6 @@ class Category extends BaseEntity {
     @OneToMany(mappedBy = "category")
     private Set<Product> products = new HashSet<>();
 
-    @NotBlank
-    @Size(min = 1, max = 16)
+    @Column(name = "name")
     private String name;
 }

@@ -3,11 +3,8 @@ package com.blocki.springrestonlinestore.core.domain;
 import com.blocki.springrestonlinestore.core.enums.ProductStatus;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -23,9 +20,8 @@ import java.util.Set;
 class Product extends BaseEntity {
 
     @Builder// Otherwise Builder will ignore the initializing expression for Set...
-    public Product(Long id, @NotBlank User user, @NotBlank Category category, Set<ShoppingCartItem> shoppingCartItems,
-                   @NotBlank @Size(min = 1, max = 32) String name, @NonNull ProductStatus productStatus,
-                   @NotBlank LocalDate creationDate, @Nullable String description, @NotBlank BigDecimal cost, @Nullable Byte[] photo) {
+    public Product(Long id, User user, Category category, Set<ShoppingCartItem> shoppingCartItems,
+                   String name, ProductStatus productStatus, LocalDate creationDate, String description, BigDecimal cost, Byte[] photo) {
 
         super(id);
         this.user = user;
@@ -41,41 +37,31 @@ class Product extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "seller_id", nullable = false)
-    @NotBlank
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
-    @NotBlank
     Category category;
 
     @OneToMany(mappedBy = "product")
     private Set<ShoppingCartItem> shoppingCartItems  = new HashSet<>();
 
-    @NotBlank
-    @Size(min = 1, max = 32)
     @Column(name = "name")
     private String name;
 
-    @Enumerated(EnumType.STRING)
-    @NonNull
     @Column(name = "product_status")
     private ProductStatus productStatus;
 
     @CreationTimestamp
-    @NotBlank
-    @Column(name = "creation_date")
+    @Column(name = "creation_date", updatable = false)
     private LocalDate creationDate;
 
     @Column(name = "description")
-    @Nullable
     private String description;
 
     @Column(name = "cost")
-    @NotBlank
     private BigDecimal cost;
 
     @Column(name = "photo")
-    @Nullable
     private Byte[] photo;     //todo refactor photo for holding list of paths to the actual images instead of storing them in database
 }

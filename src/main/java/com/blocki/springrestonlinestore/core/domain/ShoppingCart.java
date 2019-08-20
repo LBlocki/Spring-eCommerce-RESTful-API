@@ -1,11 +1,13 @@
 package com.blocki.springrestonlinestore.core.domain;
 
 import com.blocki.springrestonlinestore.core.enums.CartStatus;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Optional;
@@ -18,9 +20,8 @@ import java.util.Set;
 @NoArgsConstructor
 class ShoppingCart extends BaseEntity {
 
-    // Otherwise Builder will ignore the initializing expression for Set...
-    @Builder
-    public ShoppingCart(Long id, @NotBlank User user, Set<ShoppingCartItem> shoppingCartItems, @NotBlank LocalDate creationDate, @NonNull CartStatus cartStatus) {
+    @Builder// Otherwise Builder will ignore the initializing expression for Set...
+    public ShoppingCart(Long id, User user, Set<ShoppingCartItem> shoppingCartItems, LocalDate creationDate, CartStatus cartStatus) {
 
         super(id);
         this.user = user;
@@ -31,19 +32,15 @@ class ShoppingCart extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @NotBlank
     private User user;
 
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL)
     private Set<ShoppingCartItem> shoppingCartItems = new HashSet<>();
 
     @CreationTimestamp
-    @NotBlank
-    @Column(name = "creation_date")
+    @Column(name = "creation_date", updatable = false)
     private LocalDate creationDate;
 
-    @Enumerated(EnumType.STRING)
-    @NonNull
     @Column(name = "cart_status")
     private CartStatus cartStatus;
 }
