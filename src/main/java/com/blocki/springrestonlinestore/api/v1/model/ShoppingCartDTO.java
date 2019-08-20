@@ -28,7 +28,7 @@ public class ShoppingCartDTO {
     private UserDTO userDTO;
 
     @JsonProperty("shopping_cart_items")
-    private Set<ShoppingCartItemDTO> shoppingCartItemDTOS = new HashSet<>();
+    private Set<ShoppingCartItemDTO> shoppingCartItemDTOs = new HashSet<>();
 
     @NotBlank
     @JsonProperty("creation_date")

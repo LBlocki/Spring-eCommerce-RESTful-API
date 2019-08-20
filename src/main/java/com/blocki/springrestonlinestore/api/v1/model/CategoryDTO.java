@@ -17,7 +17,7 @@ public class CategoryDTO {
     @NotBlank
     private Long id;
 
-    private Set<ProductDTO> products = new HashSet<>();
+    private Set<ProductDTO> productsDTO = new HashSet<>();
 
     @NotBlank
     @Size(min = 1, max = 32)
