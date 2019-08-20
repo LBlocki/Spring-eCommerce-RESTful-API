@@ -14,11 +14,9 @@ public interface ProductMapper {
 
     @Mapping(source = "user", target = "userDTO")
     @Mapping(source = "category", target = "categoryDTO")
-    @Mapping(source = "shoppingCartItems", target = "shoppingCartItemDTOs")
     ProductDTO productToProductDTO(Product product);
 
     @Mapping(source = "userDTO", target = "user")
     @Mapping(source = "categoryDTO", target = "category")
-    @Mapping(source = "shoppingCartItemDTOs", target = "shoppingCartItems")
     Product productDTOToProduct(ProductDTO productDTO);
 }

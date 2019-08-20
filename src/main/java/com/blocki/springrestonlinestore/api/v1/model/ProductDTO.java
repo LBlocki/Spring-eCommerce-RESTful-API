@@ -15,8 +15,6 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -33,9 +31,6 @@ public class ProductDTO {
     @NotBlank
     @JsonProperty("category")
     private CategoryDTO categoryDTO;
-
-    @JsonProperty("shopping_cart_items")
-    private Set<ShoppingCartItemDTO> shoppingCartItemDTOs = new HashSet<>();
 
     @NotBlank
     @Size(min = 1, max = 32)

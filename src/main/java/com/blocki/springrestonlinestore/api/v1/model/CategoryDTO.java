@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -16,8 +14,6 @@ public class CategoryDTO {
 
     @NotBlank
     private Long id;
-
-    private Set<ProductDTO> productsDTO = new HashSet<>();
 
     @NotBlank
     @Size(min = 1, max = 32)
