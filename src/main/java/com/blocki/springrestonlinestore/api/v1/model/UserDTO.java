@@ -63,8 +63,12 @@ public class UserDTO {
     private String emailAddress;
 
     @NotBlank
+    @Size(min = 1, max = 16)
+    private String username;
+
+    @NotBlank
     @Size(min = 6, max = 32)
-    private String password;
+    private char[] password;
 
     @NotNull
     private Gender gender;

@@ -8,8 +8,7 @@ import org.junit.Test;
 import java.time.LocalDate;
 import java.util.HashSet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class UserMapperTest {
 
@@ -24,7 +23,8 @@ public class UserMapperTest {
     private static final String phoneNumber = "213122112";
     private static final LocalDate creationDate = LocalDate.of(2000,12,12);
     private static final String emailAddress = "dsadsa@asdsa.sda";
-    private static final String password = "qwerty";
+    private static final String username = "UserMyName";
+    private static final char[] password = {'q','s','t'};
     private static final Gender gender = Gender.MALE;
     private static final String userUrl = "/api/v1/users/5";
 
@@ -40,6 +40,7 @@ public class UserMapperTest {
                 .phoneNumber(phoneNumber)
                 .creationDate(creationDate)
                 .emailAddress(emailAddress)
+                .username(username)
                 .password(password)
                 .gender(gender)
                 .products(new HashSet<>())
@@ -60,7 +61,8 @@ public class UserMapperTest {
         assertEquals(user.getCountry(), userDTO.getCountry());
         assertEquals(user.getCreationDate(), userDTO.getCreationDate());
         assertEquals(user.getEmailAddress(), userDTO.getEmailAddress());
-        assertEquals(user.getPassword(), userDTO.getPassword());
+        assertEquals(user.getUsername(), userDTO.getUsername());
+        assertArrayEquals(user.getPassword(), userDTO.getPassword());
         assertEquals(user.getGender(), userDTO.getGender());
     }
 
@@ -76,6 +78,7 @@ public class UserMapperTest {
         userDTO.setPhoneNumber(phoneNumber);
         userDTO.setCreationDate(creationDate);
         userDTO.setEmailAddress(emailAddress);
+        userDTO.setUsername(username);
         userDTO.setPassword(password);
         userDTO.setGender(gender);
         userDTO.setProductDTOs(new HashSet<>());
@@ -96,7 +99,8 @@ public class UserMapperTest {
         assertEquals(user.getCountry(), userDTO.getCountry());
         assertEquals(user.getCreationDate(), userDTO.getCreationDate());
         assertEquals(user.getEmailAddress(), userDTO.getEmailAddress());
-        assertEquals(user.getPassword(), userDTO.getPassword());
+        assertEquals(user.getUsername(), userDTO.getUsername());
+        assertArrayEquals(user.getPassword(), userDTO.getPassword());
         assertEquals(user.getGender(), userDTO.getGender());
 
 

@@ -19,9 +19,9 @@ import java.util.Set;
 public class User extends BaseEntity {
 
     @Builder
-    public User(Long id, Set<Product> products, Set<ShoppingCart> shoppingCarts,
-                String firstName, String lastName, String address, String country,
-                String phoneNumber, LocalDate creationDate, String emailAddress, String password, Gender gender) {
+    public User(Long id, Set<Product> products, Set<ShoppingCart> shoppingCarts, String firstName, String lastName,
+                String address, String country, String phoneNumber, LocalDate creationDate, String emailAddress,
+                String username, char[] password, Gender gender) {
 
         super(id);
         this.products = Optional.ofNullable(products).orElse(this.products);
@@ -33,6 +33,7 @@ public class User extends BaseEntity {
         this.phoneNumber = phoneNumber;
         this.creationDate = creationDate;
         this.emailAddress = emailAddress;
+        this.username = username;
         this.password = password;
         this.gender = gender;
     }
@@ -65,8 +66,11 @@ public class User extends BaseEntity {
     @Column(name = "email_address", nullable = false, unique = true)
     private String emailAddress;
 
+    @Column(nullable = false, unique = true)
+    private String username;
+
     @Column(nullable = false)
-    private String password;    //todo Password needs refactoring for validation purposes for DTO
+    private char[] password;    //todo Password needs refactoring for validation purposes for DTO
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
