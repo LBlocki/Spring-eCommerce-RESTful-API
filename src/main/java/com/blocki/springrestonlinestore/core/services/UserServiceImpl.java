@@ -2,6 +2,7 @@ package com.blocki.springrestonlinestore.core.services;
 
 import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
 import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
+import com.blocki.springrestonlinestore.api.v1.models.UserListDTO;
 import com.blocki.springrestonlinestore.core.domain.User;
 import com.blocki.springrestonlinestore.core.repositories.UserRepository;
 import org.mapstruct.factory.Mappers;
@@ -24,7 +25,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> getAllUsers() {
+    public UserListDTO getAllUsers() {
 
         List<UserDTO> users = new ArrayList<>();
 
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService {
             users.add(userDTO);
         }
 
-       return users;
+       return new UserListDTO(users);
     }
 
     @Override

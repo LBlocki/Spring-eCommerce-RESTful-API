@@ -2,6 +2,7 @@ package com.blocki.springrestonlinestore.core.services;
 
 import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
 import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
+import com.blocki.springrestonlinestore.api.v1.models.UserListDTO;
 import com.blocki.springrestonlinestore.core.domain.User;
 import com.blocki.springrestonlinestore.core.repositories.UserRepository;
 import org.junit.Before;
@@ -46,11 +47,11 @@ public class UserServiceImplTest {
         Mockito.when(userRepository.findAll()).thenReturn(users);
 
         //when
-        List<UserDTO> userDTOs = userService.getAllUsers();
+        UserListDTO userDTOs = userService.getAllUsers();
 
         //than
         assertNotNull(userDTOs);
-        assertEquals(userDTOs.size(), users.size());
+        assertEquals(2, users.size());
 
         Mockito.verify(userRepository, Mockito.times(1)).findAll();
     }

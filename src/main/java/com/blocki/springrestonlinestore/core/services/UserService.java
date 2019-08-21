@@ -1,12 +1,11 @@
 package com.blocki.springrestonlinestore.core.services;
 
 import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
-
-import java.util.List;
+import com.blocki.springrestonlinestore.api.v1.models.UserListDTO;
 
 public interface UserService {
 
-    List<UserDTO> getAllUsers();
+    UserListDTO getAllUsers();
 
     UserDTO getUserById(Long id);
 
