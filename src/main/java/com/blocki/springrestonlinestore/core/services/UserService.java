@@ -1,6 +1,6 @@
 package com.blocki.springrestonlinestore.core.services;
 
-import com.blocki.springrestonlinestore.api.v1.model.UserDTO;
+import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
 
 import java.util.List;
 

@@ -1,8 +1,8 @@
-package com.blocki.springrestonlinestore.api.v1.mapper;
+package com.blocki.springrestonlinestore.api.v1.mappers;
 
-import com.blocki.springrestonlinestore.api.v1.model.ProductDTO;
-import com.blocki.springrestonlinestore.api.v1.model.ShoppingCartDTO;
-import com.blocki.springrestonlinestore.api.v1.model.ShoppingCartItemDTO;
+import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
+import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartDTO;
+import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartItemDTO;
 import com.blocki.springrestonlinestore.core.domain.Product;
 import com.blocki.springrestonlinestore.core.domain.ShoppingCart;
 import com.blocki.springrestonlinestore.core.domain.ShoppingCartItem;

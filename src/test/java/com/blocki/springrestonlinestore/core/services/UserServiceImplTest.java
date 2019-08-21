@@ -1,7 +1,7 @@
 package com.blocki.springrestonlinestore.core.services;
 
-import com.blocki.springrestonlinestore.api.v1.mapper.UserMapper;
-import com.blocki.springrestonlinestore.api.v1.model.UserDTO;
+import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
+import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
 import com.blocki.springrestonlinestore.core.domain.User;
 import com.blocki.springrestonlinestore.core.repositories.UserRepository;
 import org.junit.Before;

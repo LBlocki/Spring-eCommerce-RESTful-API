@@ -1,4 +1,4 @@
-package com.blocki.springrestonlinestore.api.v1.model;
+package com.blocki.springrestonlinestore.api.v1.models;
 
 import com.blocki.springrestonlinestore.core.domain.ShoppingCart;
 import com.fasterxml.jackson.annotation.JsonProperty;

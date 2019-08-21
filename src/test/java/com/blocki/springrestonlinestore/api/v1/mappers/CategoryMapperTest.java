@@ -1,6 +1,6 @@
-package com.blocki.springrestonlinestore.api.v1.mapper;
+package com.blocki.springrestonlinestore.api.v1.mappers;
 
-import com.blocki.springrestonlinestore.api.v1.model.CategoryDTO;
+import com.blocki.springrestonlinestore.api.v1.models.CategoryDTO;
 import com.blocki.springrestonlinestore.core.domain.Category;
 import org.junit.Test;
 

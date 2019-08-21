@@ -1,4 +1,4 @@
-package com.blocki.springrestonlinestore.api.v1.model;
+package com.blocki.springrestonlinestore.api.v1.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,6 +1,6 @@
-package com.blocki.springrestonlinestore.api.v1.mapper;
+package com.blocki.springrestonlinestore.api.v1.mappers;
 
-import com.blocki.springrestonlinestore.api.v1.model.ProductDTO;
+import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
 import com.blocki.springrestonlinestore.core.domain.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

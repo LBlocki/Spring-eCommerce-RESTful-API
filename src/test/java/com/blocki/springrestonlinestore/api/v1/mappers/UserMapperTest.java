@@ -1,6 +1,6 @@
-package com.blocki.springrestonlinestore.api.v1.mapper;
+package com.blocki.springrestonlinestore.api.v1.mappers;
 
-import com.blocki.springrestonlinestore.api.v1.model.UserDTO;
+import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
 import com.blocki.springrestonlinestore.core.domain.User;
 import org.junit.Test;
 
