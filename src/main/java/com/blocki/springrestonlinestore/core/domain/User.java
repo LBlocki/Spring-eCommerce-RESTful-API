@@ -1,5 +1,6 @@
 package com.blocki.springrestonlinestore.core.domain;
 
+import com.blocki.springrestonlinestore.core.validators.PhoneNumberConstraint;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -58,6 +59,7 @@ public class User extends BaseEntity {
     private String country; //todo Country should be refactored in the future : perhaps another table to allow control and validation for DTO
 
     @Column(name = "phone_number", nullable = false)
+    @PhoneNumberConstraint
     private String phoneNumber; //todo phoneNumber requires validation. Libphonenumber with Hibernate Validator seems like a good choice for DTO
 
     @CreationTimestamp
