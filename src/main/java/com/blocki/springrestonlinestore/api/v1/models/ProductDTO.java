@@ -21,14 +21,14 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ProductDTO {
 
-    @NotBlank
+    @NotNull
     private Long id;
 
-    @NotBlank
+    @NotNull
     @JsonProperty("user_seller")
     private UserDTO userDTO;
 
-    @NotBlank
+    @NotNull
     @JsonProperty("category")
     private CategoryDTO categoryDTO;
 
@@ -41,7 +41,7 @@ public class ProductDTO {
     private Product.ProductStatus productStatus;
 
     @JsonProperty("creation_date")
-    @NotBlank
+    @NotNull
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate creationDate;
 
@@ -50,7 +50,7 @@ public class ProductDTO {
 
     @Positive
     @NumberFormat(pattern = "#.##")
-    @NotBlank
+    @NotNull
     private BigDecimal cost;
 
     @Nullable

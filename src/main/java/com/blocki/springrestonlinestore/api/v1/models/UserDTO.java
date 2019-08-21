@@ -22,7 +22,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserDTO {
 
-    @NotBlank
+    @NotNull
     private Long id;
 
     @JsonProperty("products")
@@ -55,8 +55,8 @@ public class UserDTO {
     @PhoneNumberValidator
     private String phoneNumber;
 
-    @NotBlank
     @JsonProperty("creation_date")
+    @NotNull
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate creationDate;
 
@@ -70,8 +70,8 @@ public class UserDTO {
     @Size(min = 1, max = 16)
     private String username;
 
-    @NotBlank
     @Size(min = 6, max = 32)
+    @NotNull
     private char[] password;
 
     @NotNull

@@ -18,17 +18,17 @@ import java.util.Set;
 @AllArgsConstructor
 public class ShoppingCartDTO {
 
-    @NotBlank
+    @NotNull
     private Long id;
 
     @JsonProperty("user")
-    @NotBlank
+    @NotNull
     private UserDTO userDTO;
 
     @JsonProperty("shopping_cart_items")
     private Set<ShoppingCartItemDTO> shoppingCartItemDTOs = new HashSet<>();
 
-    @NotBlank
+    @NotNull
     @JsonProperty("creation_date")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate creationDate;
