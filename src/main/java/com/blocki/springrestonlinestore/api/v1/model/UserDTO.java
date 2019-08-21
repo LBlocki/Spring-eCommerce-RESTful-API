@@ -1,6 +1,7 @@
 package com.blocki.springrestonlinestore.api.v1.model;
 
 import com.blocki.springrestonlinestore.core.domain.User;
+import com.blocki.springrestonlinestore.core.validators.ExtendedEmailValidator;
 import com.blocki.springrestonlinestore.core.validators.PhoneNumberValidator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -60,6 +61,7 @@ public class UserDTO {
     private LocalDate creationDate;
 
     @Email
+    @ExtendedEmailValidator
     @NotBlank
     @Size(min = 4, max = 32)
     private String emailAddress;
