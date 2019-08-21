@@ -1,4 +1,4 @@
-package com.blocki.springrestonlinestore.core.validators;
+package com.blocki.springrestonlinestore.core.config.validators;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
