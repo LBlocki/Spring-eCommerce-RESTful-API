@@ -28,7 +28,7 @@ public class ShoppingCartItemDTO {
 
     @NotBlank
     @Positive
-    private int quantity;
+    private Integer quantity;
 
     @Positive
     @NotBlank

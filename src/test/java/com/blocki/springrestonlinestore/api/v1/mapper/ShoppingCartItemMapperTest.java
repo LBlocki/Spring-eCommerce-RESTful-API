@@ -18,7 +18,7 @@ public class ShoppingCartItemMapperTest {
     private ShoppingCartItemMapper shoppingCartItemConverter = ShoppingCartItemMapper.INSTANCE;
 
     private static final Long shoppingCartItemId = 2L;
-    private static final int quantity = 10;
+    private static final Integer quantity = 10;
     private static final BigDecimal totalCost = BigDecimal.valueOf(30);
     private static final String shoppingCartItemUrl = "/api/v1/shoppingCartItem/2";
 

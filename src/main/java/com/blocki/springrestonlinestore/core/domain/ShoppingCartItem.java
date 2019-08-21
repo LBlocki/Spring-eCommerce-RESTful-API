@@ -34,7 +34,7 @@ public class ShoppingCartItem extends  BaseEntity {
     private ShoppingCart shoppingCart;
 
     @Column(nullable = false)
-    private int quantity;
+    private Integer quantity;
 
     @Column(name = "total_cost", nullable = false)
     private BigDecimal totalCost;
