@@ -1,7 +1,7 @@
 package com.blocki.springrestonlinestore.api.v1.model;
 
 import com.blocki.springrestonlinestore.core.domain.User;
-import com.blocki.springrestonlinestore.core.validators.PhoneNumberConstraint;
+import com.blocki.springrestonlinestore.core.validators.PhoneNumberValidator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -51,7 +51,7 @@ public class UserDTO {
     @NotBlank
     @Size(min = 1, max = 12)
     @JsonProperty("phone_number")
-    @PhoneNumberConstraint
+    @PhoneNumberValidator
     private String phoneNumber;
 
     @NotBlank

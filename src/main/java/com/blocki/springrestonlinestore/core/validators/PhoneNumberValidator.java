@@ -1,20 +1,18 @@
 package com.blocki.springrestonlinestore.core.validators;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 
-public class PhoneNumberValidator implements ConstraintValidator<PhoneNumberConstraint, String> {
 
-    @Override
-    public void initialize(PhoneNumberConstraint contactNumber) {
+import javax.validation.Constraint;
+import javax.validation.Payload;
+import java.lang.annotation.*;
 
-    }
+@Documented
+@Constraint(validatedBy = PhoneNumberValidatorImpl.class)
+@Target( { ElementType.METHOD, ElementType.FIELD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface PhoneNumberValidator {
 
-    @Override
-    public boolean isValid(String contactField, ConstraintValidatorContext cxt) {
-
-        return contactField != null && contactField.matches("[0-9]+")
-                && (contactField.length() > 8) && (contactField.length() < 14);
-    }
-
+    String message() default "Invalid phone number";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
 }
