@@ -31,8 +31,8 @@ public class ShoppingCart extends BaseEntity {
         this.cartStatus = cartStatus;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL)

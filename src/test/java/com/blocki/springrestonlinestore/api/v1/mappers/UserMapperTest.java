@@ -1,6 +1,8 @@
 package com.blocki.springrestonlinestore.api.v1.mappers;
 
+import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartDTO;
 import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
+import com.blocki.springrestonlinestore.core.domain.ShoppingCart;
 import com.blocki.springrestonlinestore.core.domain.User;
 import org.junit.Test;
 
@@ -43,14 +45,14 @@ public class UserMapperTest {
                 .password(password)
                 .gender(gender)
                 .products(new HashSet<>())
-                .shoppingCarts(new HashSet<>())
+                .shoppingCart(new ShoppingCart())
                 .build();
 
         UserDTO userDTO = userConverter.userToUserDTO(user);
 
         assertNotNull(userDTO);
         assertNotNull(userDTO.getProductDTOs());
-        assertNotNull(userDTO.getShoppingCartDTOs());
+        assertNotNull(userDTO.getShoppingCartDTO());
 
         assertEquals(user.getId(), userDTO.getId());
         assertEquals(user.getFirstName(), userDTO.getFirstName());
@@ -81,14 +83,14 @@ public class UserMapperTest {
         userDTO.setPassword(password);
         userDTO.setGender(gender);
         userDTO.setProductDTOs(new HashSet<>());
-        userDTO.setShoppingCartDTOs(new HashSet<>());
+        userDTO.setShoppingCartDTO(new ShoppingCartDTO());
         userDTO.setUserUrl(userUrl);
 
         User user = userConverter.userDTOToUser(userDTO);
 
         assertNotNull(user);
         assertNotNull(user.getProducts());
-        assertNotNull(user.getShoppingCarts());
+        assertNotNull(user.getShoppingCart());
 
         assertEquals(user.getId(), userDTO.getId());
         assertEquals(user.getFirstName(), userDTO.getFirstName());
