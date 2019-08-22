@@ -1,6 +1,5 @@
 package com.blocki.springrestonlinestore.api.v1.models;
 
-import com.blocki.springrestonlinestore.core.domain.Product;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,5 +14,5 @@ import java.util.List;
 public class ProductListDTO {
 
     @JsonProperty("products")
-    private List<Product> productDTOs = new ArrayList<>();
+    private List<ProductDTO> productDTOs = new ArrayList<>();
 }
