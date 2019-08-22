@@ -28,9 +28,6 @@ public class ShoppingCartServiceImplTest {
     @Mock
     private ShoppingCartRepository shoppingCartRepository;
 
-    @Mock
-    private UserService Userservice;
-
     @InjectMocks
     private ShoppingCartServiceImpl shoppingCartServiceImpl;
 

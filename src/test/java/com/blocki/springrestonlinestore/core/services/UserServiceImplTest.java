@@ -8,6 +8,7 @@ import com.blocki.springrestonlinestore.core.repositories.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mapstruct.factory.Mappers;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -24,18 +25,20 @@ public class UserServiceImplTest {
     @Mock
     private UserRepository userRepository;
 
-    private UserService userService;
+    @InjectMocks
+    private UserServiceImpl userServiceImpl;
 
     private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
     private final static Long ID = 2L;
     private final static String firstName = "Michael";
+    private User user;
 
     @Before
     public void setUp() {
 
         MockitoAnnotations.initMocks(this);
-        userService = new UserServiceImpl(userRepository);
+        user = User.builder().id(ID).firstName(firstName).build();
     }
 
     @Test
@@ -46,7 +49,7 @@ public class UserServiceImplTest {
         Mockito.when(userRepository.findAll()).thenReturn(users);
 
         //when
-        UserListDTO userDTOs = userService.getAllUsers();
+        UserListDTO userDTOs = userServiceImpl.getAllUsers();
 
         //than
         assertNotNull(userDTOs);
@@ -58,11 +61,10 @@ public class UserServiceImplTest {
     public void getUserById() {
 
         //given
-        User user = User.builder().id(ID).firstName(firstName).build();
         Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(user));
 
         //when
-        UserDTO userDTO = userService.getUserById(ID);
+        UserDTO userDTO = userServiceImpl.getUserById(ID);
 
         //than
         assertNotNull(userDTO);
@@ -77,11 +79,10 @@ public class UserServiceImplTest {
     public void saveUser() {
 
         //given
-        User user = User.builder().id(ID).firstName(firstName).build();
         Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
 
         //when
-        UserDTO savedUserDTO = userService.saveUser(userMapper.userToUserDTO(user));
+        UserDTO savedUserDTO = userServiceImpl.saveUser(userMapper.userToUserDTO(user));
 
         //than
         assertNotNull(savedUserDTO);
@@ -95,11 +96,10 @@ public class UserServiceImplTest {
     public void createNewUser() {
 
         //given
-        User user = User.builder().id(ID).firstName(firstName).build();
         Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
 
         //when
-        UserDTO createdUserDTO = userService.createNewUser(userMapper.userToUserDTO(user));
+        UserDTO createdUserDTO = userServiceImpl.createNewUser(userMapper.userToUserDTO(user));
 
         //than
         assertNotNull(createdUserDTO);
@@ -114,10 +114,10 @@ public class UserServiceImplTest {
     public void deleteUser() {
 
         //given
-        UserDTO userDTO = userMapper.userToUserDTO(User.builder().id(ID).firstName(firstName).build());
+        UserDTO userDTO = userMapper.userToUserDTO(user);
 
         //when
-        userService.deleteUserById(userDTO.getId());
+        userServiceImpl.deleteUserById(userDTO.getId());
 
         //than
         Mockito.verify(userRepository, Mockito.times(1)).deleteById(Mockito.anyLong());
