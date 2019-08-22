@@ -32,7 +32,7 @@ public class ShoppingCart extends BaseEntity {
     }
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL)
