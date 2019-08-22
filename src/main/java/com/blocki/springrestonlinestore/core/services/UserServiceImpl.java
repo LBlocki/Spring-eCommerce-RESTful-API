@@ -3,9 +3,7 @@ package com.blocki.springrestonlinestore.core.services;
 import com.blocki.springrestonlinestore.api.v1.mappers.ProductMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.ShoppingCartMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
-import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
-import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
-import com.blocki.springrestonlinestore.api.v1.models.UserListDTO;
+import com.blocki.springrestonlinestore.api.v1.models.*;
 import com.blocki.springrestonlinestore.core.domain.Product;
 import com.blocki.springrestonlinestore.core.domain.User;
 import com.blocki.springrestonlinestore.core.repositories.UserRepository;
@@ -14,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -163,5 +162,50 @@ public class UserServiceImpl implements UserService {
     public void deleteUserById(Long id) {
 
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public ShoppingCartDTO createNewShoppingCart(Long id, ShoppingCartDTO shoppingCartDTO) {
+
+        userRepository
+                .findById(id).
+                map(user -> {
+
+                    user.setShoppingCart(shoppingCartConverter.shoppingCartDTOToShoppingCart(shoppingCartDTO));
+                    userRepository.save(user);
+                    return user;
+                })
+                .orElseThrow(RuntimeException::new);   //todo implement custom exception
+
+        return shoppingCartDTO;
+    }
+
+    @Override
+    public ProductDTO createNewProduct(Long id, ProductDTO productDTO) {
+
+        userRepository
+                .findById(id).
+                map(user -> {
+
+                    user.getProducts().add(productConverter.productDTOToProduct(productDTO));
+                    userRepository.save(user);
+                    return user;
+                })
+                .orElseThrow(RuntimeException::new);   //todo implement custom exception
+
+        return productDTO;
+    }
+
+    @Override
+    public ProductListDTO getAllProducts(Long id) {
+
+        return new ProductListDTO(getUserById(id).getProductDTOs());
+    }
+
+    @Override
+    public ShoppingCartListDTO getAllShoppingCarts(Long id) {
+
+        return new ShoppingCartListDTO(Collections.singletonList(getUserById(id).getShoppingCartDTO()));
+        //todo update it to pass a list ( after auditing problem)
     }
 }
