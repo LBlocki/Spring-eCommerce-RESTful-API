@@ -32,11 +32,13 @@ public class UserServiceImplTest {
 
     private final static Long ID = 2L;
     private final static String firstName = "Michael";
+    private User user;
 
     @Before
     public void setUp() {
 
         MockitoAnnotations.initMocks(this);
+        user = User.builder().id(ID).firstName(firstName).build();
     }
 
     @Test
@@ -59,7 +61,6 @@ public class UserServiceImplTest {
     public void getUserById() {
 
         //given
-        User user = User.builder().id(ID).firstName(firstName).build();
         Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(user));
 
         //when
@@ -78,7 +79,6 @@ public class UserServiceImplTest {
     public void saveUser() {
 
         //given
-        User user = User.builder().id(ID).firstName(firstName).build();
         Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
 
         //when
@@ -96,7 +96,6 @@ public class UserServiceImplTest {
     public void createNewUser() {
 
         //given
-        User user = User.builder().id(ID).firstName(firstName).build();
         Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
 
         //when
@@ -115,7 +114,7 @@ public class UserServiceImplTest {
     public void deleteUser() {
 
         //given
-        UserDTO userDTO = userMapper.userToUserDTO(User.builder().id(ID).firstName(firstName).build());
+        UserDTO userDTO = userMapper.userToUserDTO(user);
 
         //when
         userServiceImpl.deleteUserById(userDTO.getId());
