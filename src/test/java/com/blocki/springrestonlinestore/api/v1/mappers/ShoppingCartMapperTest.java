@@ -7,7 +7,7 @@ import com.blocki.springrestonlinestore.core.domain.User;
 import org.junit.Test;
 
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -29,7 +29,7 @@ public class ShoppingCartMapperTest {
         .creationDate(creationDate)
         .cartStatus(cartStatus)
         .user(new User())
-        .shoppingCartItems(new HashSet<>())
+        .shoppingCartItems(new ArrayList<>())
         .build();
 
 
@@ -52,7 +52,7 @@ public class ShoppingCartMapperTest {
         shoppingCartDTO.setCreationDate(creationDate);
         shoppingCartDTO.setCartStatus(cartStatus);
         shoppingCartDTO.setUserDTO(new UserDTO());
-        shoppingCartDTO.setShoppingCartItemDTOs(new HashSet<>());
+        shoppingCartDTO.setShoppingCartItemDTOs(new ArrayList<>());
         shoppingCartDTO.setShoppingCartUrl(shoppingCartUrl);
 
         ShoppingCart shoppingCart = shoppingCartConverter.shoppingCartDTOToShoppingCart(shoppingCartDTO);

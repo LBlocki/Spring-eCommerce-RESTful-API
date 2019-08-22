@@ -18,8 +18,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -30,7 +30,7 @@ public class UserDTO {
     private Long id;
 
     @JsonProperty("products")
-    private Set<ProductDTO> productDTOs = new HashSet<>();
+    private List<ProductDTO> productDTOs = new ArrayList<>();
 
     @JsonProperty("shopping_carts")
     private ShoppingCartDTO shoppingCartDTO;

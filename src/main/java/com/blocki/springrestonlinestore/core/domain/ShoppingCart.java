@@ -8,9 +8,9 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Entity
 @Table(name = "shopping_carts")
@@ -22,7 +22,7 @@ public class ShoppingCart extends BaseEntity {
     public enum CartStatus { ACTIVE, COMPLETED, ERROR }
 
     @Builder// Otherwise Builder will ignore the initializing expression for Set...
-    public ShoppingCart(Long id, User user, Set<ShoppingCartItem> shoppingCartItems, LocalDate creationDate, CartStatus cartStatus) {
+    public ShoppingCart(Long id, User user, List<ShoppingCartItem> shoppingCartItems, LocalDate creationDate, CartStatus cartStatus) {
 
         super(id);
         this.user = user;
@@ -36,7 +36,7 @@ public class ShoppingCart extends BaseEntity {
     private User user;
 
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL)
-    private Set<ShoppingCartItem> shoppingCartItems = new HashSet<>();
+    private List<ShoppingCartItem> shoppingCartItems = new ArrayList<>();
 
     @CreationTimestamp
     @Column(name = "creation_date", updatable = false, nullable = false)

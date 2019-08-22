@@ -15,8 +15,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,7 +44,7 @@ public class ShoppingCartServiceImplTest {
     public void setUp() throws Exception {
 
         MockitoAnnotations.initMocks(this);
-        shoppingCart = ShoppingCart.builder().id(ID).cartStatus(cartStatus).creationDate(creationDate).shoppingCartItems( new HashSet<>()).user(new User()).build();
+        shoppingCart = ShoppingCart.builder().id(ID).cartStatus(cartStatus).creationDate(creationDate).shoppingCartItems( new ArrayList<>()).user(new User()).build();
     }
 
     @Test

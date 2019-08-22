@@ -5,9 +5,9 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -20,7 +20,7 @@ public class User extends BaseEntity {
     public enum Gender {MALE, FEMALE}
 
     @Builder
-    public User(Long id, Set<Product> products, ShoppingCart shoppingCart, String firstName, String lastName,
+    public User(Long id, List<Product> products, ShoppingCart shoppingCart, String firstName, String lastName,
                 String address, String country, String phoneNumber, LocalDate creationDate, String emailAddress,
                 String username, char[] password, Gender gender) {
 
@@ -40,7 +40,7 @@ public class User extends BaseEntity {
     }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<Product> products = new HashSet<>();
+    private List<Product> products = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private ShoppingCart shoppingCart;

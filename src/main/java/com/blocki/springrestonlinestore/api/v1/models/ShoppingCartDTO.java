@@ -10,8 +10,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -26,7 +26,7 @@ public class ShoppingCartDTO {
     private UserDTO userDTO;
 
     @JsonProperty("shopping_cart_items")
-    private Set<ShoppingCartItemDTO> shoppingCartItemDTOs = new HashSet<>();
+    private List<ShoppingCartItemDTO> shoppingCartItemDTOs = new ArrayList<>();
 
     @NotNull
     @JsonProperty("creation_date")

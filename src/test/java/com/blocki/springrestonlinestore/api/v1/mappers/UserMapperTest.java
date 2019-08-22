@@ -7,7 +7,7 @@ import com.blocki.springrestonlinestore.core.domain.User;
 import org.junit.Test;
 
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
@@ -44,7 +44,7 @@ public class UserMapperTest {
                 .username(username)
                 .password(password)
                 .gender(gender)
-                .products(new HashSet<>())
+                .products(new ArrayList<>())
                 .shoppingCart(new ShoppingCart())
                 .build();
 
@@ -82,7 +82,7 @@ public class UserMapperTest {
         userDTO.setUsername(username);
         userDTO.setPassword(password);
         userDTO.setGender(gender);
-        userDTO.setProductDTOs(new HashSet<>());
+        userDTO.setProductDTOs(new ArrayList<>());
         userDTO.setShoppingCartDTO(new ShoppingCartDTO());
         userDTO.setUserUrl(userUrl);
 

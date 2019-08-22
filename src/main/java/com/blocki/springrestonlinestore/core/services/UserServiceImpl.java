@@ -14,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -139,7 +137,7 @@ public class UserServiceImpl implements UserService {
 
                    if(userDTO.getProductDTOs() != null) {
 
-                       Set<Product> products = new HashSet<>();
+                       List<Product> products = new ArrayList<>();
 
                        for( ProductDTO productDTO : userDTO.getProductDTOs()) {
 
