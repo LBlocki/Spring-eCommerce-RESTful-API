@@ -114,11 +114,8 @@ public class ProductServiceImplTest {
     @Test
     public void deleteProductById() {
 
-        //given
-        ProductDTO productDTO = productConverter.productToProductDTO(product);
-
         //when
-        productServiceImpl.deleteProductById(productDTO.getId());
+        productServiceImpl.deleteProductById(ID);
 
         //than
         Mockito.verify(productRepository, Mockito.times(1)).deleteById(Mockito.anyLong());

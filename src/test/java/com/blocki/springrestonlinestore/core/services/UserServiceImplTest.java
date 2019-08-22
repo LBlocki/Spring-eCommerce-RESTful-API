@@ -113,11 +113,7 @@ public class UserServiceImplTest {
     @Test
     public void deleteUser() {
 
-        //given
-        UserDTO userDTO = userMapper.userToUserDTO(user);
-
-        //when
-        userServiceImpl.deleteUserById(userDTO.getId());
+        userServiceImpl.deleteUserById(ID);
 
         //than
         Mockito.verify(userRepository, Mockito.times(1)).deleteById(Mockito.anyLong());
