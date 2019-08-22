@@ -1,7 +1,11 @@
 package com.blocki.springrestonlinestore.api.v1.models;
 
+import com.blocki.springrestonlinestore.core.config.parsers.LocalDateDeserializer;
+import com.blocki.springrestonlinestore.core.config.parsers.LocalDateSerializer;
 import com.blocki.springrestonlinestore.core.domain.ShoppingCart;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,6 +35,8 @@ public class ShoppingCartDTO {
     @NotNull
     @JsonProperty("creation_date")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate creationDate;
 
     @JsonProperty("cart_status")

@@ -32,7 +32,7 @@ public class UserDTO {
     @JsonProperty("products")
     private List<ProductDTO> productDTOs = new ArrayList<>();
 
-    @JsonProperty("shopping_carts")
+    @JsonProperty("shopping_cart")
     private ShoppingCartDTO shoppingCartDTO;
 
     @NotBlank
