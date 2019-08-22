@@ -33,7 +33,7 @@ public class UserDTO {
     private Set<ProductDTO> productDTOs = new HashSet<>();
 
     @JsonProperty("shopping_carts")
-    private Set<ShoppingCartDTO> shoppingCartDTOs = new HashSet<>();
+    private ShoppingCartDTO shoppingCartDTO;
 
     @NotBlank
     @Size(min = 1, max = 32)

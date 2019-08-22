@@ -21,7 +21,7 @@ public class ShoppingCartDTO {
     @NotNull
     private Long id;
 
-    @JsonProperty("user")
+    @JsonProperty("user_id")
     @NotNull
     private UserDTO userDTO;
 

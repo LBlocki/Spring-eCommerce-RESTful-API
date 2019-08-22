@@ -20,13 +20,13 @@ public class User extends BaseEntity {
     public enum Gender {MALE, FEMALE}
 
     @Builder
-    public User(Long id, Set<Product> products, Set<ShoppingCart> shoppingCarts, String firstName, String lastName,
+    public User(Long id, Set<Product> products, ShoppingCart shoppingCart, String firstName, String lastName,
                 String address, String country, String phoneNumber, LocalDate creationDate, String emailAddress,
                 String username, char[] password, Gender gender) {
 
         super(id);
         this.products = Optional.ofNullable(products).orElse(this.products);
-        this.shoppingCarts = Optional.ofNullable(shoppingCarts).orElse(this.shoppingCarts);
+        this.shoppingCart = shoppingCart;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -42,8 +42,8 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Product> products = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<ShoppingCart> shoppingCarts = new HashSet<>();
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private ShoppingCart shoppingCart;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -58,7 +58,7 @@ public class User extends BaseEntity {
     private String country; //todo Country should be refactored in the future : perhaps another table to allow control and validation for DTO
 
     @Column(name = "phone_number", nullable = false)
-    private String phoneNumber; //todo phoneNumber requires validation. Libphonenumber with Hibernate Validator seems like a good choice for DTO
+    private String phoneNumber;
 
     @CreationTimestamp
     @Column(name = "creation_date", updatable = false, nullable = false)

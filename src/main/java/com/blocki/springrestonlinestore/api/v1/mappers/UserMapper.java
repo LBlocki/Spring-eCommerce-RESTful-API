@@ -13,10 +13,10 @@ public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     @Mapping(source = "products", target = "productDTOs")
-    @Mapping(source = "shoppingCarts", target = "shoppingCartDTOs")
+    @Mapping(source = "shoppingCart", target = "shoppingCartDTO")
     UserDTO userToUserDTO(User user);
 
     @Mapping(source = "productDTOs", target = "products")
-    @Mapping(source = "shoppingCartDTOs", target = "shoppingCarts")
+    @Mapping(source = "shoppingCartDTO", target = "shoppingCart")
     User userDTOToUser(UserDTO userDTO);
 }

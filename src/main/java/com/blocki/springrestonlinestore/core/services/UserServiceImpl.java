@@ -143,7 +143,7 @@ public class UserServiceImpl implements UserService {
                        //todo use product service to patch products from user
                    }
 
-                   if(userDTO.getShoppingCartDTOs() != null) {
+                   if(userDTO.getShoppingCartDTO() != null) {
 
                        //todo use shopping cart service to patch shopping carts from user
                    }
