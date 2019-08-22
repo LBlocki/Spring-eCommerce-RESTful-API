@@ -1,8 +1,12 @@
 package com.blocki.springrestonlinestore.core.services;
 
+import com.blocki.springrestonlinestore.api.v1.mappers.ProductMapper;
+import com.blocki.springrestonlinestore.api.v1.mappers.ShoppingCartMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
+import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
 import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
 import com.blocki.springrestonlinestore.api.v1.models.UserListDTO;
+import com.blocki.springrestonlinestore.core.domain.Product;
 import com.blocki.springrestonlinestore.core.domain.User;
 import com.blocki.springrestonlinestore.core.repositories.UserRepository;
 import org.mapstruct.factory.Mappers;
@@ -10,14 +14,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userConverter = Mappers.getMapper(UserMapper.class);
-    private static final String USER_BASIC_URL = "/api/v1/users/";  //todo use controller URL
+    private final ProductMapper productConverter = Mappers.getMapper(ProductMapper.class);
+    private final ShoppingCartMapper shoppingCartConverter = Mappers.getMapper(ShoppingCartMapper.class);
+
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
@@ -32,7 +40,6 @@ public class UserServiceImpl implements UserService {
         for(User user : userRepository.findAll()) {
 
             UserDTO userDTO = userConverter.userToUserDTO(user);
-            userDTO.setUserUrl(getNewUserUrl(user.getId()));
             users.add(userDTO);
         }
 
@@ -44,11 +51,7 @@ public class UserServiceImpl implements UserService {
 
         return userRepository
                 .findById(id)
-                .map(user -> {
-                    UserDTO  userDTO = userConverter.userToUserDTO(user);
-                    userDTO.setUserUrl(getNewUserUrl(user.getId()));
-                    return userDTO;
-                })
+                .map(userConverter::userToUserDTO)
                 .orElseThrow(RuntimeException:: new);   //todo implement custom exception
     }
 
@@ -57,11 +60,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.save(userConverter.userDTOToUser(userDTO));
 
-        UserDTO savedUserDTO = userConverter.userToUserDTO(user);
-
-        savedUserDTO.setUserUrl(getNewUserUrl(savedUserDTO.getId()));
-
-        return savedUserDTO;
+        return userConverter.userToUserDTO(user);
     }
 
     @Override
@@ -140,18 +139,23 @@ public class UserServiceImpl implements UserService {
 
                    if(userDTO.getProductDTOs() != null) {
 
-                       //todo use product service to patch products from user
+                       Set<Product> products = new HashSet<>();
+
+                       for( ProductDTO productDTO : userDTO.getProductDTOs()) {
+
+                           products.add(productConverter.productDTOToProduct(productDTO));
+                       }
+
+                       user.setProducts(products);
+
                    }
 
                    if(userDTO.getShoppingCartDTO() != null) {
 
-                       //todo use shopping cart service to patch shopping carts from user
+                      user.setShoppingCart(shoppingCartConverter.shoppingCartDTOToShoppingCart(userDTO.getShoppingCartDTO()));
                    }
 
-                   UserDTO savedUser = saveUser(userConverter.userToUserDTO(user));
-                   savedUser.setUserUrl(getNewUserUrl(user.getId()));
-
-                   return savedUser;
+                   return saveUser(userConverter.userToUserDTO(user));
                })
                .orElseThrow(RuntimeException::new); //todo implement custom exception
 
@@ -161,10 +165,5 @@ public class UserServiceImpl implements UserService {
     public void deleteUserById(Long id) {
 
         userRepository.deleteById(id);
-    }
-
-    private String getNewUserUrl(Long id) {
-
-        return USER_BASIC_URL + id;
     }
 }

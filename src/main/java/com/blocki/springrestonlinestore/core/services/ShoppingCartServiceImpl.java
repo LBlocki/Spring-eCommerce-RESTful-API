@@ -1,6 +1,7 @@
 package com.blocki.springrestonlinestore.core.services;
 
 import com.blocki.springrestonlinestore.api.v1.mappers.ShoppingCartMapper;
+import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
 import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartDTO;
 import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartListDTO;
 import com.blocki.springrestonlinestore.core.domain.ShoppingCart;
@@ -17,14 +18,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartMapper shoppingCartConverter = Mappers.getMapper(ShoppingCartMapper.class);
-    private final UserService userService;
-
-    private static final String SHOPPING_CART_BASIC_URL = "/api/v1/users/{id}/shoppingCarts";
+    private final UserMapper userConverter = Mappers.getMapper(UserMapper.class);
 
     @Autowired
-    public ShoppingCartServiceImpl(ShoppingCartRepository shoppingCartRepository, UserService userService) {
+    public ShoppingCartServiceImpl(ShoppingCartRepository shoppingCartRepository) {
         this.shoppingCartRepository = shoppingCartRepository;
-        this.userService = userService;
     }
 
     @Override
@@ -35,8 +33,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         for(ShoppingCart shoppingCart : shoppingCartRepository.findAll()) {
 
             ShoppingCartDTO shoppingCartDTO = shoppingCartConverter.shoppingCartToShoppingCartDTO(shoppingCart);
-            shoppingCartDTO.setShoppingCartUrl(getNewShoppingCartUrl(shoppingCartDTO.getId()));
-
             shoppingCartDTOs.add(shoppingCartDTO);
         }
 
@@ -48,11 +44,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         return shoppingCartRepository
                 .findById(id)
-                .map(shoppingCart -> {
-                    ShoppingCartDTO  shoppingCartDTO = shoppingCartConverter.shoppingCartToShoppingCartDTO(shoppingCart);
-                    shoppingCartDTO.setShoppingCartUrl(getNewShoppingCartUrl(shoppingCart.getId()));
-                    return shoppingCartDTO;
-                })
+                .map(shoppingCartConverter::shoppingCartToShoppingCartDTO)
                 .orElseThrow(RuntimeException:: new);   //todo implement custom exception
     }
 
@@ -61,11 +53,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         ShoppingCart shoppingCart = shoppingCartRepository.save(shoppingCartConverter.shoppingCartDTOToShoppingCart(shoppingCartDTO));
 
-        ShoppingCartDTO savedShoppingCartDTO = shoppingCartConverter.shoppingCartToShoppingCartDTO(shoppingCart);
 
-        savedShoppingCartDTO.setShoppingCartUrl(getNewShoppingCartUrl(savedShoppingCartDTO.getId()));
-
-        return savedShoppingCartDTO;
+        return shoppingCartConverter.shoppingCartToShoppingCartDTO(shoppingCart);
     }
 
     @Override
@@ -107,15 +96,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
                     if(shoppingCartDTO.getUserDTO() != null) {
 
-                        userService.patchUser(id, shoppingCartDTO.getUserDTO());
+                        shoppingCart.setUser(userConverter.userDTOToUser(shoppingCartDTO.getUserDTO()));
                     }
 
-                    ShoppingCartDTO savedShoppingCartDTO = shoppingCartConverter
-                            .shoppingCartToShoppingCartDTO(shoppingCartRepository.save(shoppingCart));
+                    return shoppingCartConverter.shoppingCartToShoppingCartDTO(shoppingCartRepository.save(shoppingCart));
 
-                    savedShoppingCartDTO.setShoppingCartUrl(getNewShoppingCartUrl(savedShoppingCartDTO.getId()));
-
-                    return savedShoppingCartDTO;
                 }).orElseThrow(RuntimeException::new);
     }
 
@@ -124,10 +109,5 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         shoppingCartRepository.deleteById(id);
 
-    }
-
-    private String getNewShoppingCartUrl(Long id) {
-
-        return SHOPPING_CART_BASIC_URL + "/" + id;
     }
 }
