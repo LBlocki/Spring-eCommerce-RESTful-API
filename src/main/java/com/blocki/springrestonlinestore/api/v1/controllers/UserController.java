@@ -1,15 +1,14 @@
 package com.blocki.springrestonlinestore.api.v1.controllers;
 
-import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
-import com.blocki.springrestonlinestore.api.v1.models.UserListDTO;
+import com.blocki.springrestonlinestore.api.v1.models.*;
 import com.blocki.springrestonlinestore.core.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+//todo still needs validation
 @RestController
 @RequestMapping(UserController.USER_CONTROLLER_BASIC_URL)
 public class UserController {
@@ -20,6 +19,7 @@ public class UserController {
 
     @Autowired
     public UserController(UserService userService) {
+
         this.userService = userService;
     }
 
@@ -37,7 +37,7 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDTO createNewUser(@RequestBody @Valid UserDTO userDTO) {
 
@@ -63,5 +63,33 @@ public class UserController {
     public void deleteUserById(@PathVariable Long id) {
 
         userService.deleteUserById(id);
+    }
+
+    @GetMapping("/{id}/shoppingCarts")
+    @ResponseStatus(HttpStatus.OK)
+    public ShoppingCartListDTO getListOfAllShoppingCarts(@PathVariable Long id) {
+
+        return userService.getAllShoppingCarts(id);
+    }
+
+    @PostMapping("/{id}/shoppingCarts")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ShoppingCartDTO addNewShoppingCart(@PathVariable Long id,  @RequestBody @Valid  ShoppingCartDTO shoppingCartDTO) {
+
+       return userService.createNewShoppingCart(id, shoppingCartDTO);
+    }
+
+    @GetMapping("/{id}/products")
+    @ResponseStatus(HttpStatus.OK)
+    public ProductListDTO getListOfAllUsersProducts(@PathVariable Long id) {
+
+        return userService.getAllProducts(id);
+    }
+
+    @PostMapping("/{id}/products")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProductDTO addNewProductToUser(@PathVariable Long id, @RequestBody @Valid ProductDTO productDTO) {
+
+       return userService.createNewProduct(id, productDTO);
     }
 }

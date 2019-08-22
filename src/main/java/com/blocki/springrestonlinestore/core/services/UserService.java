@@ -1,7 +1,6 @@
 package com.blocki.springrestonlinestore.core.services;
 
-import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
-import com.blocki.springrestonlinestore.api.v1.models.UserListDTO;
+import com.blocki.springrestonlinestore.api.v1.models.*;
 
 public interface UserService {
 
@@ -18,5 +17,13 @@ public interface UserService {
     UserDTO patchUser(Long id, UserDTO userDTO);
 
     void deleteUserById(Long id);
+
+    ShoppingCartDTO createNewShoppingCart(Long id, ShoppingCartDTO shoppingCartDTO);
+
+    ProductDTO createNewProduct(Long id, ProductDTO productDTO);
+
+    ProductListDTO getAllProducts(Long id);
+
+    ShoppingCartListDTO getAllShoppingCarts(Long id);
 
 }
