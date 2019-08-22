@@ -30,7 +30,6 @@ public class UserServiceImplTest {
 
     private final static Long ID = 2L;
     private final static String firstName = "Michael";
-    private final static String userUrl = "/api/v1/users/";
 
     @Before
     public void setUp() {
@@ -51,7 +50,6 @@ public class UserServiceImplTest {
 
         //than
         assertNotNull(userDTOs);
-        assertEquals(2, users.size());
 
         Mockito.verify(userRepository, Mockito.times(1)).findAll();
     }
@@ -70,7 +68,6 @@ public class UserServiceImplTest {
         assertNotNull(userDTO);
         assertEquals(userDTO.getId(), user.getId());
         assertEquals(userDTO.getFirstName(), user.getFirstName());
-        assertEquals(userUrl + userDTO.getId(), userDTO.getUserUrl());
 
         Mockito.verify(userRepository, Mockito.times(1)).findById(Mockito.anyLong());
 
@@ -90,7 +87,6 @@ public class UserServiceImplTest {
         assertNotNull(savedUserDTO);
         assertEquals(savedUserDTO.getId(), user.getId());
         assertEquals(savedUserDTO.getFirstName(), user.getFirstName());
-        assertEquals(userUrl + user.getId(), savedUserDTO.getUserUrl());
 
         Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any());
     }
@@ -109,7 +105,6 @@ public class UserServiceImplTest {
         assertNotNull(createdUserDTO);
         assertEquals(createdUserDTO.getId(), user.getId());
         assertEquals(createdUserDTO.getFirstName(), user.getFirstName());
-        assertEquals(userUrl + user.getId(), createdUserDTO.getUserUrl());
 
         Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any());
 

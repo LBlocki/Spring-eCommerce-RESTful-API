@@ -38,7 +38,6 @@ public class ShoppingCartServiceImplTest {
 
     private ShoppingCart shoppingCart;
 
-    private static final String SHOPPING_CART_BASIC_URL = "/api/v1/users/{id}/shoppingCarts";
     private static final Long ID = 2L;
     private static final LocalDate creationDate = LocalDate.now();
     private static final ShoppingCart.CartStatus cartStatus = ShoppingCart.CartStatus.ACTIVE;
