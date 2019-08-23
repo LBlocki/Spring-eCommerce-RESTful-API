@@ -1,5 +1,22 @@
-include::{snippets}/api/v1/users/curl-request.adoc[]
+= My REST API
+v{version}, Tom Hombergs, {date}
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:highlightjs-theme: github
+:toc: left
+:toclevels: 3
+:sectlinks:
+:sectnums:
+
+[introduction]
+== Introduction
+... some warm introductory words... .
+
+== Creating a Project
+
+=== Example Request
 include::{snippets}/api/v1/users/http-request.adoc[]
+
+=== Example Response
 include::{snippets}/api/v1/users/http-response.adoc[]
-include::{snippets}/api/v1/users/request-body.adoc[]
-include::{snippets}/api/v1/users/response-body.adoc[]

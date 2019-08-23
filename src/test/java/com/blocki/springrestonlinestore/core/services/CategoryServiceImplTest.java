@@ -20,7 +20,7 @@ import java.util.Optional;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class CategoryInterfaceImplTest {
+public class CategoryServiceImplTest {
 
     @Mock
     private CategoryRepository categoryRepository;
@@ -31,7 +31,7 @@ public class CategoryInterfaceImplTest {
     private static final String name = "Clothes";
 
     @InjectMocks
-    private CategoryInterfaceImpl categoryInterfaceImpl;
+    private CategoryServiceImpl categoryInterfaceImpl;
 
     @Before
     public void setUp() throws Exception {
