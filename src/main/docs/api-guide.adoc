@@ -1,0 +1,5 @@
+include::{snippets}/api/v1/users/curl-request.adoc[]
+include::{snippets}/api/v1/users/http-request.adoc[]
+include::{snippets}/api/v1/users/http-response.adoc[]
+include::{snippets}/api/v1/users/request-body.adoc[]
+include::{snippets}/api/v1/users/response-body.adoc[]
