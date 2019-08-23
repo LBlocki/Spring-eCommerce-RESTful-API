@@ -13,14 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CategoryInterfaceImpl implements CategoryInterface {
+public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
 
     private final CategoryMapper categoryConverter = Mappers.getMapper(CategoryMapper.class);
 
     @Autowired
-    public CategoryInterfaceImpl(CategoryRepository categoryRepository) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
