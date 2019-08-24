@@ -25,7 +25,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
 
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 
 public class UserControllerTest {
@@ -125,8 +124,8 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(UserController.USER_CONTROLLER_BASIC_URL)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.users", Matchers.hasSize(1)))
-                .andDo(document(UserController.USER_CONTROLLER_BASIC_URL));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.users", Matchers.hasSize(1)));
+                //.andDo(document(UserController.USER_CONTROLLER_BASIC_URL));
 
         Mockito.verify(userService, Mockito.times(1)).getAllUsers();
 
@@ -142,8 +141,8 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(UserController.USER_CONTROLLER_BASIC_URL + "/" + userDTO.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo(userDTO.getId().intValue())))
-                .andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" + userDTO.getId()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo(userDTO.getId().intValue())));
+                //.andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" + userDTO.getId()));
 
         Mockito.verify(userService, Mockito.times(1)).getUserById(Mockito.anyLong());
     }
@@ -159,8 +158,8 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userDTO)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo(userDTO.getId().intValue())))
-                .andDo(document(UserController.USER_CONTROLLER_BASIC_URL));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo(userDTO.getId().intValue())));
+                //.andDo(document(UserController.USER_CONTROLLER_BASIC_URL));
 
         Mockito.verify(userService, Mockito.times(1)).createNewUser(Mockito.any(UserDTO.class));
     }
@@ -176,8 +175,8 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userDTO)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo(userDTO.getId().intValue())))
-                .andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo(userDTO.getId().intValue())));
+                //.andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId()));
 
         Mockito.verify(userService, Mockito.times(1)).updateUser(Mockito.anyLong(), Mockito.any(UserDTO.class));
 
@@ -194,8 +193,8 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userDTO)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo(userDTO.getId().intValue())))
-                .andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo(userDTO.getId().intValue())));
+               // .andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId()));
 
         Mockito.verify(userService, Mockito.times(1)).patchUser(Mockito.anyLong(), Mockito.any(UserDTO.class));
     }
@@ -205,8 +204,8 @@ public class UserControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.delete(UserController.USER_CONTROLLER_BASIC_URL + "/" + userDTO.getId())
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId()));
+                .andExpect(MockMvcResultMatchers.status().isOk());
+                //.andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId()));
 
         Mockito.verify(userService, Mockito.times(1)).deleteUserById(Mockito.any());
     }
@@ -221,8 +220,8 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(UserController.USER_CONTROLLER_BASIC_URL + "/" + userDTO.getId() + "/" + "shoppingCarts")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.shopping_carts", Matchers.hasSize(1)))
-                .andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId()+ "/shoppingCarts"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.shopping_carts", Matchers.hasSize(1)));
+               // .andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId()+ "/shoppingCarts"));
     }
 
     @Test
@@ -235,8 +234,8 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(shoppingCartDTO)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo((shoppingCartDTO.getId().intValue()))))
-                .andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId() + "/shoppingCarts"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo((shoppingCartDTO.getId().intValue()))));
+                //.andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId() + "/shoppingCarts"));
     }
 
     @Test
@@ -248,8 +247,8 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(UserController.USER_CONTROLLER_BASIC_URL + "/" + userDTO.getId() + "/" + "products")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.products", Matchers.hasSize(1)))
-                .andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId() + "/products"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.products", Matchers.hasSize(1)));
+                //.andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId() + "/products"));
     }
 
     @Test
@@ -262,7 +261,7 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(productDTO)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo((shoppingCartDTO.getId().intValue()))))
-                .andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId() + "/products"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo((shoppingCartDTO.getId().intValue()))));
+                //.andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId() + "/products"));
     }
 }
