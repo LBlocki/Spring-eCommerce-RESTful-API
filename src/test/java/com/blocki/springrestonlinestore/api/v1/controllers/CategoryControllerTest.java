@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 
 public class CategoryControllerTest {
@@ -71,8 +70,8 @@ public class CategoryControllerTest {
                 .get(CategoryController.CATEGORIES_BASIC_URL)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.categories", Matchers.hasSize(categoryDTOArrayList.size())))
-                .andDo(document(CategoryController.CATEGORIES_BASIC_URL));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.categories", Matchers.hasSize(categoryDTOArrayList.size())));
+                //.andDo(document(CategoryController.CATEGORIES_BASIC_URL));
 
         Mockito.verify(categoryService, Mockito.times(1)).getAllCategories();
     }
@@ -87,8 +86,8 @@ public class CategoryControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(CategoryController.CATEGORIES_BASIC_URL + "/" + categoryDTO.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo(categoryDTO.getId().intValue())))
-                .andDo(document(CategoryController.CATEGORIES_BASIC_URL + "/" + categoryDTO.getId()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo(categoryDTO.getId().intValue())));
+                //.andDo(document(CategoryController.CATEGORIES_BASIC_URL + "/" + categoryDTO.getId()));
 
         Mockito.verify(categoryService, Mockito.times(1)).getCategoryById(Mockito.anyLong());
     }
