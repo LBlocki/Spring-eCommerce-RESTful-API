@@ -7,6 +7,7 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,18 +28,18 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<CustomErrorResponse> handleNotFoundException(Exception exception) {
 
-       log.debug("Resource Not found exception caught");
+        log.debug("Resource Not found exception caught");
 
-       CustomErrorResponse errors = new CustomErrorResponse();
-       errors.setTimestamp(LocalDateTime.now());
-       errors.setError(exception.getMessage());
-       errors.setStatus(HttpStatus.NOT_FOUND.value());
+        CustomErrorResponse errors = new CustomErrorResponse();
+        errors.setTimestamp(LocalDateTime.now());
+        errors.setError(exception.getMessage());
+        errors.setStatus(HttpStatus.NOT_FOUND.value());
 
-       return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(NumberFormatException.class)
-    public ResponseEntity<CustomErrorResponse> handleNumberFormatException(Exception exception) {
+    public ResponseEntity<Object> handleNumberFormatException(Exception exception) {
 
         log.debug("Number format exception caught");
 
@@ -51,9 +52,9 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    public ResponseEntity<Object>  handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                HttpHeaders headers, HttpStatus status,
-                                                                WebRequest request) {
+    public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+                                                               HttpHeaders headers, HttpStatus status,
+                                                               WebRequest request) {
 
         log.debug("Validation failed");
 
@@ -73,4 +74,16 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, headers, status);
     }
 
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+        CustomErrorResponse errors = new CustomErrorResponse();
+        errors.setTimestamp(LocalDateTime.now());
+        errors.setError(exception.getMessage());
+        errors.setStatus(HttpStatus.BAD_REQUEST.value());
+
+        return new ResponseEntity<>(errors, headers, status);
+    }
+
 }
+
