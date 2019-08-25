@@ -3,15 +3,19 @@ package com.blocki.springrestonlinestore.api.v1.controllers;
 import com.blocki.springrestonlinestore.core.domain.Category;
 import com.blocki.springrestonlinestore.core.repositories.CategoryRepository;
 import com.blocki.springrestonlinestore.core.services.CategoryService;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.HttpHeaders;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,10 +26,13 @@ import java.util.Arrays;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Ignore //Its fucked for now
+
 @RunWith(SpringRunner.class)
 @WebMvcTest(CategoryController.class)
+@Ignore
 public class CategoryControllerTest {
 
     private final static Long ID = 2L;
@@ -66,16 +73,17 @@ public class CategoryControllerTest {
 
         //than
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/categories"))
-                .andDo(document(CategoryController.CATEGORIES_BASIC_URL ));
-                /*.andExpect(status().isOk()) //
+                .andDo(document(CategoryController.CATEGORIES_BASIC_URL ))
+                .andDo(print())
+                .andExpect(status().isOk()) //
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
                 .andExpect(jsonPath("$._embedded.categories[0].id", Matchers.equalTo(ID.intValue())))
                 .andExpect(jsonPath("$._embedded.categories[0].name", Matchers.equalTo(NAME)))
-                .andExpect(jsonPath("$._embedded.employees[0]._links.self.href",Matchers.equalTo("/api/v1/categories/" + ID)))
-                .andExpect(jsonPath("$._embedded.employees[0]._links.employees.href",Matchers.equalTo("/api/v1/categories")))
+                .andExpect(jsonPath("$._embedded.categories[0]._links.self.href",Matchers.equalTo("/api/v1/categories/" + ID)))
+                .andExpect(jsonPath("$._embedded.categories[0]._links.categories.href",Matchers.equalTo("/api/v1/categories")))
                 .andExpect(jsonPath("$._links.self.href",Matchers.equalTo("/api/v1/categories"))); //
 
-        Mockito.verify(categoryService, Mockito.times(1)).getAllCategories();*/
+        Mockito.verify(categoryService, Mockito.times(1)).getAllCategories();
     }
 
     @Test
