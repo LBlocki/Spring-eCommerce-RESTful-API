@@ -1,10 +1,14 @@
 package com.blocki.springrestonlinestore.core.services;
 
+import com.blocki.springrestonlinestore.api.v1.mappers.ShoppingCartItemMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.ShoppingCartMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
 import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartDTO;
+import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartItemDTO;
 import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartListDTO;
 import com.blocki.springrestonlinestore.core.domain.ShoppingCart;
+import com.blocki.springrestonlinestore.core.domain.ShoppingCartItem;
+import com.blocki.springrestonlinestore.core.exceptions.NotFoundException;
 import com.blocki.springrestonlinestore.core.repositories.ShoppingCartRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartMapper shoppingCartConverter = Mappers.getMapper(ShoppingCartMapper.class);
     private final UserMapper userConverter = Mappers.getMapper(UserMapper.class);
+    private final ShoppingCartItemMapper shoppingCartItemConverter = Mappers.getMapper(ShoppingCartItemMapper.class);
 
     @Autowired
     public ShoppingCartServiceImpl(ShoppingCartRepository shoppingCartRepository) {
@@ -45,7 +50,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return shoppingCartRepository
                 .findById(id)
                 .map(shoppingCartConverter::shoppingCartToShoppingCartDTO)
-                .orElseThrow(RuntimeException:: new);   //todo implement custom exception
+                .orElseThrow(NotFoundException::new);
     }
 
     @Override
@@ -91,7 +96,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
                     if(shoppingCartDTO.getShoppingCartItemDTOs() != null) {
 
-                        //todo implement using service after implementing shoppingCartItemService
+                        List<ShoppingCartItem> shoppingCartItems = new ArrayList<>();
+
+                        for( ShoppingCartItemDTO shoppingCartItemDTO : shoppingCartDTO.getShoppingCartItemDTOs()) {
+
+                            shoppingCartItems.add(shoppingCartItemConverter.ShoppingCartItemDTOToShoppingCartItem(shoppingCartItemDTO));
+                        }
+
+                        shoppingCart.setShoppingCartItems(shoppingCartItems);
                     }
 
                     if(shoppingCartDTO.getUserDTO() != null) {
@@ -101,7 +113,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
                     return shoppingCartConverter.shoppingCartToShoppingCartDTO(shoppingCartRepository.save(shoppingCart));
 
-                }).orElseThrow(RuntimeException::new);
+                })
+                .orElseThrow(NotFoundException::new);
     }
 
     @Override

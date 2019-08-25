@@ -4,6 +4,7 @@ import com.blocki.springrestonlinestore.api.v1.mappers.CategoryMapper;
 import com.blocki.springrestonlinestore.api.v1.models.CategoryDTO;
 import com.blocki.springrestonlinestore.api.v1.models.CategoryListDTO;
 import com.blocki.springrestonlinestore.core.domain.Category;
+import com.blocki.springrestonlinestore.core.exceptions.NotFoundException;
 import com.blocki.springrestonlinestore.core.repositories.CategoryRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,6 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository
                 .findById(id)
                 .map(categoryConverter::categoryToCategoryDTO)
-                .orElseThrow(RuntimeException::new);    //todo custom exception
+                .orElseThrow(NotFoundException::new);
     }
 }

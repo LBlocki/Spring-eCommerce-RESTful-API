@@ -16,28 +16,28 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class ShoppingCartItemDTO {
 
-    @NotNull
+    @NotNull(message = "field value cannot be null")
     private Long id;
 
     @JsonProperty("product")
-    @NotNull
+    @NotNull(message = "field value cannot be null")
     private ProductDTO productDTO;
 
     @JsonProperty("shopping_cart")
-    @NotNull
+    @NotNull(message = "field value cannot be null")
     private ShoppingCartDTO shoppingCartDTO;
 
-    @NotNull
-    @Positive
+    @NotNull(message = "field value cannot be null")
+    @Positive(message = "field must have positive value")
     private Integer quantity;
 
-    @Positive
-    @NotNull
+    @Positive(message = "field's value must be greater than 0")
+    @NotNull(message = "field value cannot be null")
     @JsonProperty("total_cost")
     @NumberFormat(pattern = "#.##")
     private BigDecimal totalCost;
 
-    @NotBlank
+    @NotBlank(message = "field value cannot be null or contain only blank characters")
     @JsonProperty("shopping_cart_item_url")
     private String shoppingCartItemUrl;
 }

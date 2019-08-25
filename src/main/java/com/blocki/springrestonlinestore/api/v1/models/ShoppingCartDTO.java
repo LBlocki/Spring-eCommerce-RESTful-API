@@ -22,17 +22,17 @@ import java.util.List;
 @AllArgsConstructor
 public class ShoppingCartDTO {
 
-    @NotNull
+    @NotNull(message = "field value cannot be null")
     private Long id;
 
     @JsonProperty("user_id")
-    @NotNull
+    @NotNull(message = "field value cannot be null")
     private UserDTO userDTO;
 
     @JsonProperty("shopping_cart_items")
     private List<ShoppingCartItemDTO> shoppingCartItemDTOs = new ArrayList<>();
 
-    @NotNull
+    @NotNull(message = "field value cannot be null")
     @JsonProperty("creation_date")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @JsonDeserialize(using = LocalDateDeserializer.class)
@@ -40,10 +40,10 @@ public class ShoppingCartDTO {
     private LocalDate creationDate;
 
     @JsonProperty("cart_status")
-    @NotNull
+    @NotNull(message = "field value cannot be null")
     private ShoppingCart.CartStatus cartStatus;
 
-    @NotBlank
+    @NotBlank(message = "field value cannot be null or contain only blank characters")
     @JsonProperty("shopping_cart_url")
     private String shoppingCartUrl;
 

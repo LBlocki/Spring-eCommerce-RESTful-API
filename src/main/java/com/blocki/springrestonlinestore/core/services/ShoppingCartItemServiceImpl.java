@@ -4,6 +4,7 @@ import com.blocki.springrestonlinestore.api.v1.mappers.ShoppingCartItemMapper;
 import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartItemDTO;
 import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartItemListDTO;
 import com.blocki.springrestonlinestore.core.domain.ShoppingCartItem;
+import com.blocki.springrestonlinestore.core.exceptions.NotFoundException;
 import com.blocki.springrestonlinestore.core.repositories.ShoppingCartItemRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class ShoppingCartItemServiceImpl implements ShoppingCartItemService {
        return shoppingCartItemRepository
                .findById(id)
                .map(shoppingCartItemConverter::ShoppingCartItemToShoppingCartItemDTO)
-               .orElseThrow(RuntimeException::new); //todo custom exception
+               .orElseThrow(NotFoundException::new);
     }
 
     @Override

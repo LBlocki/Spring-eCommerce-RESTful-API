@@ -1,10 +1,12 @@
 package com.blocki.springrestonlinestore.core.services;
 
+import com.blocki.springrestonlinestore.api.v1.mappers.CategoryMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.ProductMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
 import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
 import com.blocki.springrestonlinestore.api.v1.models.ProductListDTO;
 import com.blocki.springrestonlinestore.core.domain.Product;
+import com.blocki.springrestonlinestore.core.exceptions.NotFoundException;
 import com.blocki.springrestonlinestore.core.repositories.ProductRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +19,10 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+
     private final ProductMapper productConverter = Mappers.getMapper(ProductMapper.class);
     private final UserMapper userConverter = Mappers.getMapper(UserMapper.class);
+    private final CategoryMapper categoryConverter = Mappers.getMapper(CategoryMapper.class);
 
     @Autowired
     public ProductServiceImpl(ProductRepository productRepository) {
@@ -45,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository
                 .findById(id)
                 .map(productConverter::productToProductDTO)
-                .orElseThrow(RuntimeException:: new);   //todo implement custom exception
+                .orElseThrow(NotFoundException::new);
     }
 
     @Override
@@ -110,7 +114,7 @@ public class ProductServiceImpl implements ProductService {
 
                     if(productDTO.getCategoryDTO() != null) {
 
-                        //todo implement with category patch
+                        product.setCategory(categoryConverter.categoryDTOtoCategory(productDTO.getCategoryDTO()));
                     }
 
                     if(productDTO.getUserDTO() != null) {
@@ -120,7 +124,8 @@ public class ProductServiceImpl implements ProductService {
 
                     return saveProduct(productConverter.productToProductDTO(product));
 
-                }).orElseThrow(RuntimeException::new);
+                })
+                .orElseThrow(NotFoundException::new);
     }
 
     @Override

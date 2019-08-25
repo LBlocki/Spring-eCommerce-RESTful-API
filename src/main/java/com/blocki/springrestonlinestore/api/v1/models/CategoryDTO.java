@@ -13,10 +13,10 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class CategoryDTO {
 
-    @NotNull
+    @NotNull(message = "field value cannot be null")
     private Long id;
 
-    @NotBlank
-    @Size(min = 1, max = 32)
+    @NotBlank(message = "field value cannot be null or contain only blank characters")
+    @Size(min = 1, max = 32, message = "field's value must have between 1 and 32 characters")
     private String name;
 }
