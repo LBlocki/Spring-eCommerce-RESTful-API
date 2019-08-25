@@ -25,27 +25,27 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ProductDTO {
 
-    @NotNull
+    @NotNull(message = "field value cannot be null")
     private Long id;
 
-    @NotNull
+    @NotNull(message = "field value cannot be null")
     @JsonProperty("user_seller")
     private UserDTO userDTO;
 
-    @NotNull
+    @NotNull(message = "field value cannot be null")
     @JsonProperty("category")
     private CategoryDTO categoryDTO;
 
-    @NotBlank
-    @Size(min = 1, max = 32)
-    private  String name;
+    @NotBlank(message = "field value cannot be null or contain only blank characters")
+    @Size(min = 1, max = 32, message = "field's value must have between 1 and 32 characters")
+    private String name;
 
-    @NotNull
+    @NotNull(message = "field value cannot be null")
     @JsonProperty("product_status")
     private Product.ProductStatus productStatus;
 
     @JsonProperty("creation_date")
-    @NotNull
+    @NotNull(message = "field value cannot be null")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
@@ -54,15 +54,15 @@ public class ProductDTO {
     @Nullable
     private String description;
 
-    @Positive
+    @Positive(message = "field's value must be greater than 0")
     @NumberFormat(pattern = "#.##")
-    @NotNull
+    @NotNull(message = "field value cannot be null")
     private BigDecimal cost;
 
     @Nullable
     private Byte[] photo;
 
-    @NotBlank
+    @NotBlank(message = "field value cannot be null or contain only blank characters")
     @JsonProperty("product_url")
     private String productUrl;
 }

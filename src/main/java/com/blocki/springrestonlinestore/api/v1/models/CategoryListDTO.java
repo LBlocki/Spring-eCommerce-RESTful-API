@@ -15,6 +15,6 @@ import java.util.List;
 public class CategoryListDTO {
 
     @JsonProperty("categories")
-    @NotBlank
+    @NotBlank(message = "field value cannot be null or contain only blank characters")
     private List<CategoryDTO>  categoryDTOs = new ArrayList<>();
 }
