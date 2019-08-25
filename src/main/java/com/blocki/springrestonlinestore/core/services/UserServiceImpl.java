@@ -6,6 +6,7 @@ import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
 import com.blocki.springrestonlinestore.api.v1.models.*;
 import com.blocki.springrestonlinestore.core.domain.Product;
 import com.blocki.springrestonlinestore.core.domain.User;
+import com.blocki.springrestonlinestore.core.exceptions.NotFoundException;
 import com.blocki.springrestonlinestore.core.repositories.UserRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
         return userRepository
                 .findById(id)
                 .map(userConverter::userToUserDTO)
-                .orElseThrow(RuntimeException:: new);   //todo implement custom exception
+                .orElseThrow(NotFoundException::new);
     }
 
     @Override
@@ -154,7 +155,7 @@ public class UserServiceImpl implements UserService {
 
                    return saveUser(userConverter.userToUserDTO(user));
                })
-               .orElseThrow(RuntimeException::new); //todo implement custom exception
+               .orElseThrow(NotFoundException::new);
 
     }
 
@@ -175,7 +176,7 @@ public class UserServiceImpl implements UserService {
                     userRepository.save(user);
                     return user;
                 })
-                .orElseThrow(RuntimeException::new);   //todo implement custom exception
+                .orElseThrow(NotFoundException::new);
 
         return shoppingCartDTO;
     }
@@ -191,7 +192,7 @@ public class UserServiceImpl implements UserService {
                     userRepository.save(user);
                     return user;
                 })
-                .orElseThrow(RuntimeException::new);   //todo implement custom exception
+                .orElseThrow(NotFoundException::new);
 
         return productDTO;
     }
