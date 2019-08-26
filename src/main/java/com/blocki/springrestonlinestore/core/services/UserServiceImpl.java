@@ -1,20 +1,29 @@
 package com.blocki.springrestonlinestore.core.services;
 
+import com.blocki.springrestonlinestore.api.v1.controllers.UserController;
 import com.blocki.springrestonlinestore.api.v1.mappers.ProductMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.ShoppingCartMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
-import com.blocki.springrestonlinestore.api.v1.models.*;
+import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
+import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartDTO;
+import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
+import com.blocki.springrestonlinestore.core.config.resourceAssemblers.UserResourceAssembler;
 import com.blocki.springrestonlinestore.core.domain.Product;
 import com.blocki.springrestonlinestore.core.domain.User;
 import com.blocki.springrestonlinestore.core.exceptions.NotFoundException;
 import com.blocki.springrestonlinestore.core.repositories.UserRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -23,53 +32,57 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userConverter = Mappers.getMapper(UserMapper.class);
     private final ProductMapper productConverter = Mappers.getMapper(ProductMapper.class);
     private final ShoppingCartMapper shoppingCartConverter = Mappers.getMapper(ShoppingCartMapper.class);
+    private final UserResourceAssembler userResourceAssembler;
 
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserResourceAssembler userResourceAssembler) {
         this.userRepository = userRepository;
+        this.userResourceAssembler = userResourceAssembler;
     }
 
     @Override
-    public UserListDTO getAllUsers() {
+    public Resources<Resource<UserDTO>> getAllUsers() {
 
-        List<UserDTO> users = new ArrayList<>();
+        List<Resource<UserDTO>> users = userRepository
+                .findAll()
+                .stream()
+                .map(userConverter::userToUserDTO)
+                .map(userResourceAssembler::toResource)
+                .collect(Collectors.toList());
 
-        for(User user : userRepository.findAll()) {
-
-            UserDTO userDTO = userConverter.userToUserDTO(user);
-            users.add(userDTO);
-        }
-
-       return new UserListDTO(users);
+        return new Resources<>(users,
+                linkTo(methodOn(UserController.class).getAllUsers()).withSelfRel());
     }
 
     @Override
-    public UserDTO getUserById(Long id) {
+    public Resource<UserDTO> getUserById(Long id) {
 
-        return userRepository
+        UserDTO userDTO =  userRepository
                 .findById(id)
                 .map(userConverter::userToUserDTO)
                 .orElseThrow(NotFoundException::new);
+
+        return userResourceAssembler.toResource(userDTO);
     }
 
     @Override
-    public UserDTO saveUser(UserDTO userDTO) {
+    public Resource<UserDTO> saveUser(UserDTO userDTO) {
 
         User user = userRepository.save(userConverter.userDTOToUser(userDTO));
 
-        return userConverter.userToUserDTO(user);
+        return userResourceAssembler.toResource(userConverter.userToUserDTO(user));
     }
 
     @Override
-    public UserDTO createNewUser(UserDTO userDTO) {
+    public Resource<UserDTO> createNewUser(UserDTO userDTO) {
 
        return saveUser(userDTO);
     }
 
     //put request
     @Override
-    public UserDTO updateUser(Long id, UserDTO userDTO) {
+    public Resource<UserDTO> updateUser(Long id, UserDTO userDTO) {
 
         User user = userConverter.userDTOToUser(userDTO);
         user.setId(id);
@@ -79,7 +92,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDTO patchUser(Long id, UserDTO userDTO) {
+    public Resource<UserDTO> patchUser(Long id, UserDTO userDTO) {
 
        return userRepository
                .findById(id)
@@ -166,7 +179,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ShoppingCartDTO createNewShoppingCart(Long id, ShoppingCartDTO shoppingCartDTO) {
+    public Resource<ShoppingCartDTO> createNewShoppingCart(Long id, ShoppingCartDTO shoppingCartDTO) {
 
         userRepository
                 .findById(id).
@@ -178,11 +191,11 @@ public class UserServiceImpl implements UserService {
                 })
                 .orElseThrow(NotFoundException::new);
 
-        return shoppingCartDTO;
+        return new Resource<>();    //todo should return this new Shopping Cart using Shopping Cart resource assembler
     }
 
     @Override
-    public ProductDTO createNewProduct(Long id, ProductDTO productDTO) {
+    public  Resource<ProductDTO> createNewProduct(Long id, ProductDTO productDTO) {
 
         userRepository
                 .findById(id).
@@ -194,19 +207,19 @@ public class UserServiceImpl implements UserService {
                 })
                 .orElseThrow(NotFoundException::new);
 
-        return productDTO;
+        return new Resource<>();    //todo should return this new ProductDTO using Product resource assembler
     }
 
     @Override
-    public ProductListDTO getAllProducts(Long id) {
+    public Resources<Resource<ProductDTO>> getAllProducts(Long id) {
 
-        return new ProductListDTO(getUserById(id).getProductDTOs());
+      return new Resources<>();  //todo now link to self hateoas, use self rel for each as products/{id} and  aggregate link to users/id/products
     }
 
     @Override
-    public ShoppingCartListDTO getAllShoppingCarts(Long id) {
+    public  Resources<Resource<ShoppingCartDTO>> getAllShoppingCarts(Long id) {
 
-        return new ShoppingCartListDTO(Collections.singletonList(getUserById(id).getShoppingCartDTO()));
-        //todo update it to pass a list ( after auditing problem)
+        return new Resources<>();        //todo also use link to self hateoas
+        //todo update it to pass a list ( after auditing problem). Use same strategy as for products
     }
 }
