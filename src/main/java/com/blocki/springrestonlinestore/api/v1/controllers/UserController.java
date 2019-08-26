@@ -71,7 +71,7 @@ public class UserController {
 
     @GetMapping("/{id}/shoppingCarts")
     @ResponseStatus(HttpStatus.OK)
-    public  Resources<Resource<ShoppingCartDTO>> getListOfAllShoppingCarts(@PathVariable Long id) {
+    public  Resources<Resource<ShoppingCartDTO>> getAllShoppingCarts(@PathVariable Long id) {
 
         return userService.getAllShoppingCarts(id);
     }
@@ -85,7 +85,7 @@ public class UserController {
 
     @GetMapping("/{id}/products")
     @ResponseStatus(HttpStatus.OK)
-    public  Resources<Resource<ProductDTO>> getListOfAllUsersProducts(@PathVariable Long id) {
+    public  Resources<Resource<ProductDTO>> getAllUsersProducts(@PathVariable Long id) {
 
         return userService.getAllProducts(id);
     }
