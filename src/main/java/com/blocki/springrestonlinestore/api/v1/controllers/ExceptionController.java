@@ -2,8 +2,10 @@ package com.blocki.springrestonlinestore.api.v1.controllers;
 
 import com.blocki.springrestonlinestore.core.exceptions.CustomErrorResponse;
 import com.blocki.springrestonlinestore.core.exceptions.NotFoundException;
+import com.blocki.springrestonlinestore.core.exceptions.ResourceAlreadyExistsException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +38,19 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
         errors.setStatus(HttpStatus.NOT_FOUND.value());
 
         return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<CustomErrorResponse> handleResourceAlreadyExistsException(Exception exception) {
+
+        log.debug("Resource already exists");
+
+        CustomErrorResponse errors = new CustomErrorResponse();
+        errors.setTimestamp(LocalDateTime.now());
+        errors.setError(exception.getMessage());
+        errors.setStatus(HttpStatus.CONFLICT.value());
+
+        return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(NumberFormatException.class)
@@ -83,6 +98,17 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
         errors.setStatus(HttpStatus.BAD_REQUEST.value());
 
         return new ResponseEntity<>(errors, headers, status);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity handleConstraintViolationException(Exception exception){
+
+        CustomErrorResponse errors = new CustomErrorResponse();
+        errors.setTimestamp(LocalDateTime.now());
+        errors.setError("Username and email address must be unique. See stack trace: " + exception.getMessage());
+        errors.setStatus(HttpStatus.BAD_REQUEST.value());
+
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
 }

@@ -20,6 +20,6 @@ public class ShoppingCartResourceAssembler  implements ResourceAssembler<Shoppin
 
         return new Resource<>(shoppingCartDTO,
                 linkTo(methodOn(ShoppingCartController.class).getShoppingCartById(shoppingCartDTO.getId())).withSelfRel(),
-                linkTo(methodOn(UserController.class).getAllShoppingCarts(shoppingCartDTO.getUserDTO().getId())).withRel("user_shopping_carts"));
+                linkTo(methodOn(UserController.class).getShoppingCart(shoppingCartDTO.getUserDTO().getId())).withRel("user_shopping_cart"));
     }
 }
