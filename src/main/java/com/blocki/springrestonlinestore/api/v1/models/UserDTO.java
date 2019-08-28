@@ -13,6 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.core.Relation;
+import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -31,9 +32,11 @@ public class UserDTO {
     private Long id;
 
     @JsonProperty("products")
+    @Nullable
     private List<ProductDTO> productDTOs = new ArrayList<>();
 
     @JsonProperty("shopping_cart")
+    @Nullable
     private ShoppingCartDTO shoppingCartDTO;
 
     @NotBlank(message = "field's value cannot be null or contain only blank characters")

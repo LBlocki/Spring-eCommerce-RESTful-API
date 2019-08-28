@@ -43,6 +43,7 @@ public class User extends BaseEntity {
     private List<Product> products = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private ShoppingCart shoppingCart;
 
     @Column(name = "first_name", nullable = false)

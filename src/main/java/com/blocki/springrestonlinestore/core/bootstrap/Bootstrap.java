@@ -2,10 +2,8 @@ package com.blocki.springrestonlinestore.core.bootstrap;
 
 import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
 import com.blocki.springrestonlinestore.core.domain.Category;
-import com.blocki.springrestonlinestore.core.domain.ShoppingCart;
 import com.blocki.springrestonlinestore.core.domain.User;
 import com.blocki.springrestonlinestore.core.repositories.CategoryRepository;
-import com.blocki.springrestonlinestore.core.repositories.UserRepository;
 import com.blocki.springrestonlinestore.core.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +11,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 @Component
 @Slf4j
 public class Bootstrap implements CommandLineRunner {
 
     private final CategoryRepository categoryRepository;
-    private final UserRepository userRepository;
     private final UserService userService;
 
     private static final Long ID = 2L;
@@ -36,9 +32,8 @@ public class Bootstrap implements CommandLineRunner {
     private static final String USERNAME = "GreatUser";
 
     @Autowired
-    public Bootstrap(CategoryRepository categoryRepository, UserRepository userRepository, UserService userService) {
+    public Bootstrap(CategoryRepository categoryRepository, UserService userService) {
         this.categoryRepository = categoryRepository;
-        this.userRepository = userRepository;
 
         this.userService = userService;
     }
@@ -62,33 +57,32 @@ public class Bootstrap implements CommandLineRunner {
     private void loadUsers() {
 
         User firstUser = new User();
-
+        firstUser.setId(1L);
         fillUser(firstUser);
 
         User secondUser = new User();
-
+        secondUser.setId(2L);
         fillUser(secondUser);
+
         secondUser.setEmailAddress(EMAIL_ADDRESS + "f");
         secondUser.setUsername(USERNAME + "f");
+
         userService.createNewUser(UserMapper.INSTANCE.userToUserDTO(firstUser));
         userService.createNewUser(UserMapper.INSTANCE.userToUserDTO(secondUser));
 
     }
 
-    private void fillUser(User firstUser) {
+    private void fillUser(User userTobeFilled) {
 
-
-        firstUser.setFirstName(FIRST_NAME);
-        firstUser.setLastName(LAST_NAME);
-        firstUser.setEmailAddress(EMAIL_ADDRESS + "s");
-        firstUser.setPassword(PASSWORD);
-        firstUser.setGender(GENDER);
-        firstUser.setCreationDate(CREATION_DATE);
-        firstUser.setAddress(ADDRESS);
-        firstUser.setPhoneNumber(PHONE_NUMBER);
-        firstUser.setCountry(COUNTRY);
-        firstUser.setUsername(USERNAME);
-        firstUser.setProducts(new ArrayList<>());
-        firstUser.setShoppingCart(new ShoppingCart());
+        userTobeFilled.setFirstName(FIRST_NAME);
+        userTobeFilled.setLastName(LAST_NAME);
+        userTobeFilled.setEmailAddress(EMAIL_ADDRESS + "s");
+        userTobeFilled.setPassword(PASSWORD);
+        userTobeFilled.setGender(GENDER);
+        userTobeFilled.setCreationDate(CREATION_DATE);
+        userTobeFilled.setAddress(ADDRESS);
+        userTobeFilled.setPhoneNumber(PHONE_NUMBER);
+        userTobeFilled.setCountry(COUNTRY);
+        userTobeFilled.setUsername(USERNAME);
     }
 }
