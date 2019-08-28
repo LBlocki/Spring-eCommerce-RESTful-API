@@ -88,6 +88,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Resource<UserDTO> createNewUser(UserDTO userDTO) {
 
+        if(userDTO.getId() != null && userRepository.findById(userDTO.getId()).isPresent()) {
+
+            throw new ResourceAlreadyExistsException("User with this Id value already exists");
+        }
+
        return saveUser(userDTO);
     }
 
