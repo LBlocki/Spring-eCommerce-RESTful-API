@@ -12,6 +12,8 @@ public interface UserService {
 
     Resource<UserDTO> getUserById(Long id);
 
+    Resource<UserDTO> getUserByUsername(String username);
+
     Resource<UserDTO> createNewUser(UserDTO userDTO);
 
     Resource<UserDTO> updateUser(Long id, UserDTO userDTO);

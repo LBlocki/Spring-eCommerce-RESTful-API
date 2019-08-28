@@ -78,6 +78,17 @@ public class UserServiceImpl implements UserService {
         return userResourceAssembler.toResource(userDTO);
     }
 
+    @Override
+    public Resource<UserDTO> getUserByUsername(String username) {
+
+        UserDTO userDTO = userRepository
+                .findUserByUsername(username)
+                .map(userConverter::userToUserDTO)
+                .orElseThrow(NotFoundException::new);
+
+        return userResourceAssembler.toResource(userDTO);
+    }
+
     private Resource<UserDTO> saveUser(UserDTO userDTO) {
 
         User user = userRepository.save(userConverter.userDTOToUser(userDTO));
