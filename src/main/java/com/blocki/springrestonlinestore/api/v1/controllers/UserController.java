@@ -40,6 +40,13 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+    @GetMapping("/{username}")
+    @ResponseStatus(HttpStatus.OK)
+    public Resource<UserDTO> getUserByUsername(@PathVariable String username) {
+
+        return userService.getUserByUsername(username);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Resource<UserDTO> createNewUser(@RequestBody @Valid UserDTO userDTO) {
