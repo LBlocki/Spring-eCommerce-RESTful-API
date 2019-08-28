@@ -1,17 +1,11 @@
 package com.blocki.springrestonlinestore.core.services;
 
 import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartItemDTO;
-import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartItemListDTO;
+import org.springframework.hateoas.Resource;
 
 public interface ShoppingCartItemService {
 
-    ShoppingCartItemListDTO getAllShoppingCartItems();
-
-    ShoppingCartItemDTO getShoppingCartItemById(Long id);
-
-    ShoppingCartItemDTO saveShoppingCartItem(ShoppingCartItemDTO userDTO);
-
-    ShoppingCartItemDTO createNewShoppingCartItem(ShoppingCartItemDTO userDTO);
+    Resource<ShoppingCartItemDTO> getShoppingCartItemById(Long id);
 
     void deleteShoppingCartItemById(Long id);
 }

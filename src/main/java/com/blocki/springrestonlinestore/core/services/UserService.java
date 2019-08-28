@@ -12,8 +12,6 @@ public interface UserService {
 
     Resource<UserDTO> getUserById(Long id);
 
-    Resource<UserDTO> saveUser(UserDTO userDTO);
-
     Resource<UserDTO> createNewUser(UserDTO userDTO);
 
     Resource<UserDTO> updateUser(Long id, UserDTO userDTO);
@@ -28,6 +26,6 @@ public interface UserService {
 
     Resources<Resource<ProductDTO>> getAllProducts(Long id);
 
-    Resource<ShoppingCartDTO> getAllShoppingCarts(Long id);
+    Resource<ShoppingCartDTO> getShoppingCart(Long id);
 
 }

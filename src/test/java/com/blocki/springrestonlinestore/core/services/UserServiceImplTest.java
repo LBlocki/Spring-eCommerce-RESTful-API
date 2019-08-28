@@ -1,26 +1,43 @@
 package com.blocki.springrestonlinestore.core.services;
 
-import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
 import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
-import com.blocki.springrestonlinestore.api.v1.models.UserListDTO;
+import com.blocki.springrestonlinestore.core.domain.ShoppingCart;
 import com.blocki.springrestonlinestore.core.domain.User;
 import com.blocki.springrestonlinestore.core.repositories.UserRepository;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
-import org.mapstruct.factory.Mappers;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
+@RunWith(SpringRunner.class)
 public class UserServiceImplTest {
+
+    private static final Long ID = 2L;
+    private static final String FIRST_NAME = "Sherlock";
+    private static final String LAST_NAME = "Holmes";
+    private static final String EMAIL_ADDRESS = "emailAdress@gmail.com";
+    private static final char[] PASSWORD = {'s','s','s','s','s','s','s'};
+    private static final User.Gender GENDER = User.Gender.MALE;
+    private static final LocalDate CREATION_DATE = LocalDate.now();
+    private static final String ADDRESS = "221B Baker Street";
+    private static final String PHONE_NUMBER = "123456789";
+    private static final String COUNTRY = "Poland";
+    private static final String USERNAME = "GreatUser";
 
     @Mock
     private UserRepository userRepository;
@@ -28,31 +45,44 @@ public class UserServiceImplTest {
     @InjectMocks
     private UserServiceImpl userServiceImpl;
 
-    private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
-
-    private final static Long ID = 2L;
-    private final static String firstName = "Michael";
-    private User user;
+    private User fixedUser;
+    private UserDTO fixedUserDTO;
 
     @Before
     public void setUp() {
 
+        fixedUser = User.builder()
+                .firstName(FIRST_NAME)
+                .id(ID)
+                .lastName(LAST_NAME)
+                .emailAddress(EMAIL_ADDRESS)
+                .password(PASSWORD)
+                .gender(GENDER)
+                .creationDate(CREATION_DATE)
+                .address(ADDRESS)
+                .phoneNumber(PHONE_NUMBER)
+                .country(COUNTRY)
+                .username(USERNAME)
+                .products(new ArrayList<>())
+                .shoppingCart(new ShoppingCart())
+                .build();
+
+
         MockitoAnnotations.initMocks(this);
-        user = User.builder().id(ID).firstName(firstName).build();
     }
 
     @Test
     public void getAllUsers() {
 
         //given
-        List<User> users = Arrays.asList(new User(), new User());
-        Mockito.when(userRepository.findAll()).thenReturn(users);
+        Mockito.when(userRepository.findAll()).thenReturn(Arrays.asList(fixedUser,fixedUser,fixedUser));
 
         //when
-        UserListDTO userDTOs = userServiceImpl.getAllUsers();
+        Resources<Resource<UserDTO>> usersDTO = userServiceImpl.getAllUsers();
 
         //than
-        assertNotNull(userDTOs);
+        assertNotNull(usersDTO);
+        assertThat(usersDTO.getContent().size(), Matchers.equalTo(3));
 
         Mockito.verify(userRepository, Mockito.times(1)).findAll();
     }
@@ -61,62 +91,45 @@ public class UserServiceImplTest {
     public void getUserById() {
 
         //given
-        Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(fixedUser));
 
         //when
-        UserDTO userDTO = userServiceImpl.getUserById(ID);
+        Resource<UserDTO> userDTO = userServiceImpl.getUserById(ID);
 
         //than
         assertNotNull(userDTO);
-        assertEquals(userDTO.getId(), user.getId());
-        assertEquals(userDTO.getFirstName(), user.getFirstName());
-
-        Mockito.verify(userRepository, Mockito.times(1)).findById(Mockito.anyLong());
-
-    }
-
-    @Test
-    public void saveUser() {
-
-        //given
-        Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
-
-        //when
-        UserDTO savedUserDTO = userServiceImpl.saveUser(userMapper.userToUserDTO(user));
-
-        //than
-        assertNotNull(savedUserDTO);
-        assertEquals(savedUserDTO.getId(), user.getId());
-        assertEquals(savedUserDTO.getFirstName(), user.getFirstName());
-
-        Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any());
     }
 
     @Test
     public void createNewUser() {
-
-        //given
-        Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
-
-        //when
-        UserDTO createdUserDTO = userServiceImpl.createNewUser(userMapper.userToUserDTO(user));
-
-        //than
-        assertNotNull(createdUserDTO);
-        assertEquals(createdUserDTO.getId(), user.getId());
-        assertEquals(createdUserDTO.getFirstName(), user.getFirstName());
-
-        Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any());
-
     }
 
     @Test
-    public void deleteUser() {
-
-        userServiceImpl.deleteUserById(ID);
-
-        //than
-        Mockito.verify(userRepository, Mockito.times(1)).deleteById(Mockito.anyLong());
-
+    public void updateUser() {
     }
+
+    @Test
+    public void patchUser() {
+    }
+
+    @Test
+    public void deleteUserById() {
+    }
+
+    @Test
+    public void createNewShoppingCart() {
+    }
+
+    @Test
+    public void createNewProduct() {
+    }
+
+    @Test
+    public void getAllProducts() {
+    }
+
+    @Test
+    public void getShoppingCart() {
+    }
+
 }

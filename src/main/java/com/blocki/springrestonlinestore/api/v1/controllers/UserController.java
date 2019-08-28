@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-//todo still needs validation
 @RestController
 @RequestMapping(UserController.USER_CONTROLLER_BASIC_URL)
 public class UserController {
@@ -69,14 +68,14 @@ public class UserController {
         userService.deleteUserById(id);
     }
 
-    @GetMapping("/{id}/shoppingCarts")
+    @GetMapping("/{id}/shoppingCart")
     @ResponseStatus(HttpStatus.OK)
-    public  Resource<ShoppingCartDTO> getAllShoppingCarts(@PathVariable Long id) {
+    public  Resource<ShoppingCartDTO> getShoppingCart(@PathVariable Long id) {
 
-        return userService.getAllShoppingCarts(id);
+        return userService.getShoppingCart(id);
     }
 
-    @PostMapping("/{id}/shoppingCarts")
+    @PostMapping("/{id}/shoppingCart")
     @ResponseStatus(HttpStatus.CREATED)
     public Resource<ShoppingCartDTO> addNewShoppingCart(@PathVariable Long id,  @RequestBody @Valid  ShoppingCartDTO shoppingCartDTO) {
 

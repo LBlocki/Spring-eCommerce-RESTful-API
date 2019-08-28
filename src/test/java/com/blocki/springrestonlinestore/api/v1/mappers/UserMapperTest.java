@@ -84,7 +84,6 @@ public class UserMapperTest {
         userDTO.setGender(gender);
         userDTO.setProductDTOs(new ArrayList<>());
         userDTO.setShoppingCartDTO(new ShoppingCartDTO());
-        userDTO.setUserUrl(userUrl);
 
         User user = userConverter.userDTOToUser(userDTO);
 

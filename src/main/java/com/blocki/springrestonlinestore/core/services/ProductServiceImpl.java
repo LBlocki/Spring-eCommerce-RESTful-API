@@ -4,16 +4,14 @@ import com.blocki.springrestonlinestore.api.v1.mappers.CategoryMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.ProductMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
 import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
-import com.blocki.springrestonlinestore.api.v1.models.ProductListDTO;
+import com.blocki.springrestonlinestore.core.config.resourceAssemblers.ProductResourceAssembler;
 import com.blocki.springrestonlinestore.core.domain.Product;
 import com.blocki.springrestonlinestore.core.exceptions.NotFoundException;
 import com.blocki.springrestonlinestore.core.repositories.ProductRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -24,59 +22,33 @@ public class ProductServiceImpl implements ProductService {
     private final UserMapper userConverter = Mappers.getMapper(UserMapper.class);
     private final CategoryMapper categoryConverter = Mappers.getMapper(CategoryMapper.class);
 
+    private final ProductResourceAssembler productResourceAssembler;
+
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, ProductResourceAssembler productResourceAssembler) {
         this.productRepository = productRepository;
+        this.productResourceAssembler = productResourceAssembler;
     }
 
     @Override
-    public ProductListDTO getAllProducts() {
-
-        List<ProductDTO> ProductDTOs = new ArrayList<>();
-
-        for(Product shoppingCart : productRepository.findAll()) {
-
-            ProductDTO productDTO = productConverter.productToProductDTO(shoppingCart);
-            ProductDTOs.add(productDTO);
-        }
-
-        return new ProductListDTO(ProductDTOs);
-    }
-
-    @Override
-    public ProductDTO getProductById(Long id) {
+    public Resource<ProductDTO> getProductById(Long id) {
 
         return productRepository
                 .findById(id)
                 .map(productConverter::productToProductDTO)
+                .map(productResourceAssembler::toResource)
                 .orElseThrow(NotFoundException::new);
     }
 
-    @Override
-    public ProductDTO saveProduct(ProductDTO productDTO) {
+    private Resource<ProductDTO> saveProduct(ProductDTO productDTO) {
 
         Product product = productRepository.save(productConverter.productDTOToProduct(productDTO));
 
-        return productConverter.productToProductDTO(product);
+        return productResourceAssembler.toResource(productConverter.productToProductDTO(product));
     }
 
     @Override
-    public ProductDTO createNewProduct(ProductDTO productDTO) {
-
-        return saveProduct(productDTO);
-    }
-
-    @Override
-    public ProductDTO updateProduct(Long id, ProductDTO productDTO) {
-
-        Product product = productConverter.productDTOToProduct(productDTO);
-        product.setId(id);
-
-        return saveProduct(productConverter.productToProductDTO(product));
-    }
-
-    @Override
-    public ProductDTO patchProduct(Long id, ProductDTO productDTO) {
+    public Resource<ProductDTO> patchProduct(Long id, ProductDTO productDTO) {
 
         return productRepository
                 .findById(id)

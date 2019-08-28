@@ -2,7 +2,6 @@ package com.blocki.springrestonlinestore.core.services;
 
 import com.blocki.springrestonlinestore.api.v1.mappers.ShoppingCartItemMapper;
 import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartItemDTO;
-import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartItemListDTO;
 import com.blocki.springrestonlinestore.core.domain.ShoppingCartItem;
 import com.blocki.springrestonlinestore.core.repositories.ShoppingCartItemRepository;
 import org.junit.Before;
@@ -12,9 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.hateoas.Resource;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -40,21 +38,6 @@ public class ShoppingCartItemServiceImplTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    @Test
-    public void getAllShoppingCartItems() {
-
-        //given
-        List<ShoppingCartItem> shoppingCartItems = Arrays.asList(new ShoppingCartItem(), new ShoppingCartItem());
-        Mockito.when(shoppingCartItemRepository.findAll()).thenReturn(shoppingCartItems);
-
-        //when
-        ShoppingCartItemListDTO productListDTO = shoppingCartItemServiceImpl.getAllShoppingCartItems();
-
-        //than
-        assertNotNull(productListDTO);
-
-        Mockito.verify(shoppingCartItemRepository, Mockito.times(1)).findAll();
-    }
 
     @Test
     public void getShoppingCartItemById() {
@@ -63,50 +46,14 @@ public class ShoppingCartItemServiceImplTest {
         Mockito.when(shoppingCartItemRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(shoppingCartItem));
 
         //when
-        ShoppingCartItemDTO shoppingCartItemDTO = shoppingCartItemServiceImpl.getShoppingCartItemById(ID);
+        Resource<ShoppingCartItemDTO> shoppingCartItemDTO = shoppingCartItemServiceImpl.getShoppingCartItemById(ID);
 
         //than
         assertNotNull(shoppingCartItemDTO);
-        assertEquals(shoppingCartItemDTO.getId(), shoppingCartItem.getId());
-        assertEquals(shoppingCartItemDTO.getQuantity(), shoppingCartItem.getQuantity());
+        assertEquals(shoppingCartItemDTO.getContent().getId(), shoppingCartItem.getId());
+        assertEquals(shoppingCartItemDTO.getContent().getQuantity(), shoppingCartItem.getQuantity());
 
         Mockito.verify(shoppingCartItemRepository, Mockito.times(1)).findById(Mockito.anyLong());
-    }
-
-    @Test
-    public void saveShoppingCartItem() {
-
-        //given
-        Mockito.when(shoppingCartItemRepository.save(Mockito.any())).thenReturn(shoppingCartItem);
-
-        //when
-        ShoppingCartItemDTO savedShoppingCartItemDTO = shoppingCartItemServiceImpl
-                .saveShoppingCartItem(shoppingCartItemConverter.ShoppingCartItemToShoppingCartItemDTO(shoppingCartItem));
-
-        //than
-        assertNotNull(savedShoppingCartItemDTO);
-        assertEquals(savedShoppingCartItemDTO.getId(), shoppingCartItem.getId());
-        assertEquals(savedShoppingCartItemDTO.getQuantity(), shoppingCartItem.getQuantity());
-
-        Mockito.verify(shoppingCartItemRepository, Mockito.times(1)).save(Mockito.any());
-    }
-
-    @Test
-    public void createNewShoppingCartItem() {
-
-        //given
-        Mockito.when(shoppingCartItemRepository.save(Mockito.any())).thenReturn(shoppingCartItem);
-
-        //when
-        ShoppingCartItemDTO savedShoppingCartItemDTO = shoppingCartItemServiceImpl
-                .createNewShoppingCartItem(shoppingCartItemConverter.ShoppingCartItemToShoppingCartItemDTO(shoppingCartItem));
-
-        //than
-        assertNotNull(savedShoppingCartItemDTO);
-        assertEquals(savedShoppingCartItemDTO.getId(), shoppingCartItem.getId());
-        assertEquals(savedShoppingCartItemDTO.getQuantity(), shoppingCartItem.getQuantity());
-
-        Mockito.verify(shoppingCartItemRepository, Mockito.times(1)).save(Mockito.any());
     }
 
     @Test
