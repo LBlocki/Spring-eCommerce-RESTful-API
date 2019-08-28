@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.core.Relation;
 import org.springframework.lang.Nullable;
@@ -37,6 +38,7 @@ public class UserDTO {
 
     @JsonProperty("shopping_cart")
     @Nullable
+    @ToString.Exclude
     private ShoppingCartDTO shoppingCartDTO;
 
     @NotBlank(message = "field's value cannot be null or contain only blank characters")
