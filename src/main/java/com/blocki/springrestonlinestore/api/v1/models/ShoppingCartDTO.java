@@ -22,7 +22,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ShoppingCartDTO {
 
-    @NotNull(message = "field value cannot be null")
     private Long id;
 
     @JsonProperty("user_id")

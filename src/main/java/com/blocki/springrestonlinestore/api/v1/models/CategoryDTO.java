@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.hateoas.core.Relation;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
@@ -15,7 +14,6 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class CategoryDTO {
 
-    @NotNull(message = "field value cannot be null")
     private Long id;
 
     @NotBlank(message = "field value cannot be null or contain only blank characters")

@@ -34,11 +34,11 @@ public class UserDTO {
 
     @JsonProperty("products")
     @Nullable
+    @ToString.Exclude
     private List<ProductDTO> productDTOs = new ArrayList<>();
 
     @JsonProperty("shopping_cart")
     @Nullable
-    @ToString.Exclude
     private ShoppingCartDTO shoppingCartDTO;
 
     @NotBlank(message = "field's value cannot be null or contain only blank characters")

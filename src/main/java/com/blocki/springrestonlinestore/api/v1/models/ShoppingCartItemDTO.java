@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class ShoppingCartItemDTO {
 
-    @NotNull(message = "field value cannot be null")
     private Long id;
 
     @JsonProperty("product")

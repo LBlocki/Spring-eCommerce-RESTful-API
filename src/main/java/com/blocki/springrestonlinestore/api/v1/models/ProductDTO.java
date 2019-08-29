@@ -25,7 +25,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ProductDTO {
 
-    @NotNull(message = "field value cannot be null")
     private Long id;
 
     @NotNull(message = "field value cannot be null")
