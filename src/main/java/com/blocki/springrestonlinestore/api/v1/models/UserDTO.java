@@ -5,6 +5,7 @@ import com.blocki.springrestonlinestore.core.config.parsers.LocalDateSerializer;
 import com.blocki.springrestonlinestore.core.config.validators.ExtendedEmailValidator;
 import com.blocki.springrestonlinestore.core.config.validators.PhoneNumberValidator;
 import com.blocki.springrestonlinestore.core.domain.User;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -35,9 +36,11 @@ public class UserDTO {
     @JsonProperty("products")
     @Nullable
     @ToString.Exclude
+    @JsonManagedReference
     private List<ProductDTO> productDTOs = new ArrayList<>();
 
     @JsonProperty("shopping_cart")
+    @JsonManagedReference
     @Nullable
     private ShoppingCartDTO shoppingCartDTO;
 

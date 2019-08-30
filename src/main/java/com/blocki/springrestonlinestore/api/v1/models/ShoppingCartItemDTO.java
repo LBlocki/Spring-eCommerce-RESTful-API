@@ -1,10 +1,12 @@
 package com.blocki.springrestonlinestore.api.v1.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.NumberFormat;
+import org.springframework.hateoas.core.Relation;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -14,6 +16,7 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Relation(value = "item", collectionRelation = "items")
 public class ShoppingCartItemDTO {
 
     private Long id;
@@ -24,6 +27,7 @@ public class ShoppingCartItemDTO {
 
     @JsonProperty("shopping_cart")
     @NotNull(message = "field value cannot be null")
+    @JsonBackReference
     private ShoppingCartDTO shoppingCartDTO;
 
     @NotNull(message = "field value cannot be null")

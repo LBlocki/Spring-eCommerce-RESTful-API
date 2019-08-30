@@ -3,6 +3,7 @@ package com.blocki.springrestonlinestore.api.v1.models;
 import com.blocki.springrestonlinestore.core.config.parsers.LocalDateDeserializer;
 import com.blocki.springrestonlinestore.core.config.parsers.LocalDateSerializer;
 import com.blocki.springrestonlinestore.core.domain.Product;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -11,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
+import org.springframework.hateoas.core.Relation;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
@@ -23,12 +25,14 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Relation(value = "product", collectionRelation = "products")
 public class ProductDTO {
 
     private Long id;
 
     @NotNull(message = "field value cannot be null")
     @JsonProperty("user_seller")
+    @JsonBackReference
     private UserDTO userDTO;
 
     @NotNull(message = "field value cannot be null")
