@@ -19,7 +19,6 @@ public class User extends BaseEntity {
 
     public enum Gender {MALE, FEMALE}
 
-    @Builder
     public User(Long id, List<Product> products, ShoppingCart shoppingCart, String firstName, String lastName,
                 String address, String country, String phoneNumber, LocalDate creationDate, String emailAddress,
                 String username, char[] password, Gender gender) {

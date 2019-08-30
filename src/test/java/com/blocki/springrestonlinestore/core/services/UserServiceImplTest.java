@@ -69,19 +69,20 @@ public class UserServiceImplTest {
     @Before
     public void setUp() {
 
-        fixedUser = User.builder()
-                .firstName(FIRST_NAME)
-                .id(ID)
-                .lastName(LAST_NAME)
-                .emailAddress(EMAIL_ADDRESS)
-                .password(PASSWORD)
-                .gender(GENDER)
-                .creationDate(CREATION_DATE)
-                .address(ADDRESS)
-                .phoneNumber(PHONE_NUMBER)
-                .country(COUNTRY)
-                .username(USERNAME)
-                .build();
+        fixedUser = new User();
+        fixedUser.setId(ID);
+        fixedUser.setFirstName(FIRST_NAME);
+        fixedUser.setLastName(LAST_NAME);
+        fixedUser.setAddress(ADDRESS);
+        fixedUser.setCountry(COUNTRY);
+        fixedUser.setPhoneNumber(PHONE_NUMBER);
+        fixedUser.setCreationDate(CREATION_DATE);
+        fixedUser.setEmailAddress(EMAIL_ADDRESS);
+        fixedUser.setUsername(USERNAME);
+        fixedUser.setPassword(PASSWORD);
+        fixedUser.setGender(GENDER);
+        fixedUser.setProducts(new ArrayList<>());
+        fixedUser.setShoppingCart(new ShoppingCart());
 
         productDTO.setId(ID);
         productDTO.setUserDTO(fixedUserDTO);
@@ -184,6 +185,7 @@ public class UserServiceImplTest {
         //given
         Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(fixedUser);
         Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(fixedUser));
+        fixedUser.setShoppingCart(null);
 
         //when
         Resource<ShoppingCartDTO> createdShoppingCartDTO = userServiceImpl.createNewShoppingCart(ID, shoppingCartDTO);
