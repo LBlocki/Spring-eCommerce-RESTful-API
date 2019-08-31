@@ -1,22 +1,65 @@
 package com.blocki.springrestonlinestore.api.v1.mappers;
 
+import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
 import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
+import com.blocki.springrestonlinestore.core.domain.Product;
 import com.blocki.springrestonlinestore.core.domain.User;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface UserMapper {
+public abstract class UserMapper {
 
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+    private CategoryMapper categoryConverter = Mappers.getMapper(CategoryMapper.class);
 
-    @Mapping(source = "products", target = "productDTOs")
-    @Mapping(source = "shoppingCart", target = "shoppingCartDTO")
-    UserDTO userToUserDTO(User user);
+    @Mappings({
+            @Mapping(source = "products", target = "productDTOs"),
+            @Mapping(source = "shoppingCart", target = "shoppingCartDTO")
+    })
+    abstract public UserDTO userToUserDTO(User user);
 
-    @Mapping(source = "productDTOs", target = "products")
-    @Mapping(source = "shoppingCartDTO", target = "shoppingCart")
-    User userDTOToUser(UserDTO userDTO);
+    @InheritInverseConfiguration
+    abstract public User userDTOToUser(UserDTO userDTO);
+
+
+    @AfterMapping
+    protected void setAdditionalUserDTOParameters(User user, @MappingTarget UserDTO userDTO) {
+
+        if (userDTO.getShoppingCartDTO() != null) {
+            userDTO.getShoppingCartDTO().setUserDTO(userDTO);
+        }
+
+        if (userDTO.getProductDTOs() != null && !userDTO.getProductDTOs().isEmpty()) {
+
+            int i = 0;
+
+            for( ProductDTO product : userDTO.getProductDTOs()) {
+
+                product.setUserDTO(userDTO);
+                product.setCategoryDTO(categoryConverter.categoryToCategoryDTO(user.getProducts().get(i).getCategory()));
+            }
+
+        }
+    }
+
+    @AfterMapping
+    protected void setAdditionalUserParameters(UserDTO userDTO, @MappingTarget User user) {
+
+
+        if (user.getShoppingCart() != null) {
+
+            user.getShoppingCart().setUser(user);
+        }
+
+        if (user.getProducts() != null && !user.getProducts().isEmpty()) {
+
+            int i = 0;
+
+            for( Product product : user.getProducts()) {
+
+                product.setUser(user);
+                product.setCategory(categoryConverter.categoryDTOtoCategory(userDTO.getProductDTOs().get(i).getCategoryDTO()));
+            }
+        }
+    }
 }

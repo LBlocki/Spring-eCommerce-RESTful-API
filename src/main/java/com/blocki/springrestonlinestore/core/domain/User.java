@@ -19,7 +19,6 @@ public class User extends BaseEntity {
 
     public enum Gender {MALE, FEMALE}
 
-    @Builder
     public User(Long id, List<Product> products, ShoppingCart shoppingCart, String firstName, String lastName,
                 String address, String country, String phoneNumber, LocalDate creationDate, String emailAddress,
                 String username, char[] password, Gender gender) {
@@ -40,9 +39,11 @@ public class User extends BaseEntity {
     }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Product> products = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private ShoppingCart shoppingCart;
 
     @Column(name = "first_name", nullable = false)
@@ -52,10 +53,10 @@ public class User extends BaseEntity {
     private String lastName;
 
     @Column(nullable = false)
-    private String address;  //todo Address should be refactored in the future : perhaps another table to allow control and validation for DTO
+    private String address;
 
     @Column(nullable = false)
-    private String country; //todo Country should be refactored in the future : perhaps another table to allow control and validation for DTO
+    private String country;
 
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
@@ -70,11 +71,10 @@ public class User extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String username;
 
-    private char[] password;    //todo Password needs refactoring for validation purposes for DTO
+    private char[] password;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Gender gender;
-
 
 }

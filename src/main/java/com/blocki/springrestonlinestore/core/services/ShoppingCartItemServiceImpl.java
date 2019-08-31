@@ -2,65 +2,36 @@ package com.blocki.springrestonlinestore.core.services;
 
 import com.blocki.springrestonlinestore.api.v1.mappers.ShoppingCartItemMapper;
 import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartItemDTO;
-import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartItemListDTO;
-import com.blocki.springrestonlinestore.core.domain.ShoppingCartItem;
+import com.blocki.springrestonlinestore.core.config.resourceAssemblers.ShoppingCartItemResourceAssembler;
 import com.blocki.springrestonlinestore.core.exceptions.NotFoundException;
 import com.blocki.springrestonlinestore.core.repositories.ShoppingCartItemRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class ShoppingCartItemServiceImpl implements ShoppingCartItemService {
 
     private final ShoppingCartItemRepository shoppingCartItemRepository;
     private final ShoppingCartItemMapper shoppingCartItemConverter = Mappers.getMapper(ShoppingCartItemMapper.class);
+    private final ShoppingCartItemResourceAssembler shoppingCartItemResourceAssembler;
 
     @Autowired
-    public ShoppingCartItemServiceImpl(ShoppingCartItemRepository shoppingCartItemRepository) {
+    public ShoppingCartItemServiceImpl(ShoppingCartItemRepository shoppingCartItemRepository,
+                                       ShoppingCartItemResourceAssembler shoppingCartItemResourceAssembler) {
         this.shoppingCartItemRepository = shoppingCartItemRepository;
+        this.shoppingCartItemResourceAssembler = shoppingCartItemResourceAssembler;
     }
 
     @Override
-    public ShoppingCartItemListDTO getAllShoppingCartItems() {
-
-        List<ShoppingCartItemDTO> categoryDTOs = new ArrayList<>();
-
-        for(ShoppingCartItem category : shoppingCartItemRepository.findAll()) {
-
-            ShoppingCartItemDTO newCategoryDTO = shoppingCartItemConverter.ShoppingCartItemToShoppingCartItemDTO(category);
-            categoryDTOs.add(newCategoryDTO);
-        }
-
-        return new ShoppingCartItemListDTO(categoryDTOs);
-    }
-
-    @Override
-    public ShoppingCartItemDTO getShoppingCartItemById(Long id) {
+    public Resource<ShoppingCartItemDTO> getShoppingCartItemById(Long id) {
 
        return shoppingCartItemRepository
                .findById(id)
                .map(shoppingCartItemConverter::ShoppingCartItemToShoppingCartItemDTO)
+               .map(shoppingCartItemResourceAssembler::toResource)
                .orElseThrow(NotFoundException::new);
-    }
-
-    @Override
-    public ShoppingCartItemDTO saveShoppingCartItem(ShoppingCartItemDTO shoppingCartItemDTO) {
-
-       ShoppingCartItem shoppingCartItem = shoppingCartItemConverter
-               .ShoppingCartItemDTOToShoppingCartItem(shoppingCartItemDTO);
-
-       return shoppingCartItemConverter
-               .ShoppingCartItemToShoppingCartItemDTO(shoppingCartItemRepository.save(shoppingCartItem));
-    }
-
-    @Override
-    public ShoppingCartItemDTO createNewShoppingCartItem(ShoppingCartItemDTO shoppingCartItemDTO) {
-
-       return  saveShoppingCartItem(shoppingCartItemDTO);
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
 import com.blocki.springrestonlinestore.core.domain.ShoppingCart;
 import com.blocki.springrestonlinestore.core.domain.User;
 import org.junit.Test;
+import org.mapstruct.factory.Mappers;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import static org.junit.Assert.*;
 public class UserMapperTest {
 
 
-    private UserMapper userConverter = UserMapper.INSTANCE;
+    private UserMapper userConverter = Mappers.getMapper(UserMapper.class);
 
     private static final Long userId = 2L;
     private static final String firstName = "Michael";
@@ -32,21 +33,22 @@ public class UserMapperTest {
     @Test
     public void userToUserDTO() {
 
-        User user = User.builder()
-                .id(userId)
-                .firstName(firstName)
-                .lastName(lastName)
-                .address(address)
-                .country(country)
-                .phoneNumber(phoneNumber)
-                .creationDate(creationDate)
-                .emailAddress(emailAddress)
-                .username(username)
-                .password(password)
-                .gender(gender)
-                .products(new ArrayList<>())
-                .shoppingCart(new ShoppingCart())
-                .build();
+
+
+        User user = new User();
+        user.setId(userId);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setAddress(address);
+        user.setCountry(country);
+        user.setPhoneNumber(phoneNumber);
+        user.setCreationDate(creationDate);
+        user.setEmailAddress(emailAddress);
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setGender(gender);
+        user.setProducts(new ArrayList<>());
+        user.setShoppingCart(new ShoppingCart());
 
         UserDTO userDTO = userConverter.userToUserDTO(user);
 
@@ -84,7 +86,6 @@ public class UserMapperTest {
         userDTO.setGender(gender);
         userDTO.setProductDTOs(new ArrayList<>());
         userDTO.setShoppingCartDTO(new ShoppingCartDTO());
-        userDTO.setUserUrl(userUrl);
 
         User user = userConverter.userDTOToUser(userDTO);
 
@@ -103,10 +104,6 @@ public class UserMapperTest {
         assertEquals(user.getUsername(), userDTO.getUsername());
         assertArrayEquals(user.getPassword(), userDTO.getPassword());
         assertEquals(user.getGender(), userDTO.getGender());
-
-
-
-
 
     }
 

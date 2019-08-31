@@ -1,9 +1,11 @@
 package com.blocki.springrestonlinestore.api.v1.controllers;
 
 import com.blocki.springrestonlinestore.api.v1.models.CategoryDTO;
-import com.blocki.springrestonlinestore.api.v1.models.CategoryListDTO;
 import com.blocki.springrestonlinestore.core.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,16 +23,16 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping
+    @GetMapping(produces = MediaTypes.HAL_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public CategoryListDTO getAllCategories() {
+    public Resources<Resource<CategoryDTO>> getAllCategories() {
 
         return categoryService.getAllCategories();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CategoryDTO getCategoryById(@PathVariable Long id) {
+    public Resource<CategoryDTO> getCategoryById(@PathVariable Long id) {
 
         return categoryService.getCategoryById(id);
     }

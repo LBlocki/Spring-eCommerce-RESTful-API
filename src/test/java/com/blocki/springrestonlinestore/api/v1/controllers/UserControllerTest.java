@@ -1,42 +1,25 @@
 package com.blocki.springrestonlinestore.api.v1.controllers;
 
-import com.blocki.springrestonlinestore.api.v1.models.*;
 import com.blocki.springrestonlinestore.core.domain.Product;
 import com.blocki.springrestonlinestore.core.domain.ShoppingCart;
 import com.blocki.springrestonlinestore.core.domain.User;
-import com.blocki.springrestonlinestore.core.services.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hamcrest.Matchers;
+import com.blocki.springrestonlinestore.core.repositories.UserRepository;
+import com.blocki.springrestonlinestore.core.services.UserServiceImpl;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.MediaType;
-import org.springframework.restdocs.JUnitRestDocumentation;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-
+@WebMvcTest(UserController.class)
 public class UserControllerTest {
-
-    @Rule
-    public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation();
-
-    @Mock
-    private UserService userService;
-
-    @InjectMocks
-    private UserController userController;
 
     private MockMvc mockMvc;
 
@@ -51,217 +34,96 @@ public class UserControllerTest {
     private static final String PHONE_NUMBER = "123456789";
     private static final String COUNTRY = "Poland";
     private static final String USERNAME = "GreatUser";
-    private static final String USER_URL = UserController.USER_CONTROLLER_BASIC_URL + "/" + ID;
 
-    private static final String SHOPPING_CART_URL = USER_URL + "/shoppingCarts";
-    private static final ShoppingCart.CartStatus CART_STATUS = ShoppingCart.CartStatus.ACTIVE;
+    @Mock
+    UserRepository userRepository;
 
-    private static final String DESCRIPTION = "This is description";
-    private static final String PRODUCT_NAME = "Name of the product";
-    private static final Byte[] PHOTO = {'s'};
-    private static final Product.ProductStatus PRODUCT_STATUS = Product.ProductStatus.AVALIABLE;
-    private static final CategoryDTO CATEGORY_DTO = new CategoryDTO();
-    private static final String PRODUCT_URL = USER_URL + "/products";
+    @InjectMocks
+    UserServiceImpl userService;
 
+    @InjectMocks
+    UserController userController;
 
-    private UserDTO userDTO = new UserDTO();
-    private ShoppingCartDTO shoppingCartDTO = new ShoppingCartDTO();
-    private ProductDTO productDTO = new ProductDTO();
-
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private User user = new User();
+    private Product product = new Product();
+    private ShoppingCart shoppingCart = new ShoppingCart();
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
 
         MockitoAnnotations.initMocks(this);
 
-        mockMvc = MockMvcBuilders
-                .standaloneSetup(userController)
-                .apply(documentationConfiguration(this.restDocumentation))
-                .build();
+        mockMvc = MockMvcBuilders.standaloneSetup(userController)
+                .setControllerAdvice(new ExceptionController()).build();
 
-        userDTO.setFirstName(FIRST_NAME);
-        userDTO.setId(ID);
-        userDTO.setLastName(LAST_NAME);
-        userDTO.setEmailAddress(EMAIL_ADDRESS);
-        userDTO.setPassword(PASSWORD);
-        userDTO.setGender(GENDER);
-        userDTO.setCreationDate(CREATION_DATE);
-        userDTO.setAddress(ADDRESS);
-        userDTO.setPhoneNumber(PHONE_NUMBER);
-        userDTO.setCountry(COUNTRY);
-        userDTO.setUsername(USERNAME);
-        userDTO.setUserUrl(USER_URL);
+        user = new User();
+        user.setId(ID);
+        user.setFirstName(FIRST_NAME);
+        user.setLastName(LAST_NAME);
+        user.setAddress(ADDRESS);
+        user.setCountry(COUNTRY);
+        user.setPhoneNumber(PHONE_NUMBER);
+        user.setCreationDate(CREATION_DATE);
+        user.setEmailAddress(EMAIL_ADDRESS);
+        user.setUsername(USERNAME);
+        user.setPassword(PASSWORD);
+        user.setGender(GENDER);
 
-        shoppingCartDTO.setUserDTO(userDTO);
-        shoppingCartDTO.setShoppingCartUrl(SHOPPING_CART_URL);
-        shoppingCartDTO.setCartStatus(CART_STATUS);
-        shoppingCartDTO.setCreationDate(CREATION_DATE);
-        shoppingCartDTO.setId(ID);
+        product.setId(ID);
+        product.setUser(user);
 
-        productDTO.setUserDTO(userDTO);
-        productDTO.setCost(BigDecimal.ONE);
-        productDTO.setCreationDate(CREATION_DATE);
-        productDTO.setDescription(DESCRIPTION);
-        productDTO.setId(ID);
-        productDTO.setName(PRODUCT_NAME);
-        productDTO.setPhoto(PHOTO);
-        productDTO.setProductStatus(PRODUCT_STATUS);
-        productDTO.setCategoryDTO(CATEGORY_DTO);
-        productDTO.setProductUrl(PRODUCT_URL);
+        user.setProducts(Arrays.asList(product,product));
+
+        shoppingCart.setCartStatus(ShoppingCart.CartStatus.ACTIVE);
+        shoppingCart.setId(ID);
+        shoppingCart.setCreationDate(LocalDate.now());
+        shoppingCart.setShoppingCartItems(new ArrayList<>());
+
+        user.setShoppingCart(shoppingCart);
+    }
+
+    @Test
+    public void getAllUsers() throws Exception {
 
     }
 
     @Test
-    public void getListOfUsers() throws  Exception {
-
-        //given
-        UserListDTO userDTOs = new UserListDTO(Collections.singletonList(userDTO));
-
-        Mockito.when(userService.getAllUsers()).thenReturn(userDTOs);
-
-        //than
-        mockMvc.perform(MockMvcRequestBuilders.get(UserController.USER_CONTROLLER_BASIC_URL)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.users", Matchers.hasSize(1)));
-                //.andDo(document(UserController.USER_CONTROLLER_BASIC_URL));
-
-        Mockito.verify(userService, Mockito.times(1)).getAllUsers();
-
+    public void getUserById() {
     }
 
     @Test
-    public void getUserById() throws Exception {
-
-        //given
-        Mockito.when(userService.getUserById(Mockito.anyLong())).thenReturn(userDTO);
-
-        //than
-        mockMvc.perform(MockMvcRequestBuilders.get(UserController.USER_CONTROLLER_BASIC_URL + "/" + userDTO.getId())
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo(userDTO.getId().intValue())));
-                //.andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" + userDTO.getId()));
-
-        Mockito.verify(userService, Mockito.times(1)).getUserById(Mockito.anyLong());
+    public void getUserByUsername() {
     }
 
     @Test
-    public void createNewUser() throws Exception {
-
-        //given
-        Mockito.when(userService.createNewUser(Mockito.any(UserDTO.class))).thenReturn(userDTO);
-
-        //than
-        mockMvc.perform(MockMvcRequestBuilders.post(UserController.USER_CONTROLLER_BASIC_URL )
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userDTO)))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo(userDTO.getId().intValue())));
-                //.andDo(document(UserController.USER_CONTROLLER_BASIC_URL));
-
-        Mockito.verify(userService, Mockito.times(1)).createNewUser(Mockito.any(UserDTO.class));
+    public void createNewUser() {
     }
 
     @Test
-    public void updateUser() throws Exception{
-
-        //given
-        Mockito.when(userService.updateUser(Mockito.anyLong(), Mockito.any(UserDTO.class))).thenReturn(userDTO);
-
-        //than
-        mockMvc.perform(MockMvcRequestBuilders.put(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userDTO)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo(userDTO.getId().intValue())));
-                //.andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId()));
-
-        Mockito.verify(userService, Mockito.times(1)).updateUser(Mockito.anyLong(), Mockito.any(UserDTO.class));
-
+    public void updateUser() {
     }
 
     @Test
-    public void patchUser() throws Exception{
-
-        //given
-        Mockito.when(userService.patchUser(Mockito.anyLong(), Mockito.any(UserDTO.class))).thenReturn(userDTO);
-
-        //than
-        mockMvc.perform(MockMvcRequestBuilders.patch(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userDTO)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo(userDTO.getId().intValue())));
-               // .andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId()));
-
-        Mockito.verify(userService, Mockito.times(1)).patchUser(Mockito.anyLong(), Mockito.any(UserDTO.class));
+    public void patchUser() {
     }
 
     @Test
-    public void deleteUserById() throws Exception{
-
-        mockMvc.perform(MockMvcRequestBuilders.delete(UserController.USER_CONTROLLER_BASIC_URL + "/" + userDTO.getId())
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-                //.andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId()));
-
-        Mockito.verify(userService, Mockito.times(1)).deleteUserById(Mockito.any());
-    }
-
-
-    @Test
-    public void getListOfAllShoppingCarts() throws Exception {
-
-        Mockito.when(userService.getAllShoppingCarts(Mockito.anyLong()))
-                .thenReturn(new ShoppingCartListDTO(Collections.singletonList(shoppingCartDTO)));
-
-        mockMvc.perform(MockMvcRequestBuilders.get(UserController.USER_CONTROLLER_BASIC_URL + "/" + userDTO.getId() + "/" + "shoppingCarts")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.shopping_carts", Matchers.hasSize(1)));
-               // .andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId()+ "/shoppingCarts"));
+    public void deleteUserById() {
     }
 
     @Test
-    public void addNewShoppingCart() throws Exception {
-
-        Mockito.when(userService.createNewShoppingCart(Mockito.anyLong(),Mockito.any(ShoppingCartDTO.class)))
-                .thenReturn(shoppingCartDTO);
-
-        mockMvc.perform(MockMvcRequestBuilders.post(UserController.USER_CONTROLLER_BASIC_URL + "/" + userDTO.getId() + "/" + "shoppingCarts")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(shoppingCartDTO)))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo((shoppingCartDTO.getId().intValue()))));
-                //.andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId() + "/shoppingCarts"));
+    public void getShoppingCart() {
     }
 
     @Test
-    public void getListOfAllUsersProducts() throws Exception{
-
-        Mockito.when(userService.getAllProducts(Mockito.anyLong()))
-                .thenReturn(new ProductListDTO(Collections.singletonList(productDTO)));
-
-        mockMvc.perform(MockMvcRequestBuilders.get(UserController.USER_CONTROLLER_BASIC_URL + "/" + userDTO.getId() + "/" + "products")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.products", Matchers.hasSize(1)));
-                //.andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId() + "/products"));
+    public void addNewShoppingCart() {
     }
 
     @Test
-    public void addNewProductToUser()throws Exception {
+    public void getAllUsersProducts() {
+    }
 
-        Mockito.when(userService.createNewProduct(Mockito.anyLong(),Mockito.any(ProductDTO.class)))
-                .thenReturn(productDTO);
-
-        mockMvc.perform(MockMvcRequestBuilders.post(UserController.USER_CONTROLLER_BASIC_URL + "/" + userDTO.getId() + "/" + "products")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(productDTO)))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo((shoppingCartDTO.getId().intValue()))));
-                //.andDo(document(UserController.USER_CONTROLLER_BASIC_URL + "/" +  userDTO.getId() + "/products"));
+    @Test
+    public void addNewProductToUser() {
     }
 }

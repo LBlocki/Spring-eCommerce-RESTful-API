@@ -1,11 +1,12 @@
 package com.blocki.springrestonlinestore.core.services;
 
 import com.blocki.springrestonlinestore.api.v1.models.CategoryDTO;
-import com.blocki.springrestonlinestore.api.v1.models.CategoryListDTO;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 
 public interface CategoryService {
 
-    CategoryListDTO getAllCategories();
+    Resources<Resource<CategoryDTO>> getAllCategories();
 
-    CategoryDTO getCategoryById(Long id);
+    Resource<CategoryDTO> getCategoryById(Long id);
 }

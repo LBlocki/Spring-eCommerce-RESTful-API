@@ -16,7 +16,13 @@ v{version}, Tom Hombergs, {date}
 == Creating a Project
 
 === Example Request
-include::{snippets}/api/v1/users/http-request.adoc[]
+include::{snippets}/api/v1/categories/http-request.adoc[]
 
 === Example Response
-include::{snippets}/api/v1/users/http-response.adoc[]
+include::{snippets}/api/v1/categories/http-response.adoc[]
+
+=== Example Request 2
+include::{snippets}/api/v1/categories/2/http-request.adoc[]
+
+=== Example Response 2
+include::{snippets}/api/v1/categories/2/http-response.adoc[]
