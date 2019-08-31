@@ -16,6 +16,8 @@ public class UserResourceAssembler  implements ResourceAssembler<UserDTO, Resour
     public Resource<UserDTO> toResource(UserDTO userDTO) {
         return new Resource<>(userDTO,
                 linkTo(methodOn(UserController.class).getUserById(userDTO.getId())).withSelfRel(),
+                linkTo(methodOn(UserController.class).getAllUsersProducts(userDTO.getId())).withRel("user's products"),
+                linkTo(methodOn(UserController.class).getShoppingCart(userDTO.getId())).withRel("user's shopping cart"),
                 linkTo(methodOn(UserController.class).getAllUsers()).withRel("users"));
     }
 }

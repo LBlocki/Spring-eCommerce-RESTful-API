@@ -40,7 +40,7 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("/name/{username}")
     @ResponseStatus(HttpStatus.OK)
     public Resource<UserDTO> getUserByUsername(@PathVariable String username) {
 

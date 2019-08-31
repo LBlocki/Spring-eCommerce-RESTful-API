@@ -2,14 +2,17 @@ package com.blocki.springrestonlinestore.core.bootstrap;
 
 import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
 import com.blocki.springrestonlinestore.core.domain.Category;
+import com.blocki.springrestonlinestore.core.domain.Product;
 import com.blocki.springrestonlinestore.core.domain.User;
 import com.blocki.springrestonlinestore.core.repositories.CategoryRepository;
 import com.blocki.springrestonlinestore.core.services.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Component
@@ -43,11 +46,6 @@ public class Bootstrap implements CommandLineRunner {
 
 
 
-       Category clothes = Category.builder().id(1L).name("Clothes").build();
-       Category food = Category.builder().id(2L).name("Food").build();
-
-       categoryRepository.save(clothes);
-       categoryRepository.save(food);
 
        loadUsers();
 
@@ -56,9 +54,20 @@ public class Bootstrap implements CommandLineRunner {
 
     private void loadUsers() {
 
+        Category clothes = Category.builder().id(1L).name("Clothes").build();
+        Category food = Category.builder().id(2L).name("Food").build();
+
+        categoryRepository.save(clothes);
+        categoryRepository.save(food);
+
         User firstUser = new User();
         firstUser.setId(1L);
         fillUser(firstUser);
+
+        Product product = Product.builder().id(ID).name("sda").description("dsa").creationDate(LocalDate.now())
+                .cost(BigDecimal.ONE).user(firstUser).category(food).productStatus(Product.ProductStatus.AVALIABLE).build();
+
+        firstUser.getProducts().add(product);
 
         User secondUser = new User();
         secondUser.setId(2L);
@@ -67,8 +76,8 @@ public class Bootstrap implements CommandLineRunner {
         secondUser.setEmailAddress(EMAIL_ADDRESS + "f");
         secondUser.setUsername(USERNAME + "f");
 
-        userService.createNewUser(UserMapper.INSTANCE.userToUserDTO(firstUser));
-        userService.createNewUser(UserMapper.INSTANCE.userToUserDTO(secondUser));
+        userService.createNewUser(Mappers.getMapper(UserMapper.class).userToUserDTO(firstUser));
+        userService.createNewUser(Mappers.getMapper(UserMapper.class).userToUserDTO(secondUser));
 
     }
 
