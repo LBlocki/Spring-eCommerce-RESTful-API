@@ -41,6 +41,7 @@ public class UserDTO {
 
     @JsonProperty("shopping_cart")
     @JsonManagedReference
+    @ToString.Exclude
     @Nullable
     private ShoppingCartDTO shoppingCartDTO;
 
