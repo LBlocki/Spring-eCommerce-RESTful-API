@@ -37,6 +37,7 @@ public abstract class UserMapper {
 
                 product.setUserDTO(userDTO);
                 product.setCategoryDTO(categoryConverter.categoryToCategoryDTO(user.getProducts().get(i).getCategory()));
+                product.setUserDTOId(user.getId());
             }
 
         }
@@ -58,6 +59,7 @@ public abstract class UserMapper {
             for( Product product : user.getProducts()) {
 
                 product.setUser(user);
+
                 product.setCategory(categoryConverter.categoryDTOtoCategory(userDTO.getProductDTOs().get(i).getCategoryDTO()));
             }
         }

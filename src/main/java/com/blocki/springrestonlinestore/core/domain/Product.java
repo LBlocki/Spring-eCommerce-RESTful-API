@@ -1,6 +1,9 @@
 package com.blocki.springrestonlinestore.core.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -16,21 +19,6 @@ import java.time.LocalDate;
 public class Product extends BaseEntity {
 
     public enum ProductStatus { AVALIABLE, OUT_OF_STOCK, ERROR }
-
-    @Builder// Otherwise Builder will ignore the initializing expression for Set...
-    public Product(Long id, User user, Category category,
-                   String name, ProductStatus productStatus, LocalDate creationDate, String description, BigDecimal cost, Byte[] photo) {
-
-        super(id);
-        this.user = user;
-        this.category = category;
-        this.name = name;
-        this.productStatus = productStatus;
-        this.creationDate = creationDate;
-        this.description = description;
-        this.cost = cost;
-        this.photo = photo;
-    }
 
     @ManyToOne
     @JoinColumn(name = "seller_id", nullable = false)

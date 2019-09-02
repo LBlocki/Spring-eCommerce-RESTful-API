@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Entity
 @Table(name = "users")
@@ -18,25 +17,6 @@ import java.util.Optional;
 public class User extends BaseEntity {
 
     public enum Gender {MALE, FEMALE}
-
-    public User(Long id, List<Product> products, ShoppingCart shoppingCart, String firstName, String lastName,
-                String address, String country, String phoneNumber, LocalDate creationDate, String emailAddress,
-                String username, char[] password, Gender gender) {
-
-        super(id);
-        this.products = Optional.ofNullable(products).orElse(this.products);
-        this.shoppingCart = shoppingCart;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.country = country;
-        this.phoneNumber = phoneNumber;
-        this.creationDate = creationDate;
-        this.emailAddress = emailAddress;
-        this.username = username;
-        this.password = password;
-        this.gender = gender;
-    }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @ToString.Exclude

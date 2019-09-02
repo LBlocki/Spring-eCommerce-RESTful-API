@@ -7,6 +7,7 @@ import com.blocki.springrestonlinestore.core.domain.Category;
 import com.blocki.springrestonlinestore.core.domain.Product;
 import com.blocki.springrestonlinestore.core.domain.User;
 import org.junit.Test;
+import org.mapstruct.factory.Mappers;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -15,7 +16,7 @@ import static org.junit.Assert.*;
 
 public class ProductMapperTest {
 
-    private ProductMapper productConverter = ProductMapper.INSTANCE;
+    private ProductMapper productConverter = Mappers.getMapper(ProductMapper.class);
 
     private static final Long productID = 2L;
     private static final String productName = "Doll";
@@ -23,24 +24,25 @@ public class ProductMapperTest {
     private static final String description = "This is the description for the product";
     private static final BigDecimal cost = new BigDecimal(100.2);
     private static final Byte[] photo = {2,3,4};
-    private static final String productUrl = "api/v1/product/2";
     private static final LocalDate creationDate = LocalDate.of(2000, 12, 12);
 
     @Test
     public void productToProductDTO() {
 
         //given
-        Product product = Product.builder()
-                .id(productID)
-                .name(productName)
-                .productStatus(productStatus)
-                .description(description)
-                .cost(cost)
-                .photo(photo)
-                .creationDate(creationDate)
-                .user(new User())
-                .category(new Category())
-                .build();
+        User user = new User();
+        user.setId(2L);
+
+        Product product = new Product();
+        product.setUser(user);
+        product.setCategory(new Category());
+        product.setCreationDate(LocalDate.now());
+        product.setCost(BigDecimal.ONE);
+        product.setProductStatus(Product.ProductStatus.AVALIABLE);
+        product.setName(productName);
+        product.setId(productID);
+        product.setDescription(description);
+        product.setPhoto(photo);
 
         //when
         ProductDTO productDTO = productConverter.productToProductDTO(product);
@@ -57,6 +59,7 @@ public class ProductMapperTest {
         assertEquals(productDTO.getCost(), product.getCost());
         assertArrayEquals(productDTO.getPhoto(), product.getPhoto());
         assertEquals(productDTO.getCreationDate(), product.getCreationDate());
+        assertEquals(productDTO.getUserDTOId(), user.getId());
 
     }
 
@@ -74,7 +77,6 @@ public class ProductMapperTest {
         productDTO.setCreationDate(creationDate);
         productDTO.setUserDTO(new UserDTO());
         productDTO.setCategoryDTO(new CategoryDTO());
-        productDTO.setProductUrl(productUrl);
 
         //when
         Product product = productConverter.productDTOToProduct(productDTO);

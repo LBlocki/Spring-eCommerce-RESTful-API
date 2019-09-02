@@ -2,21 +2,43 @@ package com.blocki.springrestonlinestore.api.v1.mappers;
 
 import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
 import com.blocki.springrestonlinestore.core.domain.Product;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
+import com.blocki.springrestonlinestore.core.exceptions.NotFoundException;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface ProductMapper {
+public abstract class ProductMapper {
 
-    ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
+    private UserMapper userConverter = Mappers.getMapper(UserMapper.class);
 
-    @Mapping(source = "user", target = "userDTO")
-    @Mapping(source = "category", target = "categoryDTO")
-    ProductDTO productToProductDTO(Product product);
+    @Mappings({
+            @Mapping(source = "user", target = "userDTO"),
+            @Mapping(source = "category", target = "categoryDTO")
+    })
+    abstract public ProductDTO productToProductDTO(Product product);
 
-    @Mapping(source = "userDTO", target = "user")
-    @Mapping(source = "categoryDTO", target = "category")
-    Product productDTOToProduct(ProductDTO productDTO);
+    @InheritInverseConfiguration
+    abstract public Product productDTOToProduct(ProductDTO productDTO);
+
+    @AfterMapping
+    protected void setAdditionalProductDTOParameters(Product product, @MappingTarget ProductDTO productDTO) {
+
+        if(product.getUser() == null) {
+
+            throw new NotFoundException("Product's user is null");
+        }
+
+        productDTO.setUserDTOId(product.getUser().getId());
+    }
+
+    @AfterMapping
+    protected void setAdditionalProductParameters(ProductDTO productDTO, @MappingTarget Product product) {
+
+        if(productDTO.getUserDTO() == null) {
+
+            throw new NotFoundException("ProductDTO's userDTO is null");
+        }
+
+        product.setUser(userConverter.userDTOToUser(productDTO.getUserDTO()));
+    }
 }
