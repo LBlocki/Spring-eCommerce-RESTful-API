@@ -29,6 +29,13 @@ public class ProductController {
         return productService.getProductById(id);
     }
 
+    @GetMapping("/name/{productName}")
+    @ResponseStatus(HttpStatus.OK)
+    public Resource<ProductDTO> getProductByName(@PathVariable String productName) {
+
+        return productService.getProductByName(productName);
+    }
+
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Resource<ProductDTO> patchProduct(@PathVariable Long id, @RequestBody @Valid ProductDTO userDTO) {

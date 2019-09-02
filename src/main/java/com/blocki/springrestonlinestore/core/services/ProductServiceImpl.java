@@ -40,6 +40,16 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(NotFoundException::new);
     }
 
+    @Override
+    public Resource<ProductDTO> getProductByName(String name) {
+
+        return productRepository
+                .findProductByName(name)
+                .map(productConverter::productToProductDTO)
+                .map(productResourceAssembler::toResource)
+                .orElseThrow(NotFoundException::new);
+    }
+
     private Resource<ProductDTO> saveProduct(ProductDTO productDTO) {
 
         Product product = productRepository.save(productConverter.productDTOToProduct(productDTO));

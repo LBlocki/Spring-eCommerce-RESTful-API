@@ -7,6 +7,8 @@ public interface ProductService {
 
     Resource<ProductDTO> getProductById(Long id);
 
+    Resource<ProductDTO> getProductByName(String name);
+
     Resource<ProductDTO> patchProduct(Long id, ProductDTO shoppingCartDTO);
 
     void deleteProductById(Long id);

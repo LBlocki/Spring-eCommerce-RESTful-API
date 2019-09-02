@@ -89,4 +89,23 @@ public class ProductServiceImplTest {
 
         Mockito.verify(productRepository, Mockito.times(1)).deleteById(Mockito.anyLong());
     }
+
+    @Test
+    public void getProductByName() {
+
+        //given
+        Mockito.when(productRepository.findProductByName(Mockito.any())).thenReturn(Optional.of(product));
+
+        //when
+        Resource<ProductDTO> productDTO = productService.getProductByName(product.getName());
+
+        //than
+        Mockito.verify(productRepository, Mockito.times(1)).findProductByName(Mockito.any());
+        Mockito.verify(productResourceAssembler, Mockito.times(1)).toResource(Mockito.any(ProductDTO.class));
+
+        assertNotNull(productDTO);
+        assertEquals(productDTO.getContent().getId(), product.getId());
+        assertEquals(productDTO.getContent().getUserDTOId(), userID);
+        assertEquals(productDTO.getContent().getProductStatus(), product.getProductStatus());
+    }
 }
