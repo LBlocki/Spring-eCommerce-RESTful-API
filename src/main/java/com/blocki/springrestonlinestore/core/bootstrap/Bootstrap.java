@@ -42,7 +42,7 @@ public class Bootstrap implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
 
 
 
@@ -64,8 +64,16 @@ public class Bootstrap implements CommandLineRunner {
         firstUser.setId(1L);
         fillUser(firstUser);
 
-        Product product = Product.builder().id(ID).name("sda").description("dsa").creationDate(LocalDate.now())
-                .cost(BigDecimal.ONE).user(firstUser).category(food).productStatus(Product.ProductStatus.AVALIABLE).build();
+        Product product = new Product();
+        product.setUser(firstUser);
+        product.setCategory(clothes);
+        product.setCreationDate(LocalDate.now());
+        product.setCost(BigDecimal.ONE);
+        product.setProductStatus(Product.ProductStatus.AVALIABLE);
+        product.setName("Product name");
+        product.setId(ID);
+        product.setDescription("This is description");
+        product.setPhoto(new Byte[]{'s'});
 
         firstUser.getProducts().add(product);
 
