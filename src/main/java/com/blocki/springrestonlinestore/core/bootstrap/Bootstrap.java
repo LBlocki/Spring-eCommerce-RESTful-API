@@ -54,8 +54,13 @@ public class Bootstrap implements CommandLineRunner {
 
     private void loadUsers() {
 
-        Category clothes = Category.builder().id(1L).name("Clothes").build();
-        Category food = Category.builder().id(2L).name("Food").build();
+        Category clothes = new Category();
+        Category food =  new Category();
+
+        clothes.setId(1L);
+        clothes.setName("Clothes");
+        food.setId(2L);
+        food.setName("Food");
 
         categoryRepository.save(clothes);
         categoryRepository.save(food);

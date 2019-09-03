@@ -2,26 +2,29 @@ package com.blocki.springrestonlinestore.api.v1.mappers;
 
 import com.blocki.springrestonlinestore.api.v1.models.CategoryDTO;
 import com.blocki.springrestonlinestore.core.domain.Category;
+import org.junit.Before;
 import org.junit.Test;
+import org.mapstruct.factory.Mappers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class CategoryMapperTest {
 
-    private CategoryMapper categoryConverter = CategoryMapper.INSTANCE;
+    private CategoryMapper categoryConverter = Mappers.getMapper(CategoryMapper.class);
 
-    private static final Long CategoryID = 1L;
-    private static final String CategoryName = "Clothes";
+    private static final Long categoryID = 1L;
+    private static final String categoryName = "Clothes";
+    private Category category = new Category();
 
+    @Before
+    public void setUp() {
+
+        category.setId(categoryID);
+        category.setName(categoryName);
+    }
     @Test
     public void categoryToCategoryDTO() {
-
-        //given
-        Category category = Category.builder()
-                .id(CategoryID)
-                .name(CategoryName)
-                .build();
 
         //when
         CategoryDTO categoryDTO = categoryConverter.categoryToCategoryDTO(category);
@@ -38,9 +41,7 @@ public class CategoryMapperTest {
     public void categoryDTOToCategory() {
 
         //given
-        CategoryDTO categoryDTO = new CategoryDTO();
-        categoryDTO.setId(CategoryID);
-        categoryDTO.setName(CategoryName);
+        CategoryDTO categoryDTO = categoryConverter.categoryToCategoryDTO(category);
 
         //when
         Category category = categoryConverter.categoryDTOtoCategory(categoryDTO);

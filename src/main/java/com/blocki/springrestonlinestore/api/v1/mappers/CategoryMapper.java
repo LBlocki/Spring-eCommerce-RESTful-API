@@ -4,15 +4,12 @@ import com.blocki.springrestonlinestore.api.v1.models.CategoryDTO;
 import com.blocki.springrestonlinestore.core.domain.Category;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
 
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface CategoryMapper {
+public abstract class CategoryMapper {
 
-    CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
+    abstract public CategoryDTO categoryToCategoryDTO(Category category);
 
-    CategoryDTO categoryToCategoryDTO(Category category);
-
-    Category categoryDTOtoCategory(CategoryDTO categoryDTO);
+    abstract public Category categoryDTOtoCategory(CategoryDTO categoryDTO);
 }

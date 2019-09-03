@@ -1,6 +1,9 @@
 package com.blocki.springrestonlinestore.core.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,13 +16,6 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Category extends BaseEntity {
-
-    @Builder// Otherwise Builder will ignore the initializing expression for Set...
-    public Category(Long id, String name) {
-
-        super(id);
-        this.name = name;
-    }
 
     @Column(unique = true, nullable = false)
     private String name;
