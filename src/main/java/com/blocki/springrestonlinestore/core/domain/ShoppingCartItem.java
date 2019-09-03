@@ -1,7 +1,5 @@
 package com.blocki.springrestonlinestore.core.domain;
 
-
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -15,15 +13,6 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class ShoppingCartItem extends  BaseEntity {
-
-    @Builder
-    public ShoppingCartItem(Long id, Product product, ShoppingCart shoppingCart, int quantity, BigDecimal totalCost) {
-        super(id);
-        this.product = product;
-        this.shoppingCart = shoppingCart;
-        this.quantity = quantity;
-        this.totalCost = totalCost;
-    }
 
     @ManyToOne
     @JoinColumn(name = "product_id")
