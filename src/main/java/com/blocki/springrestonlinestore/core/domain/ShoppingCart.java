@@ -3,6 +3,7 @@ package com.blocki.springrestonlinestore.core.domain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -24,6 +25,7 @@ public class ShoppingCart extends BaseEntity {
     private User user;
 
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<ShoppingCartItem> shoppingCartItems = new ArrayList<>();
 
     @CreationTimestamp

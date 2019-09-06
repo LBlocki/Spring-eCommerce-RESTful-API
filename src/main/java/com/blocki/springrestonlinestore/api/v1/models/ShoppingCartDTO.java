@@ -11,10 +11,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.core.Relation;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -39,6 +39,7 @@ public class ShoppingCartDTO {
 
     @JsonProperty("shopping_cart_items")
     @JsonManagedReference
+    @ToString.Exclude
     private List<ShoppingCartItemDTO> shoppingCartItemDTOs = new ArrayList<>();
 
     @NotNull(message = "Creation date field value cannot be null")

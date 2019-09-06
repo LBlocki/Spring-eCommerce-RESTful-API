@@ -24,6 +24,7 @@ public class ShoppingCartItemServiceImplTest {
     private Product product = new Product();
     private ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
     private ShoppingCart shoppingCart = new ShoppingCart();
+    private User user = new User();
 
     @Mock
     private ShoppingCartItemRepository shoppingCartItemRepository;
@@ -41,17 +42,25 @@ public class ShoppingCartItemServiceImplTest {
         MockitoAnnotations.initMocks(this);
 
         product.setId(2L);
-        product.setUser(new User());
         product.setCategory(new Category());
 
         shoppingCartItem.setId(shoppingCartItemId);
         shoppingCartItem.setQuantity(quantity);
         shoppingCartItem.setTotalCost(totalCost);
+
+        user.setId(1L);
+        user.setShoppingCart(shoppingCart);
+        user.getProducts().add(product);
+        product.setUser(user);
+
         shoppingCartItem.setProduct(product);
+        shoppingCart.setUser(user);
 
         shoppingCart.setId(2L);
         shoppingCart.getShoppingCartItems().add(shoppingCartItem);
         shoppingCartItem.setShoppingCart(shoppingCart);
+
+
     }
 
     @Test

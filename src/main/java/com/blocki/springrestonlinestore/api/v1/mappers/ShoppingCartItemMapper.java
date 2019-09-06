@@ -2,7 +2,6 @@ package com.blocki.springrestonlinestore.api.v1.mappers;
 
 import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartItemDTO;
 import com.blocki.springrestonlinestore.core.domain.ShoppingCartItem;
-import com.blocki.springrestonlinestore.core.exceptions.NotFoundException;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -20,38 +19,19 @@ public abstract class ShoppingCartItemMapper {
     abstract public ShoppingCartItem ShoppingCartItemDTOToShoppingCartItem(ShoppingCartItemDTO shoppingCartItemDTO);
 
     @AfterMapping
-    protected void setAdditionalShoppingCartItemDTOParameters(ShoppingCartItem shoppingCartItem,
+    void setAdditionalShoppingCartItemDTOParameters(ShoppingCartItem shoppingCartItem,
                                                               @MappingTarget ShoppingCartItemDTO shoppingCartItemDTO) {
-
-        if(shoppingCartItem.getShoppingCart() == null) {
-
-            throw new NotFoundException("ShoppingCartItem's Shopping cart is null");
-        }
-
-        else if(shoppingCartItem.getProduct() == null) {
-
-            throw new NotFoundException("ShoppingCartItem's product is null");
-        }
 
         shoppingCartItemDTO.setProductDTO(productConverter.productToProductDTO(shoppingCartItem.getProduct()));
         shoppingCartItemDTO.setShoppingCartDTO(shoppingCartConverter
                 .shoppingCartToShoppingCartDTO(shoppingCartItem.getShoppingCart()));
-        shoppingCartItemDTO.setShoppingCartDTOId(shoppingCartItem.getId());
+        shoppingCartItemDTO.setShoppingCartDTOId(shoppingCartItem.getShoppingCart().getId());
     }
 
     @AfterMapping
-    protected void setAdditionalShoppingCartItemParameters(ShoppingCartItemDTO shoppingCartItemDTO,
+    void setAdditionalShoppingCartItemParameters(ShoppingCartItemDTO shoppingCartItemDTO,
                                                               @MappingTarget ShoppingCartItem shoppingCartItem) {
 
-        if(shoppingCartItemDTO.getShoppingCartDTO() == null) {
-
-            throw new NotFoundException("ShoppingCartItem's Shopping cart is null");
-        }
-
-        else if(shoppingCartItemDTO.getProductDTO() == null) {
-
-            throw new NotFoundException("ShoppingCartItem's product is null");
-        }
 
         shoppingCartItem.setProduct(productConverter.productDTOToProduct(shoppingCartItemDTO.getProductDTO()));
         shoppingCartItem.setShoppingCart(shoppingCartConverter
