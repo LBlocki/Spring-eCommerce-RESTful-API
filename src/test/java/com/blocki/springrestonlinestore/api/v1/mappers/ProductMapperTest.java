@@ -1,65 +1,49 @@
 package com.blocki.springrestonlinestore.api.v1.mappers;
 
-import com.blocki.springrestonlinestore.api.v1.models.CategoryDTO;
+import com.blocki.springrestonlinestore.TestEntity;
 import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
-import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
-import com.blocki.springrestonlinestore.core.domain.Category;
 import com.blocki.springrestonlinestore.core.domain.Product;
-import com.blocki.springrestonlinestore.core.domain.User;
+import org.junit.Before;
 import org.junit.Test;
 import org.mapstruct.factory.Mappers;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 import static org.junit.Assert.*;
 
 public class ProductMapperTest {
 
     private final ProductMapper productConverter = Mappers.getMapper(ProductMapper.class);
+    private final TestEntity testEntity = new TestEntity();
 
-    private static final Long productID = 2L;
-    private static final String productName = "Doll";
-    private static final Product.ProductStatus productStatus = Product.ProductStatus.AVALIABLE;
-    private static final String description = "This is the description for the product";
-    private static final BigDecimal cost = new BigDecimal(100.2);
-    private static final Byte[] photo = {2,3,4};
-    private static final LocalDate creationDate = LocalDate.of(2000, 12, 12);
+    private Product product;
+
+    @Before
+    public void setUp() {
+
+        product = testEntity.getProduct();
+    }
 
     @Test
     public void productToProductDTO() {
 
-        //given
-        User user = new User();
-        user.setId(2L);
-
-        Product product = new Product();
-        product.setUser(user);
-        product.setCategory(new Category());
-        product.setCreationDate(LocalDate.now());
-        product.setCost(BigDecimal.ONE);
-        product.setProductStatus(Product.ProductStatus.AVALIABLE);
-        product.setName(productName);
-        product.setId(productID);
-        product.setDescription(description);
-        product.setPhoto(photo);
-
         //when
-        ProductDTO productDTO = productConverter.productToProductDTO(product);
+        ProductDTO testProductDTO = productConverter.productToProductDTO(product);
 
         //then
-        assertNotNull(productDTO);
-        assertNotNull(productDTO.getUserDTO());
-        assertNotNull(productDTO.getCategoryDTO());
+        assertNotNull(testProductDTO);
+        assertNotNull(testProductDTO.getUserDTO());
+        assertNotNull(testProductDTO.getCategoryDTO());
 
-        assertEquals(productDTO.getId(), product.getId());
-        assertEquals(productDTO.getName(), product.getName());
-        assertEquals(productDTO.getProductStatus(), product.getProductStatus());
-        assertEquals(productDTO.getDescription(), product.getDescription());
-        assertEquals(productDTO.getCost(), product.getCost());
-        assertArrayEquals(productDTO.getPhoto(), product.getPhoto());
-        assertEquals(productDTO.getCreationDate(), product.getCreationDate());
-        assertEquals(productDTO.getUserDTOId(), user.getId());
+        assertEquals(testProductDTO.getId(), product.getId());
+        assertEquals(testProductDTO.getName(), product.getName());
+        assertEquals(testProductDTO.getProductStatus(), product.getProductStatus());
+        assertEquals(testProductDTO.getDescription(), product.getDescription());
+        assertEquals(testProductDTO.getCost(), product.getCost());
+        assertEquals(testProductDTO.getCreationDate(), product.getCreationDate());
+        assertEquals(testProductDTO.getUserDTO().getId(), product.getUser().getId());
+        assertEquals(testProductDTO.getCategoryDTO().getId(), product.getCategory().getId());
+        assertEquals(testProductDTO.getUserDTOId(), product.getUser().getId());
+
+        assertArrayEquals(testProductDTO.getPhoto(), product.getPhoto());
 
     }
 
@@ -67,31 +51,25 @@ public class ProductMapperTest {
     public void productDTOtoProduct() {
 
         //given
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.setId(productID);
-        productDTO.setName(productName);
-        productDTO.setProductStatus(productStatus);
-        productDTO.setDescription(description);
-        productDTO.setCost(cost);
-        productDTO.setPhoto(photo);
-        productDTO.setCreationDate(creationDate);
-        productDTO.setUserDTO(new UserDTO());
-        productDTO.setCategoryDTO(new CategoryDTO());
+        ProductDTO productDTO = productConverter.productToProductDTO(product);
 
         //when
-        Product product = productConverter.productDTOToProduct(productDTO);
+        Product testProduct = productConverter.productDTOToProduct(productDTO);
 
         //then
-        assertNotNull(product);
-        assertNotNull(product.getUser());
-        assertNotNull(product.getCategory());
+        assertNotNull(testProduct);
+        assertNotNull(testProduct.getUser());
+        assertNotNull(testProduct.getCategory());
 
-        assertEquals(productDTO.getId(), product.getId());
-        assertEquals(productDTO.getName(), product.getName());
-        assertEquals(productDTO.getProductStatus(), product.getProductStatus());
-        assertEquals(productDTO.getDescription(), product.getDescription());
-        assertEquals(productDTO.getCost(), product.getCost());
-        assertArrayEquals(productDTO.getPhoto(), product.getPhoto());
-        assertEquals(productDTO.getCreationDate(), product.getCreationDate());
+        assertEquals(testProduct.getId(), productDTO.getId());
+        assertEquals(testProduct.getName(), productDTO.getName());
+        assertEquals(testProduct.getProductStatus(), productDTO.getProductStatus());
+        assertEquals(testProduct.getDescription(), productDTO.getDescription());
+        assertEquals(testProduct.getCost(), productDTO.getCost());
+        assertEquals(testProduct.getCreationDate(), productDTO.getCreationDate());
+        assertEquals(testProduct.getUser().getId(), productDTO.getUserDTO().getId());
+        assertEquals(testProduct.getCategory().getId(), productDTO.getCategoryDTO().getId());
+
+        assertArrayEquals(testProduct.getPhoto(), productDTO.getPhoto());
     }
 }
