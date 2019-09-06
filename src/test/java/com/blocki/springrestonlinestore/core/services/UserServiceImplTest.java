@@ -1,5 +1,6 @@
 package com.blocki.springrestonlinestore.core.services;
 
+import com.blocki.springrestonlinestore.api.v1.mappers.ShoppingCartMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
 import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
 import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartDTO;
@@ -56,13 +57,15 @@ public class UserServiceImplTest {
     @Spy
     private ProductResourceAssembler productResourceAssembler = new ProductResourceAssembler();
 
-    @Spy
     private UserMapper userConverter = Mappers.getMapper(UserMapper.class);
+
+    private ShoppingCartMapper shoppingCartConverter = Mappers.getMapper(ShoppingCartMapper.class);
 
     private User fixedUser;
     private UserDTO fixedUserDTO;
 
     private ShoppingCartDTO shoppingCartDTO = new ShoppingCartDTO();
+    private ShoppingCart shoppingCart = new ShoppingCart();
     private ProductDTO productDTO = new ProductDTO();
     private Product product = new Product();
 
@@ -82,7 +85,14 @@ public class UserServiceImplTest {
         fixedUser.setPassword(PASSWORD);
         fixedUser.setGender(GENDER);
         fixedUser.setProducts(new ArrayList<>());
-        fixedUser.setShoppingCart(new ShoppingCart());
+
+        shoppingCart.setUser(fixedUser);
+        shoppingCart.setShoppingCartItems(new ArrayList<>());
+        shoppingCart.setCartStatus(ShoppingCart.CartStatus.ACTIVE);
+        shoppingCart.setCreationDate(LocalDate.now());
+        shoppingCart.setId(2L);
+
+        fixedUser.setShoppingCart(shoppingCart);
 
         productDTO.setId(ID);
         productDTO.setUserDTO(fixedUserDTO);
@@ -93,11 +103,14 @@ public class UserServiceImplTest {
         fixedUser.setProducts(Arrays.asList(product,product));
 
         fixedUserDTO = userConverter.userToUserDTO(fixedUser);
+        fixedUserDTO.getProductDTOs().add(productDTO);
 
         shoppingCartDTO.setCartStatus(ShoppingCart.CartStatus.ACTIVE);
         shoppingCartDTO.setId(ID);
         shoppingCartDTO.setCreationDate(LocalDate.now());
         shoppingCartDTO.setShoppingCartItemDTOs(new ArrayList<>());
+        shoppingCartDTO.setUserDTO(fixedUserDTO);
+        shoppingCartDTO.setUserDTOId(fixedUserDTO.getId());
 
         MockitoAnnotations.initMocks(this);
     }
@@ -241,7 +254,7 @@ public class UserServiceImplTest {
     public void getShoppingCart() {
 
         //given
-        fixedUser.setShoppingCart(ShoppingCart.builder().user(fixedUser).id(ID).build());
+        fixedUser.setShoppingCart(shoppingCartConverter.shoppingCartDTOToShoppingCart(shoppingCartDTO));
         Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(fixedUser));
 
         //when

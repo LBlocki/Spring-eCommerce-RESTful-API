@@ -1,8 +1,8 @@
 package com.blocki.springrestonlinestore.core.services;
 
+import com.blocki.springrestonlinestore.api.v1.controllers.ShoppingCartController;
 import com.blocki.springrestonlinestore.api.v1.mappers.ShoppingCartItemMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.ShoppingCartMapper;
-import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
 import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartDTO;
 import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartItemDTO;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.ShoppingCartItemResourceAssembler;
@@ -13,15 +13,23 @@ import com.blocki.springrestonlinestore.core.repositories.ShoppingCartRepository
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
-    private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartMapper shoppingCartConverter = Mappers.getMapper(ShoppingCartMapper.class);
-    private final UserMapper userConverter = Mappers.getMapper(UserMapper.class);
-    private final ShoppingCartItemMapper shoppingCartItemConverter = Mappers.getMapper(ShoppingCartItemMapper.class);
+    private final ShoppingCartItemMapper shoppingCartItemConverter =
+            Mappers.getMapper(ShoppingCartItemMapper.class);
+
+    private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartResourceAssembler shoppingCartResourceAssembler;
     private final ShoppingCartItemResourceAssembler shoppingCartItemResourceAssembler;
 
@@ -57,6 +65,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public void deleteShoppingCartById(Long id) {
 
+        getShoppingCartById(id).getContent().getUserDTO().setShoppingCartDTO(null);
         shoppingCartRepository.deleteById(id);
 
     }
@@ -66,21 +75,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         ShoppingCartDTO shoppingCartDTO = getShoppingCartById(id).getContent();
         shoppingCartDTO.setCartStatus(ShoppingCart.CartStatus.COMPLETED);
-
-        //todo now add to history here or with auditing
+        //here it would go to the orders history
 
         return shoppingCartResourceAssembler.toResource(shoppingCartDTO);
     }
 
     @Override
-    public Resource<ShoppingCartDTO> createCancellationRequest(Long id) {
+    public void createCancellationRequest(Long id) {
 
         ShoppingCartDTO shoppingCartDTO = getShoppingCartById(id).getContent();
-        shoppingCartDTO.setCartStatus(ShoppingCart.CartStatus.COMPLETED);
 
-        //todo now add to history here or with auditing
+        deleteShoppingCartById(shoppingCartDTO.getId());
 
-        return shoppingCartResourceAssembler.toResource(shoppingCartDTO);
     }
 
     @Override
@@ -94,5 +100,19 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         saveShoppingCart(shoppingCartDTO);
 
         return shoppingCartItemResourceAssembler.toResource(shoppingCartItemDTO);
+    }
+
+    @Override
+    public Resources<Resource<ShoppingCartItemDTO>> getAllShoppingCartItems(Long id) {
+
+        List<Resource<ShoppingCartItemDTO>> shoppingCartItemList =  getShoppingCartById(id)
+                .getContent()
+                .getShoppingCartItemDTOs()
+                .stream()
+                .map(shoppingCartItemResourceAssembler::toResource)
+                .collect(Collectors.toList());
+
+        return new Resources<>(shoppingCartItemList,
+                linkTo(methodOn(ShoppingCartController.class).getAllShoppingCartItems(id)).withSelfRel());
     }
 }

@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 
 public class ProductMapperTest {
 
-    private ProductMapper productConverter = Mappers.getMapper(ProductMapper.class);
+    private final ProductMapper productConverter = Mappers.getMapper(ProductMapper.class);
 
     private static final Long productID = 2L;
     private static final String productName = "Doll";

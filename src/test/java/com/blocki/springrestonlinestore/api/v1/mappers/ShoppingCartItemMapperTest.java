@@ -13,14 +13,16 @@ import static org.junit.Assert.assertNotNull;
 
 public class ShoppingCartItemMapperTest {
 
-    private ShoppingCartItemMapper shoppingCartItemConverter = Mappers.getMapper(ShoppingCartItemMapper.class);
+    private final ShoppingCartItemMapper shoppingCartItemConverter =
+            Mappers.getMapper(ShoppingCartItemMapper.class);
 
     private static final Long shoppingCartItemId = 2L;
     private static final Integer quantity = 10;
     private static final BigDecimal totalCost = BigDecimal.valueOf(30);
 
     private Product product = new Product();
-    private  ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+    private ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+    private ShoppingCart shoppingCart = new ShoppingCart();
 
     @Before
     public void setUp() {
@@ -29,11 +31,15 @@ public class ShoppingCartItemMapperTest {
         product.setUser(new User());
         product.setCategory(new Category());
 
+        shoppingCart.setUser(new User());
+
+
         shoppingCartItem.setId(shoppingCartItemId);
         shoppingCartItem.setQuantity(quantity);
         shoppingCartItem.setTotalCost(totalCost);
-        shoppingCartItem.setShoppingCart(new ShoppingCart());
         shoppingCartItem.setProduct(product);
+        shoppingCart.getShoppingCartItems().add(shoppingCartItem);
+        shoppingCartItem.setShoppingCart(shoppingCart);
     }
 
     @Test

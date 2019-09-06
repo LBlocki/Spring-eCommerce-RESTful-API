@@ -16,7 +16,7 @@ public class CategoryDTO {
 
     private Long id;
 
-    @NotBlank(message = "field value cannot be null or contain only blank characters")
-    @Size(min = 1, max = 32, message = "field's value must have between 1 and 32 characters")
+    @NotBlank(message = "Name field value cannot be null or contain only blank characters")
+    @Size(min = 1, max = 32, message = "Name field value must have between 1 and 32 characters")
     private String name;
 }

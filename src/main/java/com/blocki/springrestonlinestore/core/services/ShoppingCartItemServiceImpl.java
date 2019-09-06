@@ -20,6 +20,7 @@ public class ShoppingCartItemServiceImpl implements ShoppingCartItemService {
     @Autowired
     public ShoppingCartItemServiceImpl(ShoppingCartItemRepository shoppingCartItemRepository,
                                        ShoppingCartItemResourceAssembler shoppingCartItemResourceAssembler) {
+
         this.shoppingCartItemRepository = shoppingCartItemRepository;
         this.shoppingCartItemResourceAssembler = shoppingCartItemResourceAssembler;
     }

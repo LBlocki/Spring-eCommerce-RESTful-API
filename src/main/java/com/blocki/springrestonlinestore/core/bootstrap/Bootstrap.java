@@ -1,9 +1,7 @@
 package com.blocki.springrestonlinestore.core.bootstrap;
 
 import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
-import com.blocki.springrestonlinestore.core.domain.Category;
-import com.blocki.springrestonlinestore.core.domain.Product;
-import com.blocki.springrestonlinestore.core.domain.User;
+import com.blocki.springrestonlinestore.core.domain.*;
 import com.blocki.springrestonlinestore.core.repositories.CategoryRepository;
 import com.blocki.springrestonlinestore.core.services.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +12,8 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Collections;
 
 @Component
 @Slf4j
@@ -80,7 +80,19 @@ public class Bootstrap implements CommandLineRunner {
         product.setDescription("This is description");
         product.setPhoto(new Byte[]{'s'});
 
+        ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+        shoppingCartItem.setQuantity(30);
+        shoppingCartItem.setProduct(product);
+        shoppingCartItem.setTotalCost(BigDecimal.ONE);
+
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setCartStatus(ShoppingCart.CartStatus.ACTIVE);
+        shoppingCart.setCreationDate(LocalDate.now());
+        shoppingCart.setShoppingCartItems(Collections.singletonList(shoppingCartItem));
+        shoppingCartItem.setShoppingCart(shoppingCart);
+
         firstUser.getProducts().add(product);
+        firstUser.setShoppingCart(shoppingCart);
 
         User secondUser = new User();
         secondUser.setId(2L);

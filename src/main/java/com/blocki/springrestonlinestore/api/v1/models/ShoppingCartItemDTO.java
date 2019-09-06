@@ -29,7 +29,7 @@ public class ShoppingCartItemDTO {
     @JsonBackReference
     private ShoppingCartDTO shoppingCartDTO;
 
-    @NotNull(message = "Shopping Cart's id field cannot be null")
+    @NotNull(message = "Shopping Cart id field cannot be null")
     @JsonProperty("shopping_cart_id")
     private Long ShoppingCartDTOId;
 
@@ -37,8 +37,8 @@ public class ShoppingCartItemDTO {
     @Positive(message = "field must have positive value")
     private Integer quantity;
 
-    @Positive(message = "Total cost's field value must be greater than 0")
-    @NotNull(message = "Total cost's field value cannot be null")
+    @Positive(message = "Total cost field value must be greater than 0")
+    @NotNull(message = "Total cost field value cannot be null")
     @JsonProperty("total_cost")
     @NumberFormat(pattern = "#.##")
     private BigDecimal totalCost;

@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 public class UserMapperTest {
 
 
-    private UserMapper userConverter = Mappers.getMapper(UserMapper.class);
+    private final UserMapper userConverter = Mappers.getMapper(UserMapper.class);
 
     private static final Long userId = 2L;
     private static final String firstName = "Michael";
@@ -28,7 +28,6 @@ public class UserMapperTest {
     private static final String username = "UserMyName";
     private static final char[] password = {'q','s','t'};
     private static final User.Gender gender = User.Gender.MALE;
-    private static final String userUrl = "/api/v1/users/5";
 
     @Test
     public void userToUserDTO() {

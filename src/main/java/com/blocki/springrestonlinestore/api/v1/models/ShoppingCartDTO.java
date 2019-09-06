@@ -29,15 +29,19 @@ public class ShoppingCartDTO {
     private Long id;
 
     @JsonProperty("user_id")
-    @NotNull(message = "field value cannot be null")
+    @NotNull(message = "User field value cannot be null")
     @JsonBackReference
     private UserDTO userDTO;
+
+    @NotNull(message = "Owner_id field cannot be null")
+    @JsonProperty("owner_id")
+    private Long userDTOId;
 
     @JsonProperty("shopping_cart_items")
     @JsonManagedReference
     private List<ShoppingCartItemDTO> shoppingCartItemDTOs = new ArrayList<>();
 
-    @NotNull(message = "field value cannot be null")
+    @NotNull(message = "Creation date field value cannot be null")
     @JsonProperty("creation_date")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @JsonDeserialize(using = LocalDateDeserializer.class)
@@ -45,11 +49,7 @@ public class ShoppingCartDTO {
     private LocalDate creationDate;
 
     @JsonProperty("cart_status")
-    @NotNull(message = "field value cannot be null")
+    @NotNull(message = "Cart status field value cannot be null")
     private ShoppingCart.CartStatus cartStatus;
-
-    @NotBlank(message = "field value cannot be null or contain only blank characters")
-    @JsonProperty("shopping_cart_url")
-    private String shoppingCartUrl;
 
 }

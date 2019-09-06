@@ -23,6 +23,7 @@ public class ShoppingCartItemServiceImplTest {
 
     private Product product = new Product();
     private ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+    private ShoppingCart shoppingCart = new ShoppingCart();
 
     @Mock
     private ShoppingCartItemRepository shoppingCartItemRepository;
@@ -35,7 +36,7 @@ public class ShoppingCartItemServiceImplTest {
             new ShoppingCartItemResourceAssembler();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
 
         MockitoAnnotations.initMocks(this);
 
@@ -46,8 +47,11 @@ public class ShoppingCartItemServiceImplTest {
         shoppingCartItem.setId(shoppingCartItemId);
         shoppingCartItem.setQuantity(quantity);
         shoppingCartItem.setTotalCost(totalCost);
-        shoppingCartItem.setShoppingCart(new ShoppingCart());
         shoppingCartItem.setProduct(product);
+
+        shoppingCart.setId(2L);
+        shoppingCart.getShoppingCartItems().add(shoppingCartItem);
+        shoppingCartItem.setShoppingCart(shoppingCart);
     }
 
     @Test
@@ -58,7 +62,8 @@ public class ShoppingCartItemServiceImplTest {
                 .thenReturn(Optional.of(shoppingCartItem));
 
         //when
-        Resource<ShoppingCartItemDTO> shoppingCartItemDTO = shoppingCartItemService.getShoppingCartItemById(shoppingCartItemId);
+        Resource<ShoppingCartItemDTO> shoppingCartItemDTO =
+                shoppingCartItemService.getShoppingCartItemById(shoppingCartItemId);
 
         //than
         Mockito.verify(shoppingCartItemRepository, Mockito.times(1)).findById(Mockito.anyLong());

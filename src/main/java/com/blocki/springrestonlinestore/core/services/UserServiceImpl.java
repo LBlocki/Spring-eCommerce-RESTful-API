@@ -227,7 +227,7 @@ public class UserServiceImpl implements UserService {
         UserDTO userDTO = getUserById(id).getContent();
 
         Objects.requireNonNull(userDTO.getProductDTOs()).add(productDTO);
-        productDTO.setUserDTO(userDTO);
+        productDTO.setUserDTOId(userDTO.getId());
         saveUser(userDTO);
 
         return productResourceAssembler.toResource(productDTO);

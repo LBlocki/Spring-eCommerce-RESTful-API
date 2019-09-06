@@ -11,10 +11,11 @@ import static org.junit.Assert.assertNotNull;
 
 public class CategoryMapperTest {
 
-    private CategoryMapper categoryConverter = Mappers.getMapper(CategoryMapper.class);
+    private final CategoryMapper categoryConverter = Mappers.getMapper(CategoryMapper.class);
 
     private static final Long categoryID = 1L;
     private static final String categoryName = "Clothes";
+
     private Category category = new Category();
 
     @Before

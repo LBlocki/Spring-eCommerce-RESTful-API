@@ -30,11 +30,11 @@ public class ProductDTO {
 
     private Long id;
 
-    @NotNull(message = "UserDTO field cannot be null")
+    @NotNull(message = "User field cannot be null")
     @JsonBackReference
     private UserDTO userDTO;
 
-    @NotNull(message = "UserDTOId field cannot be null")
+    @NotNull(message = "Owner_id field cannot be null")
     @JsonProperty("owner_id")
     private Long userDTOId;
 
