@@ -35,6 +35,7 @@ public abstract class ShoppingCartMapper {
             shoppingCartItemDTO.setShoppingCartDTO(shoppingCartDTO);
             shoppingCartItemDTO.setProductDTO(productConverter.productToProductDTO(
                     shoppingCart.getShoppingCartItems().get(i).getProduct()));
+            shoppingCartItemDTO.setShoppingCartDTOId(shoppingCartDTO.getId());
 
             i++;
         }
