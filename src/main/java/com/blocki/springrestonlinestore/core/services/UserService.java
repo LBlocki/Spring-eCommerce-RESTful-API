@@ -28,6 +28,6 @@ public interface UserService {
 
     Resources<Resource<ProductDTO>> getAllProducts(Long id);
 
-    Resource<ShoppingCartDTO> getShoppingCart(Long id);
+    Resource<ShoppingCartDTO> getShoppingCartById(Long id);
 
 }

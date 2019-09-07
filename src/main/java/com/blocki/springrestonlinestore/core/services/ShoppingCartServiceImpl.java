@@ -1,7 +1,6 @@
 package com.blocki.springrestonlinestore.core.services;
 
 import com.blocki.springrestonlinestore.api.v1.controllers.ShoppingCartController;
-import com.blocki.springrestonlinestore.api.v1.mappers.ShoppingCartItemMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.ShoppingCartMapper;
 import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartDTO;
 import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartItemDTO;
@@ -26,8 +25,6 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     private final ShoppingCartMapper shoppingCartConverter = Mappers.getMapper(ShoppingCartMapper.class);
-    private final ShoppingCartItemMapper shoppingCartItemConverter =
-            Mappers.getMapper(ShoppingCartItemMapper.class);
 
     private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartResourceAssembler shoppingCartResourceAssembler;
@@ -65,7 +62,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public void deleteShoppingCartById(Long id) {
 
-        getShoppingCartById(id).getContent().getUserDTO().setShoppingCartDTO(null);
         shoppingCartRepository.deleteById(id);
 
     }
@@ -73,8 +69,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public Resource<ShoppingCartDTO> createPurchaseRequest(Long id) {
 
-        ShoppingCartDTO shoppingCartDTO = getShoppingCartById(id).getContent();
+        ShoppingCart shoppingCart = shoppingCartRepository.findById(id).orElseThrow(NotFoundException::new);
+        ShoppingCartDTO shoppingCartDTO = shoppingCartConverter.shoppingCartToShoppingCartDTO(shoppingCart);
+
         shoppingCartDTO.setCartStatus(ShoppingCart.CartStatus.COMPLETED);
+
         //here it would go to the orders history
 
         return shoppingCartResourceAssembler.toResource(shoppingCartDTO);
@@ -83,16 +82,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public void createCancellationRequest(Long id) {
 
-        ShoppingCartDTO shoppingCartDTO = getShoppingCartById(id).getContent();
-
-        deleteShoppingCartById(shoppingCartDTO.getId());
-
+        deleteShoppingCartById(id);
     }
 
     @Override
     public Resource<ShoppingCartItemDTO> createNewShoppingCartItem(Long id, ShoppingCartItemDTO shoppingCartItemDTO) {
 
-        ShoppingCartDTO shoppingCartDTO = getShoppingCartById(id).getContent();
+        ShoppingCart shoppingCart = shoppingCartRepository.findById(id).orElseThrow(NotFoundException::new);
+        ShoppingCartDTO shoppingCartDTO = shoppingCartConverter.shoppingCartToShoppingCartDTO(shoppingCart);
 
         shoppingCartItemDTO.setShoppingCartDTO(shoppingCartDTO);
         shoppingCartDTO.getShoppingCartItemDTOs().add(shoppingCartItemDTO);
@@ -105,8 +102,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public Resources<Resource<ShoppingCartItemDTO>> getAllShoppingCartItems(Long id) {
 
-        List<Resource<ShoppingCartItemDTO>> shoppingCartItemList =  getShoppingCartById(id)
-                .getContent()
+        ShoppingCart shoppingCart = shoppingCartRepository.findById(id).orElseThrow(NotFoundException::new);
+        ShoppingCartDTO shoppingCartDTO = shoppingCartConverter.shoppingCartToShoppingCartDTO(shoppingCart);
+
+        List<Resource<ShoppingCartItemDTO>> shoppingCartItemList = shoppingCartDTO
                 .getShoppingCartItemDTOs()
                 .stream()
                 .map(shoppingCartItemResourceAssembler::toResource)

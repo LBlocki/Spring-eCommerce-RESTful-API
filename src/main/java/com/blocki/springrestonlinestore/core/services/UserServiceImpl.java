@@ -207,7 +207,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public Resource<ShoppingCartDTO> createNewShoppingCart(Long id, ShoppingCartDTO shoppingCartDTO) {
 
-        UserDTO userDTO = getUserById(id).getContent();
+        User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
+        UserDTO userDTO = userConverter.userToUserDTO(user);
 
         if(userDTO.getShoppingCartDTO() != null) {
 
@@ -224,7 +225,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public  Resource<ProductDTO> createNewProduct(Long id, ProductDTO productDTO) {
 
-        UserDTO userDTO = getUserById(id).getContent();
+        User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
+        UserDTO userDTO = userConverter.userToUserDTO(user);
+
+        if(Objects.requireNonNull(userDTO.getProductDTOs()).contains(productDTO)) {
+
+            throw new ResourceAlreadyExistsException("Product is already assigned to this user");
+        }
 
         Objects.requireNonNull(userDTO.getProductDTOs()).add(productDTO);
         productDTO.setUserDTOId(userDTO.getId());
@@ -236,31 +243,31 @@ public class UserServiceImpl implements UserService {
     @Override
     public Resources<Resource<ProductDTO>> getAllProducts(Long id) {
 
-        List<Resource<ProductDTO>> products = Objects.requireNonNull(getUserById(id)
-                .getContent()
+        User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
+        UserDTO userDTO = userConverter.userToUserDTO(user);
+
+        List<Resource<ProductDTO>> products = Objects
+                .requireNonNull(userDTO
                 .getProductDTOs())
                 .stream()
                 .map(productResourceAssembler::toResource)
                 .collect(Collectors.toList());
 
-        return new Resources<>(products,
+        return new Resources<>(products ,
                 linkTo(methodOn(UserController.class).getAllUsersProducts(id)).withSelfRel());
-
     }
 
     @Override
-    public  Resource<ShoppingCartDTO> getShoppingCart(Long id) {
+    public  Resource<ShoppingCartDTO> getShoppingCartById(Long id) {
 
-        ShoppingCartDTO shoppingCart = getUserById(id)
-                .getContent()
-                .getShoppingCartDTO();
+        User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
 
-        if(shoppingCart == null) {
+        if(user.getShoppingCart() == null) {
 
-            throw  new NotFoundException("Order not found");
+            throw new NotFoundException("User's shopping cart is null");
         }
 
-        return shoppingCartResourceAssembler.toResource(shoppingCart);
-
+        return shoppingCartResourceAssembler.
+                toResource(shoppingCartConverter.shoppingCartToShoppingCartDTO(user.getShoppingCart()));
     }
 }
