@@ -1,66 +1,40 @@
 package com.blocki.springrestonlinestore.core.services;
 
+import com.blocki.springrestonlinestore.TestEntity;
 import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.ProductResourceAssembler;
-import com.blocki.springrestonlinestore.core.domain.Category;
 import com.blocki.springrestonlinestore.core.domain.Product;
-import com.blocki.springrestonlinestore.core.domain.User;
 import com.blocki.springrestonlinestore.core.repositories.ProductRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.*;
 import org.springframework.hateoas.Resource;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class ProductServiceImplTest {
 
+    private final TestEntity testEntity = new TestEntity();
 
-    private static final Long productID = 2L;
-    private static final Long userID = 5L;
-    private static final String productName = "Doll";
-    private static final Product.ProductStatus productStatus = Product.ProductStatus.AVALIABLE;
-    private static final String description = "This is the description for the product";
-    private static final BigDecimal cost = new BigDecimal(100.2);
-    private static final Byte[] photo = {2,3,4};
-    private static final LocalDate creationDate = LocalDate.of(2000, 12, 12);
+    private Product product;
 
     @Mock
     private ProductRepository productRepository;
 
-    @Spy
-    private ProductResourceAssembler productResourceAssembler = new ProductResourceAssembler();
-
     @InjectMocks
     private ProductServiceImpl productService;
 
-    private User user = new User();
-    private Product product = new Product();
-    private Category category = new Category();
+    @Spy
+    private ProductResourceAssembler productResourceAssembler = new ProductResourceAssembler();
 
     @Before
     public void setUp() {
 
         MockitoAnnotations.initMocks(this);
 
-        user.setId(userID);
-        category.setId(3L);
-        category.setName("Clothes");
-
-        product.setUser(user);
-        product.setCategory(category);
-        product.setCreationDate(creationDate);
-        product.setCost(cost);
-        product.setProductStatus(productStatus);
-        product.setName(productName);
-        product.setId(productID);
-        product.setDescription(description);
-        product.setPhoto(photo);
+        product = testEntity.getProduct();
     }
 
     @Test
@@ -70,24 +44,42 @@ public class ProductServiceImplTest {
         Mockito.when(productRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(product));
 
         //when
-        Resource<ProductDTO> productDTO = productService.getProductById(productID);
+        Resource<ProductDTO> testProductDTO = productService.getProductById(product.getId());
 
-        //than
+        //then
         Mockito.verify(productRepository, Mockito.times(1)).findById(Mockito.anyLong());
         Mockito.verify(productResourceAssembler, Mockito.times(1)).toResource(Mockito.any(ProductDTO.class));
 
-        assertNotNull(productDTO);
-        assertEquals(productDTO.getContent().getId(), product.getId());
-        assertEquals(productDTO.getContent().getUserDTOId(), userID);
-        assertEquals(productDTO.getContent().getProductStatus(), product.getProductStatus());
+        Mockito.verifyNoMoreInteractions(productRepository);
+        Mockito.verifyNoMoreInteractions(productResourceAssembler);
+
+        assertNotNull(testProductDTO);
+        assertNotNull(testProductDTO.getContent().getCategoryDTO());
+        assertNotNull(testProductDTO.getContent().getUserDTO());
+
+        assertEquals(testProductDTO.getContent().getId(), product.getId());
+        assertEquals(testProductDTO.getContent().getCategoryDTO().getId(), product.getCategory().getId());
+        assertEquals(testProductDTO.getContent().getUserDTO().getId(), product.getUser().getId());
+        assertEquals(testProductDTO.getContent().getCost(), product.getCost());
+        assertEquals(testProductDTO.getContent().getCreationDate(), product.getCreationDate());
+        assertEquals(testProductDTO.getContent().getUserDTOId(), product.getUser().getId());
+        assertEquals(testProductDTO.getContent().getProductStatus(), product.getProductStatus());
+        assertEquals(testProductDTO.getContent().getDescription(), product.getDescription());
+        assertEquals(testProductDTO.getContent().getName(), product.getName());
+
+        assertArrayEquals(testProductDTO.getContent().getPhoto(), product.getPhoto());
     }
 
     @Test
     public void deleteProductById() {
 
-        productService.deleteProductById(productID);
+        //when
+        productService.deleteProductById(product.getId());
 
+        //then
         Mockito.verify(productRepository, Mockito.times(1)).deleteById(Mockito.anyLong());
+
+        Mockito.verifyNoMoreInteractions(productRepository);
     }
 
     @Test
@@ -97,15 +89,29 @@ public class ProductServiceImplTest {
         Mockito.when(productRepository.findProductByName(Mockito.any())).thenReturn(Optional.of(product));
 
         //when
-        Resource<ProductDTO> productDTO = productService.getProductByName(product.getName());
+        Resource<ProductDTO> testProductDTO = productService.getProductByName(product.getName());
 
-        //than
+        //then
         Mockito.verify(productRepository, Mockito.times(1)).findProductByName(Mockito.any());
         Mockito.verify(productResourceAssembler, Mockito.times(1)).toResource(Mockito.any(ProductDTO.class));
 
-        assertNotNull(productDTO);
-        assertEquals(productDTO.getContent().getId(), product.getId());
-        assertEquals(productDTO.getContent().getUserDTOId(), userID);
-        assertEquals(productDTO.getContent().getProductStatus(), product.getProductStatus());
+        Mockito.verifyNoMoreInteractions(productRepository);
+        Mockito.verifyNoMoreInteractions(productResourceAssembler);
+
+        assertNotNull(testProductDTO);
+        assertNotNull(testProductDTO.getContent().getCategoryDTO());
+        assertNotNull(testProductDTO.getContent().getUserDTO());
+
+        assertEquals(testProductDTO.getContent().getId(), product.getId());
+        assertEquals(testProductDTO.getContent().getCategoryDTO().getId(), product.getCategory().getId());
+        assertEquals(testProductDTO.getContent().getUserDTO().getId(), product.getUser().getId());
+        assertEquals(testProductDTO.getContent().getCost(), product.getCost());
+        assertEquals(testProductDTO.getContent().getCreationDate(), product.getCreationDate());
+        assertEquals(testProductDTO.getContent().getUserDTOId(), product.getUser().getId());
+        assertEquals(testProductDTO.getContent().getProductStatus(), product.getProductStatus());
+        assertEquals(testProductDTO.getContent().getDescription(), product.getDescription());
+        assertEquals(testProductDTO.getContent().getName(), product.getName());
+
+        assertArrayEquals(testProductDTO.getContent().getPhoto(), product.getPhoto());
     }
 }
