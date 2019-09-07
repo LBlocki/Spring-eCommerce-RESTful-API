@@ -22,6 +22,7 @@ public class ShoppingCart extends BaseEntity {
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @ToString.Exclude
     private User user;
 
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL)
