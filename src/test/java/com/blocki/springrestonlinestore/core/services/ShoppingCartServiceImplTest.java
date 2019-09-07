@@ -14,7 +14,9 @@ import org.junit.Test;
 import org.mapstruct.factory.Mappers;
 import org.mockito.*;
 import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -137,7 +139,7 @@ public class ShoppingCartServiceImplTest {
         ShoppingCartItem shoppingCartItem = shoppingCart.getShoppingCartItems().get(0);
 
         //when
-        Resource<ShoppingCartItemDTO> testShoppingCartItemDTO = shoppingCartService
+        Resource<ShoppingCartItemDTO> testCreatedShoppingCartItemDTO = shoppingCartService
                 .createNewShoppingCartItem(shoppingCart.getId(), shoppingCartItemConverter
                         .ShoppingCartItemToShoppingCartItemDTO(shoppingCartItem));
 
@@ -145,7 +147,7 @@ public class ShoppingCartServiceImplTest {
         Mockito.verify(shoppingCartRepository, Mockito.times(1)).findById(Mockito.anyLong());
         Mockito.verify(shoppingCartRepository, Mockito.times(1))
                 .save(Mockito.any(ShoppingCart.class));
-        Mockito.verify(shoppingCartResourceAssembler, Mockito.times(2))
+        Mockito.verify(shoppingCartResourceAssembler, Mockito.times(1))
                 .toResource(Mockito.any(ShoppingCartDTO.class));
         Mockito.verify(shoppingCartItemResourceAssembler, Mockito.times(1))
                 .toResource(Mockito.any(ShoppingCartItemDTO.class));
@@ -153,9 +155,39 @@ public class ShoppingCartServiceImplTest {
         Mockito.verifyNoMoreInteractions(shoppingCartRepository);
         Mockito.verifyNoMoreInteractions(shoppingCartItemResourceAssembler);
         Mockito.verifyNoMoreInteractions(shoppingCartItemResourceAssembler);
+
+        assertNotNull(testCreatedShoppingCartItemDTO);
+        assertNotNull(testCreatedShoppingCartItemDTO.getContent().getProductDTO());
+        assertNotNull(testCreatedShoppingCartItemDTO.getContent().getShoppingCartDTO());
+
+        assertEquals(testCreatedShoppingCartItemDTO.getContent()
+                .getShoppingCartDTOId(), shoppingCartItem.getShoppingCart().getId());
+        assertEquals(testCreatedShoppingCartItemDTO.getContent().getId(), shoppingCartItem.getId());
+        assertEquals(testCreatedShoppingCartItemDTO.getContent()
+                .getProductDTO().getId(), shoppingCartItem.getProduct().getId());
+        assertEquals(testCreatedShoppingCartItemDTO.getContent().getTotalCost(), shoppingCartItem.getTotalCost());
+        assertEquals(testCreatedShoppingCartItemDTO.getContent().getQuantity(), shoppingCartItem.getQuantity());
     }
 
     @Test
     public void getAllShoppingCartItems() {
+
+        //given
+        Mockito.when(shoppingCartRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(shoppingCart));
+        List<ShoppingCartItem> shoppingCartItemList = shoppingCart.getShoppingCartItems();
+
+
+        //when
+        Resources<Resource<ShoppingCartItemDTO>> testShoppingCartItemList =
+                shoppingCartService.getAllShoppingCartItems(shoppingCart.getId());
+
+        //then
+        Mockito.verify(shoppingCartRepository, Mockito.times(1)).findById(Mockito.anyLong());
+
+        Mockito.verifyNoMoreInteractions(shoppingCartRepository);
+
+        assertNotNull(testShoppingCartItemList);
+
+        assertEquals(testShoppingCartItemList.getContent().size(),shoppingCartItemList.size());
     }
 }
