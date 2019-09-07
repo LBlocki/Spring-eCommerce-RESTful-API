@@ -1,72 +1,65 @@
 package com.blocki.springrestonlinestore.api.v1.mappers;
 
+import com.blocki.springrestonlinestore.TestEntity;
 import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartItemDTO;
-import com.blocki.springrestonlinestore.core.domain.*;
+import com.blocki.springrestonlinestore.core.domain.ShoppingCartItem;
 import org.junit.Before;
 import org.junit.Test;
 import org.mapstruct.factory.Mappers;
-
-import java.math.BigDecimal;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class ShoppingCartItemMapperTest {
 
-    private ShoppingCartItemMapper shoppingCartItemConverter = Mappers.getMapper(ShoppingCartItemMapper.class);
+    private final ShoppingCartItemMapper shoppingCartItemConverter = Mappers.getMapper(ShoppingCartItemMapper.class);
+    private final TestEntity testEntity = new TestEntity();
 
-    private static final Long shoppingCartItemId = 2L;
-    private static final Integer quantity = 10;
-    private static final BigDecimal totalCost = BigDecimal.valueOf(30);
-
-    private Product product = new Product();
-    private  ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+    private ShoppingCartItem shoppingCartItem;
 
     @Before
     public void setUp() {
 
-        product.setId(2L);
-        product.setUser(new User());
-        product.setCategory(new Category());
-
-        shoppingCartItem.setId(shoppingCartItemId);
-        shoppingCartItem.setQuantity(quantity);
-        shoppingCartItem.setTotalCost(totalCost);
-        shoppingCartItem.setShoppingCart(new ShoppingCart());
-        shoppingCartItem.setProduct(product);
+       shoppingCartItem = testEntity.getShoppingCartItem();
     }
 
     @Test
     public void ShoppingCartItemToShoppingCartItemTDO() {
 
         //when
-        ShoppingCartItemDTO shoppingCartItemDTO = shoppingCartItemConverter.ShoppingCartItemToShoppingCartItemDTO(shoppingCartItem);
+        ShoppingCartItemDTO testShoppingCartItemDTO = shoppingCartItemConverter.ShoppingCartItemToShoppingCartItemDTO(shoppingCartItem);
 
-        assertNotNull(shoppingCartItemDTO);
-        assertNotNull(shoppingCartItemDTO.getProductDTO());
-        assertNotNull(shoppingCartItemDTO.getShoppingCartDTO());
+        //then
+        assertNotNull(testShoppingCartItemDTO);
+        assertNotNull(testShoppingCartItemDTO.getProductDTO());
+        assertNotNull(testShoppingCartItemDTO.getShoppingCartDTO());
 
-        assertEquals(shoppingCartItem.getId(), shoppingCartItemDTO.getId());
-        assertEquals(shoppingCartItem.getQuantity(), shoppingCartItemDTO.getQuantity());
-        assertEquals(shoppingCartItem.getTotalCost(), shoppingCartItemDTO.getTotalCost());
+        assertEquals(testShoppingCartItemDTO.getId(), shoppingCartItem.getId());
+        assertEquals(testShoppingCartItemDTO.getQuantity(), shoppingCartItem.getQuantity());
+        assertEquals(testShoppingCartItemDTO.getTotalCost(), shoppingCartItem.getTotalCost());
+        assertEquals(testShoppingCartItemDTO.getProductDTO().getId(), shoppingCartItem.getProduct().getId());
+        assertEquals(testShoppingCartItemDTO.getShoppingCartDTO().getId(), shoppingCartItem.getShoppingCart().getId());
+        assertEquals(testShoppingCartItemDTO.getShoppingCartDTOId(), shoppingCartItem.getShoppingCart().getId());
     }
 
     @Test
     public void ShoppingCartItemDTOToShoppingCartItem() {
 
+        //given
         ShoppingCartItemDTO shoppingCartItemDTO = shoppingCartItemConverter.ShoppingCartItemToShoppingCartItemDTO(shoppingCartItem);
 
         //when
-        ShoppingCartItem shoppingCartItem = shoppingCartItemConverter.ShoppingCartItemDTOToShoppingCartItem(shoppingCartItemDTO);
+        ShoppingCartItem testShoppingCartItem = shoppingCartItemConverter.ShoppingCartItemDTOToShoppingCartItem(shoppingCartItemDTO);
 
-        assertNotNull(shoppingCartItem);
-        assertNotNull(shoppingCartItem.getProduct());
-        assertNotNull(shoppingCartItem.getShoppingCart());
+        //then
+        assertNotNull(testShoppingCartItem);
+        assertNotNull(testShoppingCartItem.getProduct());
+        assertNotNull(testShoppingCartItem.getShoppingCart());
 
-        assertEquals(shoppingCartItem.getId(), shoppingCartItemDTO.getId());
-        assertEquals(shoppingCartItem.getQuantity(), shoppingCartItemDTO.getQuantity());
-        assertEquals(shoppingCartItem.getTotalCost(), shoppingCartItemDTO.getTotalCost());
-
+        assertEquals(testShoppingCartItem.getId(), shoppingCartItemDTO.getId());
+        assertEquals(testShoppingCartItem.getQuantity(), shoppingCartItemDTO.getQuantity());
+        assertEquals(testShoppingCartItem.getTotalCost(), shoppingCartItemDTO.getTotalCost());
+        assertEquals(testShoppingCartItem.getProduct().getId(), shoppingCartItemDTO.getId());
+        assertEquals(testShoppingCartItem.getShoppingCart().getId(), shoppingCartItemDTO.getShoppingCartDTO().getId());
     }
-
 }

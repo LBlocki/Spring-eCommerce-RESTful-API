@@ -19,7 +19,13 @@ public class ShoppingCartResourceAssembler  implements ResourceAssembler<Shoppin
     public Resource<ShoppingCartDTO> toResource(ShoppingCartDTO shoppingCartDTO) {
 
         return new Resource<>(shoppingCartDTO,
-                linkTo(methodOn(ShoppingCartController.class).getShoppingCartById(shoppingCartDTO.getId())).withSelfRel(),
-                linkTo(methodOn(UserController.class).getShoppingCart(shoppingCartDTO.getUserDTO().getId())).withRel("user_shopping_cart"));
+                linkTo(methodOn(ShoppingCartController.class).getShoppingCartById(shoppingCartDTO.getId()))
+                        .withSelfRel(),
+                linkTo(methodOn(UserController.class).getShoppingCart(shoppingCartDTO.getUserDTO().getId()))
+                        .withRel("user shopping_cart"),
+                linkTo(methodOn(ShoppingCartController.class).getAllShoppingCartItems(shoppingCartDTO.getId()))
+                        .withRel("shopping_cart items"),
+                linkTo(methodOn(UserController.class).getUserById(shoppingCartDTO.getUserDTOId()))
+                        .withRel("shopping cart's user"));
     }
 }

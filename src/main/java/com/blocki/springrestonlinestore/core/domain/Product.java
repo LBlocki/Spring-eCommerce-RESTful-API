@@ -1,9 +1,6 @@
 package com.blocki.springrestonlinestore.core.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -22,6 +19,7 @@ public class Product extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "seller_id", nullable = false)
+    @ToString.Exclude
     private User user;
 
     @ManyToOne

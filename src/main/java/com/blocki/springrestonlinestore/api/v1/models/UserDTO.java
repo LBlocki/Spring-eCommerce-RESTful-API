@@ -41,36 +41,36 @@ public class UserDTO {
 
     @JsonProperty("shopping_cart")
     @JsonManagedReference
-    @ToString.Exclude
     @Nullable
+    @ToString.Exclude
     private ShoppingCartDTO shoppingCartDTO;
 
-    @NotBlank(message = "field's value cannot be null or contain only blank characters")
+    @NotBlank(message = "First name field value cannot be null or contain only blank characters")
     @Size(min = 1, max = 32, message = "field's value must have between 1 and 32 characters")
     @JsonProperty("first_name")
     private String firstName;
 
-    @NotBlank(message = "field's value cannot be null or contain only blank characters")
-    @Size(min = 1, max = 32, message = "field's value must have between 1 and 32 characters")
+    @NotBlank(message = "Last name field value cannot be null or contain only blank characters")
+    @Size(min = 1, max = 32, message = "Last name field value must have between 1 and 32 characters")
     @JsonProperty("last_name")
     private String lastName;
 
-    @NotBlank(message = "field's value cannot be null or contain only blank characters")
-    @Size(min = 1, max = 64, message = "field's value must have between 1 and 64 characters")
+    @NotBlank(message = "Address field value cannot be null or contain only blank characters")
+    @Size(min = 1, max = 64, message = "Address field's value must have between 1 and 64 characters")
     private String address;
 
-    @NotBlank(message = "field's value cannot be null or contain only blank characters")
-    @Size(min = 1, max = 16, message = "field's value must have between 1 and 16 characters")
+    @NotBlank(message = "Country field value cannot be null or contain only blank characters")
+    @Size(min = 1, max = 16, message = "Country field value must have between 1 and 16 characters")
     private String country;
 
-    @NotBlank(message = "field's value cannot be null or contain only blank characters")
-    @Size(min = 1, max = 12, message = "field's value must have between 1 and 12 characters")
+    @NotBlank(message = "Phone number field value cannot be null or contain only blank characters")
+    @Size(min = 1, max = 12, message = "Phone number field value must have between 1 and 12 characters")
     @JsonProperty("phone_number")
     @PhoneNumberValidator
     private String phoneNumber;
 
     @JsonProperty("creation_date")
-    @NotNull(message = "field's value cannot be null")
+    @NotNull(message = "Creation date field value cannot be null")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
@@ -78,19 +78,19 @@ public class UserDTO {
 
     @Email
     @ExtendedEmailValidator
-    @NotBlank(message = "field's value cannot be null or contain only blank characters")
-    @Size(min = 4, max = 32, message = "field's value must have between 4 and 32 characters")
+    @NotBlank(message = "Email address field value cannot be null or contain only blank characters")
+    @Size(min = 4, max = 32, message = "Email address field value must have between 4 and 32 characters")
     private String emailAddress;
 
-    @NotBlank(message = "field's value cannot be null or contain only blank characters")
-    @Size(min = 1, max = 16, message = "field's value must have between 1 and 16 characters")
+    @NotBlank(message = "Username field value cannot be null or contain only blank characters")
+    @Size(min = 1, max = 16, message = "Username field value must have between 1 and 16 characters")
     private String username;
 
-    @Size(min = 6, max = 32, message = "field's value must have between 6 and 32 characters")
-    @NotNull(message = "field's value cannot be null")
+    @Size(min = 6, max = 32, message = "Password field value must have between 6 and 32 characters")
+    @NotNull(message = "Password field value cannot be null")
     private char[] password;
 
-    @NotNull(message = "field's value cannot be null")
+    @NotNull(message = "Gender field value cannot be null")
     private User.Gender gender;
 
 }

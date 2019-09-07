@@ -1,5 +1,6 @@
 package com.blocki.springrestonlinestore.core.services;
 
+import com.blocki.springrestonlinestore.TestEntity;
 import com.blocki.springrestonlinestore.api.v1.models.CategoryDTO;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.CategoryResourceAssembler;
 import com.blocki.springrestonlinestore.core.domain.Category;
@@ -18,10 +19,9 @@ import static org.junit.Assert.*;
 
 public class CategoryServiceImplTest {
 
-    private static final Long categoryID = 1L;
-    private static final String categoryName = "Clothes";
+    private final TestEntity testEntity = new TestEntity();
 
-    private Category category = new Category();
+    private Category category;
 
     @Mock
     private CategoryRepository categoryRepository;
@@ -37,8 +37,7 @@ public class CategoryServiceImplTest {
 
         MockitoAnnotations.initMocks(this);
 
-        category.setId(categoryID);
-        category.setName(categoryName);
+        category = testEntity.getCategory();
     }
 
     @Test
@@ -50,11 +49,13 @@ public class CategoryServiceImplTest {
         //when
         Resources<Resource<CategoryDTO>> categories = categoryService.getAllCategories();
 
-        //than
+        //then
         Mockito.verify(categoryRepository, Mockito.times(1)).findAll();
+
         Mockito.verifyNoMoreInteractions(categoryRepository);
 
         assertNotNull(categories);
+
         assertThat(categories.getContent().size(), Matchers.equalTo(2));
     }
 
@@ -65,14 +66,18 @@ public class CategoryServiceImplTest {
         Mockito.when(categoryRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(category));
 
         //when
-        Resource<CategoryDTO> categoryDTO = categoryService.getCategoryById(categoryID);
+        Resource<CategoryDTO> TestCategoryDTO = categoryService.getCategoryById(category.getId());
 
-        //than
+        //then
         Mockito.verify(categoryRepository, Mockito.times(1)).findById(Mockito.anyLong());
         Mockito.verify(categoryResourceAssembler, Mockito.times(1)).toResource(Mockito.any(CategoryDTO.class));
 
-        assertNotNull(categoryDTO);
-        assertEquals(categoryDTO.getContent().getId(), category.getId());
-        assertEquals(categoryDTO.getContent().getName(), category.getName());
+        Mockito.verifyNoMoreInteractions(categoryRepository);
+        Mockito.verifyNoMoreInteractions(categoryResourceAssembler);
+
+        assertNotNull(TestCategoryDTO);
+
+        assertEquals(TestCategoryDTO.getContent().getId(), category.getId());
+        assertEquals(TestCategoryDTO.getContent().getName(), category.getName());
     }
 }

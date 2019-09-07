@@ -5,8 +5,11 @@ import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartItemDTO;
 import com.blocki.springrestonlinestore.core.services.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(ShoppingCartController.SHOPPING_CARTS_BASIC_URL)
@@ -39,32 +42,29 @@ public class ShoppingCartController {
     @ResponseStatus(HttpStatus.CREATED)
     public Resource<ShoppingCartDTO> createPurchaseRequest(@PathVariable Long id) {
 
-       //todo create service
-        return null;
+      return shoppingCartService.createPurchaseRequest(id);
     }
 
     @PostMapping("/{id}/actions/cancel")
     @ResponseStatus(HttpStatus.CREATED)
-    public Resource<ShoppingCartDTO> createCancellationRequest(@PathVariable Long id) {
+    public void createCancellationRequest(@PathVariable Long id) {
 
-        //todo create service
-        return null;
+        shoppingCartService.createCancellationRequest(id);
     }
 
 
     @GetMapping("/{id}/shoppingCartItems")
     @ResponseStatus(HttpStatus.OK)
-    public Resource<ShoppingCartItemDTO> getAllShoppingCartItems(@PathVariable Long id) {
+    public Resources<Resource<ShoppingCartItemDTO>> getAllShoppingCartItems(@PathVariable Long id) {
 
-       //todo create service
-        return null;
+       return shoppingCartService.getAllShoppingCartItems(id);
     }
 
     @PostMapping("/{id}/shoppingCartItems")
     @ResponseStatus(HttpStatus.CREATED)
-    public Resource<ShoppingCartItemDTO> createNewShoppingCartItem(@PathVariable Long id) {
+    public Resource<ShoppingCartItemDTO> createNewShoppingCartItem(
+            @PathVariable Long id, @RequestBody @Valid ShoppingCartItemDTO shoppingCartItemDTO) {
 
-       //todo create service
-        return null;
+       return shoppingCartService.createNewShoppingCartItem(id, shoppingCartItemDTO);
     }
 }

@@ -1,5 +1,6 @@
 package com.blocki.springrestonlinestore.api.v1.mappers;
 
+import com.blocki.springrestonlinestore.TestEntity;
 import com.blocki.springrestonlinestore.api.v1.models.CategoryDTO;
 import com.blocki.springrestonlinestore.core.domain.Category;
 import org.junit.Before;
@@ -11,30 +12,29 @@ import static org.junit.Assert.assertNotNull;
 
 public class CategoryMapperTest {
 
-    private CategoryMapper categoryConverter = Mappers.getMapper(CategoryMapper.class);
+    private final CategoryMapper categoryConverter = Mappers.getMapper(CategoryMapper.class);
+    private final TestEntity testEntity = new TestEntity();
 
-    private static final Long categoryID = 1L;
-    private static final String categoryName = "Clothes";
-    private Category category = new Category();
+    private Category category;
 
     @Before
     public void setUp() {
 
-        category.setId(categoryID);
-        category.setName(categoryName);
+        category = testEntity.getCategory();
     }
+
     @Test
     public void categoryToCategoryDTO() {
 
         //when
-        CategoryDTO categoryDTO = categoryConverter.categoryToCategoryDTO(category);
+        CategoryDTO testCategoryDTO = categoryConverter.categoryToCategoryDTO(category);
 
         //then
-        assertNotNull(categoryDTO);
+        assertNotNull(testCategoryDTO);
 
-        assertEquals(categoryDTO.getName(), category.getName());
-        assertEquals(categoryDTO.getId(), category.getId());
-
+        //then
+        assertEquals(testCategoryDTO.getName(), category.getName());
+        assertEquals(testCategoryDTO.getId(), category.getId());
     }
 
     @Test
@@ -44,12 +44,12 @@ public class CategoryMapperTest {
         CategoryDTO categoryDTO = categoryConverter.categoryToCategoryDTO(category);
 
         //when
-        Category category = categoryConverter.categoryDTOtoCategory(categoryDTO);
+        Category testCategory = categoryConverter.categoryDTOtoCategory(categoryDTO);
 
         //then
-        assertNotNull(category);
+        assertNotNull(testCategory);
 
-        assertEquals(category.getName(), categoryDTO.getName());
-        assertEquals(category.getId(), categoryDTO.getId());
+        assertEquals(testCategory.getName(), categoryDTO.getName());
+        assertEquals(testCategory.getId(), categoryDTO.getId());
     }
 }

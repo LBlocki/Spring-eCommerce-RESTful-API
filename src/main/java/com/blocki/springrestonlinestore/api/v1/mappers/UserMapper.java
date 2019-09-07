@@ -1,11 +1,16 @@
 package com.blocki.springrestonlinestore.api.v1.mappers;
 
 import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
+import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartItemDTO;
 import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
 import com.blocki.springrestonlinestore.core.domain.Product;
+import com.blocki.springrestonlinestore.core.domain.ShoppingCartItem;
 import com.blocki.springrestonlinestore.core.domain.User;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
+import java.util.Objects;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class UserMapper {
@@ -23,9 +28,31 @@ public abstract class UserMapper {
 
 
     @AfterMapping
-    protected void setAdditionalUserDTOParameters(User user, @MappingTarget UserDTO userDTO) {
+    void setAdditionalUserDTOParameters(User user, @MappingTarget UserDTO userDTO) {
 
         if (userDTO.getShoppingCartDTO() != null) {
+
+            int i = 0;
+
+            List<ShoppingCartItem> shoppingCartItemList = user.getShoppingCart().getShoppingCartItems();
+
+            for(ShoppingCartItemDTO shoppingCartItem : userDTO.getShoppingCartDTO().getShoppingCartItemDTOs()) {
+
+                ProductDTO productDTO = new ProductDTO();
+
+                productDTO.setId(shoppingCartItemList.get(i).getProduct().getId());
+                productDTO.setCategoryDTO(categoryConverter
+                        .categoryToCategoryDTO(shoppingCartItemList.get(i).getProduct().getCategory()));
+                productDTO.setUserDTOId(userDTO.getId());
+                productDTO.setUserDTO(userDTO);
+                productDTO.setPhoto(shoppingCartItemList.get(i).getProduct().getPhoto());
+                productDTO.setProductStatus(shoppingCartItemList.get(i).getProduct().getProductStatus());
+
+                shoppingCartItem.setProductDTO(productDTO);
+                shoppingCartItem.setShoppingCartDTO(userDTO.getShoppingCartDTO());
+                shoppingCartItem.setShoppingCartDTOId(userDTO.getShoppingCartDTO().getId());
+            }
+
             userDTO.getShoppingCartDTO().setUserDTO(userDTO);
         }
 
@@ -36,18 +63,38 @@ public abstract class UserMapper {
             for( ProductDTO product : userDTO.getProductDTOs()) {
 
                 product.setUserDTO(userDTO);
-                product.setCategoryDTO(categoryConverter.categoryToCategoryDTO(user.getProducts().get(i).getCategory()));
+                product.setCategoryDTO(categoryConverter.categoryToCategoryDTO(
+                        user.getProducts().get(i).getCategory()));
                 product.setUserDTOId(user.getId());
             }
-
         }
+
     }
 
     @AfterMapping
-    protected void setAdditionalUserParameters(UserDTO userDTO, @MappingTarget User user) {
+    void setAdditionalUserParameters(UserDTO userDTO, @MappingTarget User user) {
 
 
         if (user.getShoppingCart() != null) {
+
+            int i = 0;
+
+            List<ShoppingCartItemDTO> shoppingCartItemDTOList = Objects.requireNonNull(userDTO.getShoppingCartDTO()).getShoppingCartItemDTOs();
+
+            for(ShoppingCartItem shoppingCartItem : user.getShoppingCart().getShoppingCartItems()) {
+
+                Product product = new Product();
+
+                product.setId(shoppingCartItemDTOList.get(i).getProductDTO().getId());
+                product.setCategory(categoryConverter
+                        .categoryDTOtoCategory(shoppingCartItemDTOList.get(i).getProductDTO().getCategoryDTO()));
+                product.setUser(user);
+                product.setPhoto(shoppingCartItemDTOList.get(i).getProductDTO().getPhoto());
+                product.setProductStatus(shoppingCartItemDTOList.get(i).getProductDTO().getProductStatus());
+
+                shoppingCartItem.setProduct(product);
+                shoppingCartItem.setShoppingCart(user.getShoppingCart());
+            }
 
             user.getShoppingCart().setUser(user);
         }
@@ -59,8 +106,8 @@ public abstract class UserMapper {
             for( Product product : user.getProducts()) {
 
                 product.setUser(user);
-
-                product.setCategory(categoryConverter.categoryDTOtoCategory(userDTO.getProductDTOs().get(i).getCategoryDTO()));
+                    product.setCategory(categoryConverter.categoryDTOtoCategory(
+                            Objects.requireNonNull(userDTO.getProductDTOs()).get(i).getCategoryDTO()));
             }
         }
     }

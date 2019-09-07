@@ -1,110 +1,87 @@
 package com.blocki.springrestonlinestore.api.v1.mappers;
 
-import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartDTO;
+import com.blocki.springrestonlinestore.TestEntity;
 import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
-import com.blocki.springrestonlinestore.core.domain.ShoppingCart;
 import com.blocki.springrestonlinestore.core.domain.User;
+import org.junit.Before;
 import org.junit.Test;
 import org.mapstruct.factory.Mappers;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
 public class UserMapperTest {
 
 
-    private UserMapper userConverter = Mappers.getMapper(UserMapper.class);
+    private final UserMapper userConverter = Mappers.getMapper(UserMapper.class);
+    private final TestEntity testEntity = new TestEntity();
 
-    private static final Long userId = 2L;
-    private static final String firstName = "Michael";
-    private static final String lastName = "Borrows";
-    private static final String address = "221B Baker Street";
-    private static final String country = "Great Britain";
-    private static final String phoneNumber = "213122112";
-    private static final LocalDate creationDate = LocalDate.of(2000,12,12);
-    private static final String emailAddress = "dsadsa@asdsa.sda";
-    private static final String username = "UserMyName";
-    private static final char[] password = {'q','s','t'};
-    private static final User.Gender gender = User.Gender.MALE;
-    private static final String userUrl = "/api/v1/users/5";
+    private User user;
+
+    @Before
+    public void setUp() {
+
+        user = testEntity.getUser();
+    }
 
     @Test
     public void userToUserDTO() {
 
-
-
-        User user = new User();
-        user.setId(userId);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setAddress(address);
-        user.setCountry(country);
-        user.setPhoneNumber(phoneNumber);
-        user.setCreationDate(creationDate);
-        user.setEmailAddress(emailAddress);
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setGender(gender);
-        user.setProducts(new ArrayList<>());
-        user.setShoppingCart(new ShoppingCart());
-
+        //when
         UserDTO userDTO = userConverter.userToUserDTO(user);
 
+        //then
         assertNotNull(userDTO);
         assertNotNull(userDTO.getProductDTOs());
         assertNotNull(userDTO.getShoppingCartDTO());
+        assertNotNull(userDTO.getShoppingCartDTO().getShoppingCartItemDTOs());
 
-        assertEquals(user.getId(), userDTO.getId());
-        assertEquals(user.getFirstName(), userDTO.getFirstName());
-        assertEquals(user.getLastName(), userDTO.getLastName());
-        assertEquals(user.getAddress(), userDTO.getAddress());
-        assertEquals(user.getPhoneNumber(), userDTO.getPhoneNumber());
-        assertEquals(user.getCountry(), userDTO.getCountry());
-        assertEquals(user.getCreationDate(), userDTO.getCreationDate());
-        assertEquals(user.getEmailAddress(), userDTO.getEmailAddress());
-        assertEquals(user.getUsername(), userDTO.getUsername());
-        assertArrayEquals(user.getPassword(), userDTO.getPassword());
-        assertEquals(user.getGender(), userDTO.getGender());
+        assertEquals(userDTO.getId(), user.getId());
+        assertEquals(userDTO.getFirstName(), user.getFirstName());
+        assertEquals(userDTO.getLastName(), user.getLastName());
+        assertEquals(userDTO.getAddress(), user.getAddress());
+        assertEquals(userDTO.getPhoneNumber(), user.getPhoneNumber());
+        assertEquals(userDTO.getCountry(), user.getCountry());
+        assertEquals(userDTO.getCreationDate(), user.getCreationDate());
+        assertEquals(userDTO.getEmailAddress(), user.getEmailAddress());
+        assertEquals(userDTO.getUsername(), user.getUsername());
+        assertEquals(userDTO.getGender(), user.getGender());
+        assertEquals(userDTO.getProductDTOs().size(), user.getProducts().size());
+        assertEquals(userDTO.getShoppingCartDTO().getId(), user.getShoppingCart().getId());
+
+        assertArrayEquals(userDTO.getPassword(), user.getPassword());
     }
 
     @Test
     public void userDTOToUser() {
 
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(userId);
-        userDTO.setFirstName(firstName);
-        userDTO.setLastName(lastName);
-        userDTO.setAddress(address);
-        userDTO.setCountry(country);
-        userDTO.setPhoneNumber(phoneNumber);
-        userDTO.setCreationDate(creationDate);
-        userDTO.setEmailAddress(emailAddress);
-        userDTO.setUsername(username);
-        userDTO.setPassword(password);
-        userDTO.setGender(gender);
-        userDTO.setProductDTOs(new ArrayList<>());
-        userDTO.setShoppingCartDTO(new ShoppingCartDTO());
+        //given
+        UserDTO userDTO = userConverter.userToUserDTO(user);
 
-        User user = userConverter.userDTOToUser(userDTO);
+        //when
+        User TestUser = userConverter.userDTOToUser(userDTO);
 
-        assertNotNull(user);
-        assertNotNull(user.getProducts());
-        assertNotNull(user.getShoppingCart());
+        //then
+        assertNotNull(TestUser);
+        assertNotNull(TestUser.getProducts());
+        assertNotNull(TestUser.getShoppingCart());
 
-        assertEquals(user.getId(), userDTO.getId());
-        assertEquals(user.getFirstName(), userDTO.getFirstName());
-        assertEquals(user.getLastName(), userDTO.getLastName());
-        assertEquals(user.getAddress(), userDTO.getAddress());
-        assertEquals(user.getPhoneNumber(), userDTO.getPhoneNumber());
-        assertEquals(user.getCountry(), userDTO.getCountry());
-        assertEquals(user.getCreationDate(), userDTO.getCreationDate());
-        assertEquals(user.getEmailAddress(), userDTO.getEmailAddress());
-        assertEquals(user.getUsername(), userDTO.getUsername());
-        assertArrayEquals(user.getPassword(), userDTO.getPassword());
-        assertEquals(user.getGender(), userDTO.getGender());
+        assertEquals(TestUser.getId(), userDTO.getId());
+        assertEquals(TestUser.getFirstName(), userDTO.getFirstName());
+        assertEquals(TestUser.getLastName(), userDTO.getLastName());
+        assertEquals(TestUser.getAddress(), userDTO.getAddress());
+        assertEquals(TestUser.getPhoneNumber(), userDTO.getPhoneNumber());
+        assertEquals(TestUser.getCountry(), userDTO.getCountry());
+        assertEquals(TestUser.getCreationDate(), userDTO.getCreationDate());
+        assertEquals(TestUser.getEmailAddress(), userDTO.getEmailAddress());
+        assertEquals(TestUser.getUsername(), userDTO.getUsername());
+        assertEquals(TestUser.getGender(), userDTO.getGender());
 
+        assert userDTO.getProductDTOs() != null;
+        assertEquals(TestUser.getProducts().size(), userDTO.getProductDTOs().size());
+
+        assert userDTO.getShoppingCartDTO() != null;
+        assertEquals(TestUser.getShoppingCart().getId(), userDTO.getShoppingCartDTO().getId());
+
+        assertArrayEquals(TestUser.getPassword(), userDTO.getPassword());
     }
-
 }

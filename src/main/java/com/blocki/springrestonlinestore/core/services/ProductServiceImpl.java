@@ -16,16 +16,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private final ProductRepository productRepository;
-
     private final ProductMapper productConverter = Mappers.getMapper(ProductMapper.class);
     private final UserMapper userConverter = Mappers.getMapper(UserMapper.class);
     private final CategoryMapper categoryConverter = Mappers.getMapper(CategoryMapper.class);
 
     private final ProductResourceAssembler productResourceAssembler;
+    private final ProductRepository productRepository;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, ProductResourceAssembler productResourceAssembler) {
+    public ProductServiceImpl(ProductRepository productRepository,
+                              ProductResourceAssembler productResourceAssembler) {
+
         this.productRepository = productRepository;
         this.productResourceAssembler = productResourceAssembler;
     }
@@ -99,7 +100,7 @@ public class ProductServiceImpl implements ProductService {
                         product.setCategory(categoryConverter.categoryDTOtoCategory(productDTO.getCategoryDTO()));
                     }
 
-                    if(productDTO.getUserDTO() != null) {
+                    if(productDTO.getUserDTOId() != null) {
 
                       product.setUser(userConverter.userDTOToUser(productDTO.getUserDTO()));
                     }
@@ -114,6 +115,5 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProductById(Long id) {
 
         productRepository.deleteById(id);
-
     }
 }
