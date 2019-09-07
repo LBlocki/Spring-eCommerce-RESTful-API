@@ -79,7 +79,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public  Resource<ShoppingCartDTO> getShoppingCart(@PathVariable Long id) {
 
-        return userService.getShoppingCart(id);
+        return userService.getShoppingCartById(id);
     }
 
     @PostMapping("/{id}/shoppingCart")
