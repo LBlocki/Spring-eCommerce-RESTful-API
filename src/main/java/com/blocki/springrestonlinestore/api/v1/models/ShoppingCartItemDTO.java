@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.hateoas.core.Relation;
 
@@ -22,11 +23,13 @@ public class ShoppingCartItemDTO {
 
     @JsonProperty("product")
     @NotNull(message = "Product field cannot be null")
+    @ToString.Exclude
     private ProductDTO productDTO;
 
     @JsonProperty("shopping_cart")
     @NotNull(message = "Shopping Cart field value cannot be null")
     @JsonBackReference
+    @ToString.Exclude
     private ShoppingCartDTO shoppingCartDTO;
 
     @NotNull(message = "Shopping Cart id field cannot be null")

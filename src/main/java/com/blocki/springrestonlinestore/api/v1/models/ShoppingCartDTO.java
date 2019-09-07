@@ -31,6 +31,7 @@ public class ShoppingCartDTO {
     @JsonProperty("user_id")
     @NotNull(message = "User field value cannot be null")
     @JsonBackReference
+    @ToString.Exclude
     private UserDTO userDTO;
 
     @NotNull(message = "Owner_id field cannot be null")

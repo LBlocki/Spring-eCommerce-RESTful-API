@@ -42,6 +42,7 @@ public class UserDTO {
     @JsonProperty("shopping_cart")
     @JsonManagedReference
     @Nullable
+    @ToString.Exclude
     private ShoppingCartDTO shoppingCartDTO;
 
     @NotBlank(message = "First name field value cannot be null or contain only blank characters")
