@@ -4,9 +4,11 @@ import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartDTO;
 import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartItemDTO;
 import com.blocki.springrestonlinestore.core.domain.ShoppingCart;
 import com.blocki.springrestonlinestore.core.domain.ShoppingCartItem;
+import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
+@Slf4j
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class ShoppingCartMapper {
 
@@ -39,6 +41,12 @@ public abstract class ShoppingCartMapper {
 
             i++;
         }
+
+        if(log.isDebugEnabled()) {
+
+            log.debug(ShoppingCartMapper.class.getName() + ":(shoppingCartToShoppingCartDTO): shoppingCart:\n"
+                    + shoppingCart.toString() + ",\n shoppingCartDTO:" + shoppingCartDTO.toString() + "\n");
+        }
     }
 
     @AfterMapping
@@ -56,6 +64,12 @@ public abstract class ShoppingCartMapper {
                     shoppingCartDTO.getShoppingCartItemDTOs().get(i).getProductDTO()));
 
             i++;
+        }
+
+        if(log.isDebugEnabled()) {
+
+            log.debug(ShoppingCartMapper.class.getName() + ":(shoppingCartDTOToShoppingCart): shoppingCartDTO:\n"
+                    + shoppingCartDTO.toString() + ",\n shoppingCart:" + shoppingCartDTO.toString() + "\n");
         }
     }
 }

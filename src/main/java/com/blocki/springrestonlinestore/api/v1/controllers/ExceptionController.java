@@ -30,7 +30,10 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<CustomErrorResponse> handleNotFoundException(Exception exception) {
 
-        log.debug("Resource Not found exception caught");
+        if(log.isDebugEnabled()) {
+
+            log.debug("Resource Not found exception caught : " + exception.getMessage() + "\n");
+        }
 
         CustomErrorResponse errors = new CustomErrorResponse();
         errors.setTimestamp(LocalDateTime.now());
@@ -43,7 +46,10 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ResourceAlreadyExistsException.class)
     public ResponseEntity<CustomErrorResponse> handleResourceAlreadyExistsException(Exception exception) {
 
-        log.debug("Resource already exists");
+        if(log.isDebugEnabled()) {
+
+            log.debug("Resource already exists exception caught : " + exception.getMessage() + "\n");
+        }
 
         CustomErrorResponse errors = new CustomErrorResponse();
         errors.setTimestamp(LocalDateTime.now());
@@ -56,7 +62,10 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(NumberFormatException.class)
     public ResponseEntity<Object> handleNumberFormatException(Exception exception) {
 
-        log.debug("Number format exception caught");
+        if(log.isDebugEnabled()) {
+
+            log.debug("Wrong number format exception caught : " + exception.getMessage() + "\n");
+        }
 
         CustomErrorResponse errors = new CustomErrorResponse();
         errors.setTimestamp(LocalDateTime.now());
@@ -67,18 +76,21 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+    public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,
                                                                HttpHeaders headers, HttpStatus status,
                                                                WebRequest request) {
 
-        log.debug("Validation failed");
+        if(log.isDebugEnabled()) {
+
+            log.debug("Not valid argument exception caught : " + exception.getMessage() + "\n");
+        }
 
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", new Date());
         body.put("status", status.value());
 
         //Get all fields errors
-        List<String> errors = ex.getBindingResult()
+        List<String> errors = exception.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
@@ -92,6 +104,11 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
+        if(log.isDebugEnabled()) {
+
+            log.debug("Http message not readable exception caught : " + exception.getMessage() + "\n");
+        }
+
         CustomErrorResponse errors = new CustomErrorResponse();
         errors.setTimestamp(LocalDateTime.now());
         errors.setError(exception.getMessage());
@@ -102,6 +119,11 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity handleConstraintViolationException(Exception exception){
+
+        if(log.isDebugEnabled()) {
+
+            log.debug("Constraint violation exception caught : " + exception.getMessage() + "\n");
+        }
 
         CustomErrorResponse errors = new CustomErrorResponse();
         errors.setTimestamp(LocalDateTime.now());

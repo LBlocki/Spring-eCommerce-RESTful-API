@@ -2,12 +2,14 @@ package com.blocki.springrestonlinestore.api.v1.mappers;
 
 import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartItemDTO;
 import com.blocki.springrestonlinestore.core.domain.ShoppingCartItem;
+import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
+@Slf4j
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class ShoppingCartItemMapper {
 
@@ -26,6 +28,14 @@ public abstract class ShoppingCartItemMapper {
         shoppingCartItemDTO.setShoppingCartDTO(shoppingCartConverter
                 .shoppingCartToShoppingCartDTO(shoppingCartItem.getShoppingCart()));
         shoppingCartItemDTO.setShoppingCartDTOId(shoppingCartItem.getShoppingCart().getId());
+
+        if(log.isDebugEnabled()) {
+
+            log.debug(ShoppingCartItemMapper.class.getName()
+                    + ":(ShoppingCartItemToShoppingCartItemDTO): shoppingCartItem:\n"
+                    + shoppingCartItem.toString() + ",\n shoppingCartItemDTO:"
+                    + shoppingCartItemDTO.toString() + "\n");
+        }
     }
 
     @AfterMapping
@@ -36,5 +46,13 @@ public abstract class ShoppingCartItemMapper {
         shoppingCartItem.setProduct(productConverter.productDTOToProduct(shoppingCartItemDTO.getProductDTO()));
         shoppingCartItem.setShoppingCart(shoppingCartConverter
                 .shoppingCartDTOToShoppingCart(shoppingCartItemDTO.getShoppingCartDTO()));
+
+        if(log.isDebugEnabled()) {
+
+            log.debug(ShoppingCartItemMapper.class.getName()
+                    + ":(ShoppingCartItemDTOToShoppingCartItem): shoppingCartItemDTO:\n"
+                    + shoppingCartItemDTO.toString() + ",\n shoppingCartItem:"
+                    + shoppingCartItem.toString() + "\n");
+        }
     }
 }
