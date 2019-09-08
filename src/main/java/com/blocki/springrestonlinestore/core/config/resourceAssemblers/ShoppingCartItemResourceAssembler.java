@@ -19,8 +19,11 @@ public class ShoppingCartItemResourceAssembler  implements ResourceAssembler<Sho
 
         return new Resource<>(shoppingCartItemDTO,
                 linkTo(methodOn(ShoppingCartItemController.class).getShoppingCartById(shoppingCartItemDTO.getId()))
-                        .withSelfRel(),
+                        .withSelfRel().withType("GET"),
+                linkTo(methodOn(ShoppingCartItemController.class).getShoppingCartById(shoppingCartItemDTO.getId()))
+                        .withRel("delete shopping_cart item").withType("DELETE"),
                 linkTo(methodOn(ShoppingCartController.class).getAllShoppingCartItems(shoppingCartItemDTO
-                        .getShoppingCartDTO().getId())).withRel("shopping_cart_items"));
+                        .getShoppingCartDTO().getId())).withRel("get list of shopping_cart items").withType("GET"));
+
     }
 }

@@ -17,7 +17,12 @@ public class ProductResourceAssembler  implements ResourceAssembler<ProductDTO, 
     public Resource<ProductDTO> toResource(ProductDTO productDTO) {
 
        return new Resource<>(productDTO,
-               linkTo(methodOn(ProductController.class).getProductById(productDTO.getId())).withSelfRel(),
-               linkTo(methodOn(UserController.class).getAllUsersProducts(productDTO.getUserDTO().getId())).withRel("users_products"));
+               linkTo(methodOn(ProductController.class).getProductById(productDTO.getId())).withSelfRel().withType("GET"),
+               linkTo(methodOn(ProductController.class).patchProduct(productDTO.getUserDTO().getId(), productDTO))
+                       .withRel("update product").withType("PATCH"),
+               linkTo(methodOn(ProductController.class).getProductById(productDTO.getUserDTO().getId()))
+                       .withRel("delete product").withType("DELETE"),
+               linkTo(methodOn(UserController.class).getAllUsersProducts(productDTO.getUserDTO().getId()))
+                       .withRel("get list of users products").withType("GET"));
     }
 }
