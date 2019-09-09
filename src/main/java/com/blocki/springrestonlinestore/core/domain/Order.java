@@ -25,7 +25,7 @@ public class Order extends BaseEntity {
     @ToString.Exclude
     private User user;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<OrderItem> orderItems = new ArrayList<>();
 
