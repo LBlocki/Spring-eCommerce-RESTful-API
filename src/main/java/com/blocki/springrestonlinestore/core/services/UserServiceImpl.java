@@ -64,7 +64,10 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
 
         return new Resources<>(users,
-                linkTo(methodOn(UserController.class).getAllUsers()).withSelfRel());
+                linkTo(methodOn(UserController.class)
+                        .createNewUser(new UserDTO())).withRel("create new user").withType("POST"),
+                linkTo(methodOn(UserController.class)
+                        .getAllUsers()).withSelfRel().withType("GET"));
     }
 
     @Override
@@ -254,7 +257,8 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
 
         return new Resources<>(products ,
-                linkTo(methodOn(UserController.class).getAllUsersProducts(id)).withSelfRel());
+                linkTo(methodOn(UserController.class).getUserById(id)).withRel("get product's user").withType("GET"),
+                linkTo(methodOn(UserController.class).getAllUsersProducts(id)).withSelfRel().withType("GET"));
     }
 
     @Override

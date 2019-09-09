@@ -106,6 +106,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .collect(Collectors.toList());
 
         return new Resources<>(shoppingCartItemList,
-                linkTo(methodOn(ShoppingCartController.class).getAllShoppingCartItems(id)).withSelfRel());
+                linkTo(methodOn(ShoppingCartController.class)
+                        .getShoppingCartById(id)).withRel("get shopping cart item's shopping cart").withType("GET"),
+                linkTo(methodOn(ShoppingCartController.class)
+                        .getAllShoppingCartItems(id)).withSelfRel().withType("GET"));
     }
 }

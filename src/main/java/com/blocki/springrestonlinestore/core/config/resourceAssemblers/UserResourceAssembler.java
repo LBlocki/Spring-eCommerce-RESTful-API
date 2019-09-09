@@ -28,6 +28,12 @@ public class UserResourceAssembler  implements ResourceAssembler<UserDTO, Resour
                         .withRel("create product").withType("POST"),
                 linkTo(methodOn(UserController.class).addNewShoppingCart(userDTO.getId(), new ShoppingCartDTO()))
                         .withRel("create shopping cart").withType("POST"),
+                linkTo(methodOn(UserController.class).updateUser(userDTO.getId(), new UserDTO()))
+                        .withRel("update user").withType("PUT"),
+                linkTo(methodOn(UserController.class).patchUser(userDTO.getId(), new UserDTO()))
+                        .withRel("patch user").withType("PATCH"),
+                linkTo(methodOn(UserController.class).getUserById(userDTO.getId()))
+                        .withRel("delete user").withType("DELETE"),
                 linkTo(methodOn(UserController.class).getAllUsers()).withRel("get list of users").withType("GET"));
     }
 }
