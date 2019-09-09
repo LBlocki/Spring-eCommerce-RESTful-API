@@ -80,12 +80,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public void createCancellationRequest(Long id) {
-
-        deleteShoppingCartById(id);
-    }
-
-    @Override
     public Resource<ShoppingCartItemDTO> createNewShoppingCartItem(Long id, ShoppingCartItemDTO shoppingCartItemDTO) {
 
         ShoppingCart shoppingCart = shoppingCartRepository.findById(id).orElseThrow(NotFoundException::new);

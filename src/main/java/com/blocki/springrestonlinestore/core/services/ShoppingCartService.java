@@ -13,8 +13,6 @@ public interface ShoppingCartService {
 
     Resource<ShoppingCartDTO> createPurchaseRequest(Long id);
 
-    void createCancellationRequest(Long id);
-
     Resource<ShoppingCartItemDTO> createNewShoppingCartItem(Long id, ShoppingCartItemDTO shoppingCartItemDTO);
 
     Resources<Resource<ShoppingCartItemDTO>> getAllShoppingCartItems(Long id);

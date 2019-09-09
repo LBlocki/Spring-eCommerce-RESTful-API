@@ -116,21 +116,6 @@ public class ShoppingCartServiceImplTest {
     }
 
     @Test
-    public void createCancellationRequest() {
-
-        //given
-        Mockito.when(shoppingCartRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(shoppingCart));
-
-        //when
-        shoppingCartService.createCancellationRequest(shoppingCart.getId());
-
-        //then
-        Mockito.verify(shoppingCartRepository, Mockito.times(1)).deleteById(Mockito.anyLong());
-
-        Mockito.verifyNoMoreInteractions(shoppingCartRepository);
-    }
-
-    @Test
     public void createNewShoppingCartItem() {
 
         //given
