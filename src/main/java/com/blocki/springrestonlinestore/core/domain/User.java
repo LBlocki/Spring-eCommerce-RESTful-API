@@ -18,13 +18,13 @@ public class User extends BaseEntity {
 
     public enum Gender {MALE, FEMALE}
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<Product> products = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @ToString.Exclude
-    private ShoppingCart shoppingCart;
+    private Order order;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;

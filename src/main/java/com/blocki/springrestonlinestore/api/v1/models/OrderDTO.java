@@ -2,7 +2,7 @@ package com.blocki.springrestonlinestore.api.v1.models;
 
 import com.blocki.springrestonlinestore.core.config.parsers.LocalDateDeserializer;
 import com.blocki.springrestonlinestore.core.config.parsers.LocalDateSerializer;
-import com.blocki.springrestonlinestore.core.domain.ShoppingCart;
+import com.blocki.springrestonlinestore.core.domain.Order;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,7 +24,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Relation(value = "order", collectionRelation = "orders")
-public class ShoppingCartDTO {
+public class OrderDTO {
 
     private Long id;
 
@@ -38,10 +38,10 @@ public class ShoppingCartDTO {
     @JsonProperty("owner_id")
     private Long userDTOId;
 
-    @JsonProperty("shopping_cart_items")
+    @JsonProperty("order_items")
     @JsonManagedReference
     @ToString.Exclude
-    private List<ShoppingCartItemDTO> shoppingCartItemDTOs = new ArrayList<>();
+    private List<OrderItemDTO> orderItemDTOS = new ArrayList<>();
 
     @NotNull(message = "Creation date field value cannot be null")
     @JsonProperty("creation_date")
@@ -50,8 +50,8 @@ public class ShoppingCartDTO {
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate creationDate;
 
-    @JsonProperty("cart_status")
-    @NotNull(message = "Cart status field value cannot be null")
-    private ShoppingCart.CartStatus cartStatus;
+    @JsonProperty("order_status")
+    @NotNull(message = "Order status field value cannot be null")
+    private Order.OrderStatus orderStatus;
 
 }

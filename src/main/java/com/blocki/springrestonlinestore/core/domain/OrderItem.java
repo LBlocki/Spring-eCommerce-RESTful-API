@@ -9,11 +9,11 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "Shopping_Cart_Items")
+@Table(name = "Order_items")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class ShoppingCartItem extends  BaseEntity {
+public class OrderItem extends  BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -21,9 +21,9 @@ public class ShoppingCartItem extends  BaseEntity {
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "shopping_cart_id")
+    @JoinColumn(name = "order_id")
     @ToString.Exclude
-    private ShoppingCart shoppingCart;
+    private Order order;
 
     @Column(nullable = false)
     private Integer quantity;
