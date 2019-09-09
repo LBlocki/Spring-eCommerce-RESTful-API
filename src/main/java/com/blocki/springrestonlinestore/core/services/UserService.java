@@ -1,7 +1,7 @@
 package com.blocki.springrestonlinestore.core.services;
 
+import com.blocki.springrestonlinestore.api.v1.models.OrderDTO;
 import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
-import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartDTO;
 import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
@@ -22,12 +22,12 @@ public interface UserService {
 
     void deleteUserById(Long id);
 
-    Resource<ShoppingCartDTO> createNewShoppingCart(Long id, ShoppingCartDTO shoppingCartDTO);
+    Resource<OrderDTO> createNewOrder(Long id, OrderDTO orderDTO);
 
     Resource<ProductDTO> createNewProduct(Long id, ProductDTO productDTO);
 
     Resources<Resource<ProductDTO>> getAllProducts(Long id);
 
-    Resource<ShoppingCartDTO> getShoppingCartById(Long id);
+    Resource<OrderDTO> getOrderById(Long id);
 
 }

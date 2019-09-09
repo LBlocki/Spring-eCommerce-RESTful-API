@@ -14,8 +14,8 @@ public class TestEntity {
 
     private Category category = new Category();
     private Product product = new Product();
-    private ShoppingCart shoppingCart = new ShoppingCart();
-    private ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+    private Order order = new Order();
+    private OrderItem orderItem = new OrderItem();
     private User user = new User();
 
     private static final LocalDate creationDate = LocalDate.now();
@@ -41,11 +41,11 @@ public class TestEntity {
     private static final Byte[] photo = {2,3,4};
 
     //shopping cart data
-    private static final Long shoppingCartID = 3L;
-    private static final ShoppingCart.CartStatus cartStatus = ShoppingCart.CartStatus.ACTIVE;
+    private static final Long OrderId = 3L;
+    private static final Order.OrderStatus orderStatus = Order.OrderStatus.ACTIVE;
 
     //shopping cart item data
-    private static final Long shoppingCartItemId = 2L;
+    private static final Long OrderItemId = 2L;
     private static final Integer quantity = 10;
     private static final BigDecimal totalCost = BigDecimal.valueOf(30);
 
@@ -70,7 +70,7 @@ public class TestEntity {
         user.setPassword(password);
         user.setGender(gender);
         user.setProducts(Arrays.asList(product, product));
-        user.setShoppingCart(shoppingCart);
+        user.setOrder(order);
 
         product.setUser(user);
         product.setCategory(category);
@@ -82,17 +82,17 @@ public class TestEntity {
         product.setDescription(description);
         product.setPhoto(photo);
 
-        shoppingCart.setId(shoppingCartID);
-        shoppingCart.setCreationDate(creationDate);
-        shoppingCart.setCartStatus(cartStatus);
-        shoppingCart.setUser(user);
-        shoppingCart.setShoppingCartItems(Arrays.asList(shoppingCartItem, shoppingCartItem));
+        order.setId(OrderId);
+        order.setCreationDate(creationDate);
+        order.setOrderStatus(orderStatus);
+        order.setUser(user);
+        order.setOrderItems(Arrays.asList(orderItem, orderItem));
 
-        shoppingCartItem.setId(shoppingCartItemId);
-        shoppingCartItem.setQuantity(quantity);
-        shoppingCartItem.setTotalCost(totalCost);
-        shoppingCartItem.setProduct(product);
-        shoppingCartItem.setShoppingCart(shoppingCart);
+        orderItem.setId(OrderItemId);
+        orderItem.setQuantity(quantity);
+        orderItem.setTotalCost(totalCost);
+        orderItem.setProduct(product);
+        orderItem.setOrder(order);
     }
 
     public Category getCategory() { return category; }
@@ -101,12 +101,12 @@ public class TestEntity {
         return product;
     }
 
-    public ShoppingCart getShoppingCart() {
-        return shoppingCart;
+    public Order getOrder() {
+        return order;
     }
 
-    public ShoppingCartItem getShoppingCartItem() {
-        return shoppingCartItem;
+    public OrderItem getOrderItem() {
+        return orderItem;
     }
 
     public User getUser() {

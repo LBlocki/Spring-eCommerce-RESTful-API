@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Collections;
 
 @Component
@@ -80,19 +79,19 @@ public class Bootstrap implements CommandLineRunner {
         product.setDescription("This is description");
         product.setPhoto(new Byte[]{'s'});
 
-        ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
-        shoppingCartItem.setQuantity(30);
-        shoppingCartItem.setProduct(product);
-        shoppingCartItem.setTotalCost(BigDecimal.ONE);
+        OrderItem orderItem = new OrderItem();
+        orderItem.setQuantity(30);
+        orderItem.setProduct(product);
+        orderItem.setTotalCost(BigDecimal.ONE);
 
-        ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setCartStatus(ShoppingCart.CartStatus.ACTIVE);
-        shoppingCart.setCreationDate(LocalDate.now());
-        shoppingCart.setShoppingCartItems(Collections.singletonList(shoppingCartItem));
-        shoppingCartItem.setShoppingCart(shoppingCart);
+        Order order = new Order();
+        order.setOrderStatus(Order.OrderStatus.ACTIVE);
+        order.setCreationDate(LocalDate.now());
+        order.setOrderItems(Collections.singletonList(orderItem));
+        orderItem.setOrder(order);
 
         firstUser.getProducts().add(product);
-        firstUser.setShoppingCart(shoppingCart);
+        firstUser.setOrder(order);
 
         User secondUser = new User();
         secondUser.setId(2L);

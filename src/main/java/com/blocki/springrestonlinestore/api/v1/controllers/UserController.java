@@ -1,7 +1,7 @@
 package com.blocki.springrestonlinestore.api.v1.controllers;
 
+import com.blocki.springrestonlinestore.api.v1.models.OrderDTO;
 import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
-import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartDTO;
 import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
 import com.blocki.springrestonlinestore.core.services.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -96,7 +96,7 @@ public class UserController {
 
         if(log.isDebugEnabled()) {
 
-            log.debug(ShoppingCartController.class.getName() +
+            log.debug(OrderController.class.getName() +
                     ":(updateUser): Id value in path: " + id + "," +
                     " User passed in path:" + userDTO.toString() + "\n");
         }
@@ -110,7 +110,7 @@ public class UserController {
 
         if(log.isDebugEnabled()) {
 
-            log.debug(ShoppingCartController.class.getName() +
+            log.debug(OrderController.class.getName() +
                     ":(patchUser): Id value in path: " + id + "," +
                     " User passed in path:" + userDTO.toString() + "\n");
         }
@@ -131,37 +131,37 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}/shoppingCart")
-    public  ResponseEntity<Resource<ShoppingCartDTO>> getShoppingCart(@PathVariable final Long id) {
+    @GetMapping("/{id}/order")
+    public  ResponseEntity<Resource<OrderDTO>> getOrder(@PathVariable final Long id) {
 
         if(log.isDebugEnabled()) {
 
-            log.debug(UserController.class.getName() + ":(getShoppingCart): ID value in path: " + id  + "\n");
+            log.debug(UserController.class.getName() + ":(getOrder): ID value in path: " + id  + "\n");
         }
 
-        return ResponseEntity.ok(userService.getShoppingCartById(id));
+        return ResponseEntity.ok(userService.getOrderById(id));
     }
 
-    @PostMapping("/{id}/shoppingCart")
-    public ResponseEntity<Resource<ShoppingCartDTO>> addNewShoppingCart(@PathVariable final Long id,
-                                                        @RequestBody @Valid final ShoppingCartDTO shoppingCartDTO) {
+    @PostMapping("/{id}/order")
+    public ResponseEntity<Resource<OrderDTO>> addNewOrder(@PathVariable final Long id,
+                                                                 @RequestBody @Valid final OrderDTO orderDTO) {
 
         if(log.isDebugEnabled()) {
 
             log.debug(UserController.class.getName() +
-                    ":(addNewShoppingCart): Id value in path: " + id + "," +
-                    " shoppingCart passed in path:" + shoppingCartDTO.toString() + "\n");
+                    ":(addNewOrder): Id value in path: " + id + "," +
+                    " order passed in path:" + orderDTO.toString() + "\n");
         }
 
-        final Resource<ShoppingCartDTO> shoppingCartDTOResource =
-                userService.createNewShoppingCart(id, shoppingCartDTO);
+        final Resource<OrderDTO> orderDTOResource =
+                userService.createNewOrder(id, orderDTO);
 
         final URI uri = MvcUriComponentsBuilder.fromController(getClass())
-                .path("/{id}/shoppingCart")
-                .buildAndExpand(shoppingCartDTOResource.getId())
+                .path("/{id}/order")
+                .buildAndExpand(orderDTOResource.getId())
                 .toUri();
 
-        return ResponseEntity.created(uri).body(shoppingCartDTOResource);
+        return ResponseEntity.created(uri).body(orderDTOResource);
 
     }
 

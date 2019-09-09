@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Relation(value = "item", collectionRelation = "items")
-public class ShoppingCartItemDTO {
+public class OrderItemDTO {
 
     private Long id;
 
@@ -26,15 +26,15 @@ public class ShoppingCartItemDTO {
     @ToString.Exclude
     private ProductDTO productDTO;
 
-    @JsonProperty("shopping_cart")
+    @JsonProperty("order")
     @NotNull(message = "Shopping Cart field value cannot be null")
     @JsonBackReference
     @ToString.Exclude
-    private ShoppingCartDTO shoppingCartDTO;
+    private OrderDTO orderDTO;
 
     @NotNull(message = "Shopping Cart id field cannot be null")
-    @JsonProperty("shopping_cart_id")
-    private Long ShoppingCartDTOId;
+    @JsonProperty("order_id")
+    private Long orderDTOId;
 
     @NotNull(message = "Quantity value cannot be null")
     @Positive(message = "field must have positive value")

@@ -16,24 +16,24 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class ShoppingCart extends BaseEntity {
+public class Order extends BaseEntity {
 
-    public enum CartStatus { ACTIVE, COMPLETED, ERROR }
+    public enum OrderStatus { ACTIVE, COMPLETED, ERROR }
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     @ToString.Exclude
     private User user;
 
-    @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @ToString.Exclude
-    private List<ShoppingCartItem> shoppingCartItems = new ArrayList<>();
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     @CreationTimestamp
     @Column(name = "creation_date", updatable = false, nullable = false)
     private LocalDate creationDate;
 
-    @Column(name = "cart_status", nullable = false)
+    @Column(name = "order_status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private CartStatus cartStatus;
+    private OrderStatus orderStatus;
 }
