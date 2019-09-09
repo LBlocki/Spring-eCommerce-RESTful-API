@@ -1,14 +1,14 @@
 package com.blocki.springrestonlinestore.core.services;
 
 import com.blocki.springrestonlinestore.api.v1.controllers.UserController;
+import com.blocki.springrestonlinestore.api.v1.mappers.OrderMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.ProductMapper;
-import com.blocki.springrestonlinestore.api.v1.mappers.ShoppingCartMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
+import com.blocki.springrestonlinestore.api.v1.models.OrderDTO;
 import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
-import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartDTO;
 import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
+import com.blocki.springrestonlinestore.core.config.resourceAssemblers.OrderResourceAssembler;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.ProductResourceAssembler;
-import com.blocki.springrestonlinestore.core.config.resourceAssemblers.ShoppingCartResourceAssembler;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.UserResourceAssembler;
 import com.blocki.springrestonlinestore.core.domain.Product;
 import com.blocki.springrestonlinestore.core.domain.User;
@@ -36,21 +36,21 @@ public class UserServiceImpl implements UserService {
 
     private final UserMapper userConverter = Mappers.getMapper(UserMapper.class);
     private final ProductMapper productConverter = Mappers.getMapper(ProductMapper.class);
-    private final ShoppingCartMapper shoppingCartConverter = Mappers.getMapper(ShoppingCartMapper.class);
+    private final OrderMapper orderConverter = Mappers.getMapper(OrderMapper.class);
 
     private final UserResourceAssembler userResourceAssembler;
     private final ProductResourceAssembler productResourceAssembler;
-    private final ShoppingCartResourceAssembler shoppingCartResourceAssembler;
+    private final OrderResourceAssembler orderResourceAssembler;
 
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository,UserResourceAssembler userResourceAssembler,
-                           ProductResourceAssembler productResourceAssembler, ShoppingCartResourceAssembler shoppingCartResourceAssembler) {
+    public UserServiceImpl(UserRepository userRepository, UserResourceAssembler userResourceAssembler,
+                           ProductResourceAssembler productResourceAssembler, OrderResourceAssembler orderResourceAssembler) {
 
         this.userRepository = userRepository;
         this.userResourceAssembler = userResourceAssembler;
         this.productResourceAssembler = productResourceAssembler;
-        this.shoppingCartResourceAssembler = shoppingCartResourceAssembler;
+        this.orderResourceAssembler = orderResourceAssembler;
     }
 
     @Override
@@ -190,9 +190,9 @@ public class UserServiceImpl implements UserService {
 
                    }
 
-                   if(userDTO.getShoppingCartDTO() != null) {
+                   if(userDTO.getOrderDTO() != null) {
 
-                      user.setShoppingCart(shoppingCartConverter.shoppingCartDTOToShoppingCart(userDTO.getShoppingCartDTO()));
+                      user.setOrder(orderConverter.orderDTOToOrder(userDTO.getOrderDTO()));
                    }
 
                    return saveUser(userConverter.userToUserDTO(user));
@@ -208,21 +208,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Resource<ShoppingCartDTO> createNewShoppingCart(Long id, ShoppingCartDTO shoppingCartDTO) {
+    public Resource<OrderDTO> createNewOrder(Long id, OrderDTO orderDTO) {
 
         User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
         UserDTO userDTO = userConverter.userToUserDTO(user);
 
-        if(userDTO.getShoppingCartDTO() != null) {
+        if(userDTO.getOrderDTO() != null) {
 
             throw new ResourceAlreadyExistsException("Order already exists. You need to delete current order before creating a new one");
         }
 
-        userDTO.setShoppingCartDTO(shoppingCartDTO);
-        shoppingCartDTO.setUserDTO(userDTO);
+        userDTO.setOrderDTO(orderDTO);
+        orderDTO.setUserDTO(userDTO);
         saveUser(userDTO);
 
-        return shoppingCartResourceAssembler.toResource(shoppingCartDTO);
+        return orderResourceAssembler.toResource(orderDTO);
     }
 
     @Override
@@ -262,16 +262,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public  Resource<ShoppingCartDTO> getShoppingCartById(Long id) {
+    public  Resource<OrderDTO> getOrderById(Long id) {
 
         User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
 
-        if(user.getShoppingCart() == null) {
+        if(user.getOrder() == null) {
 
             throw new NotFoundException("User's shopping cart is null");
         }
 
-        return shoppingCartResourceAssembler.
-                toResource(shoppingCartConverter.shoppingCartToShoppingCartDTO(user.getShoppingCart()));
+        return orderResourceAssembler.
+                toResource(orderConverter.orderToOrderDTO(user.getOrder()));
     }
 }

@@ -1,10 +1,10 @@
 package com.blocki.springrestonlinestore.api.v1.mappers;
 
+import com.blocki.springrestonlinestore.api.v1.models.OrderItemDTO;
 import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
-import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartItemDTO;
 import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
+import com.blocki.springrestonlinestore.core.domain.OrderItem;
 import com.blocki.springrestonlinestore.core.domain.Product;
-import com.blocki.springrestonlinestore.core.domain.ShoppingCartItem;
 import com.blocki.springrestonlinestore.core.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.*;
@@ -21,7 +21,7 @@ public abstract class UserMapper {
 
     @Mappings({
             @Mapping(source = "products", target = "productDTOs"),
-            @Mapping(source = "shoppingCart", target = "shoppingCartDTO")
+            @Mapping(source = "order", target = "orderDTO")
     })
     abstract public UserDTO userToUserDTO(User user);
 
@@ -32,30 +32,30 @@ public abstract class UserMapper {
     @AfterMapping
     void setAdditionalUserDTOParameters(User user, @MappingTarget UserDTO userDTO) {
 
-        if (userDTO.getShoppingCartDTO() != null) {
+        if (userDTO.getOrderDTO() != null) {
 
             int i = 0;
 
-            List<ShoppingCartItem> shoppingCartItemList = user.getShoppingCart().getShoppingCartItems();
+            List<OrderItem> orderItemList = user.getOrder().getOrderItems();
 
-            for(ShoppingCartItemDTO shoppingCartItem : userDTO.getShoppingCartDTO().getShoppingCartItemDTOs()) {
+            for(OrderItemDTO orderItemDTO : userDTO.getOrderDTO().getOrderItemDTOS()) {
 
                 ProductDTO productDTO = new ProductDTO();
 
-                productDTO.setId(shoppingCartItemList.get(i).getProduct().getId());
+                productDTO.setId(orderItemList.get(i).getProduct().getId());
                 productDTO.setCategoryDTO(categoryConverter
-                        .categoryToCategoryDTO(shoppingCartItemList.get(i).getProduct().getCategory()));
+                        .categoryToCategoryDTO(orderItemList.get(i).getProduct().getCategory()));
                 productDTO.setUserDTOId(userDTO.getId());
                 productDTO.setUserDTO(userDTO);
-                productDTO.setPhoto(shoppingCartItemList.get(i).getProduct().getPhoto());
-                productDTO.setProductStatus(shoppingCartItemList.get(i).getProduct().getProductStatus());
+                productDTO.setPhoto(orderItemList.get(i).getProduct().getPhoto());
+                productDTO.setProductStatus(orderItemList.get(i).getProduct().getProductStatus());
 
-                shoppingCartItem.setProductDTO(productDTO);
-                shoppingCartItem.setShoppingCartDTO(userDTO.getShoppingCartDTO());
-                shoppingCartItem.setShoppingCartDTOId(userDTO.getShoppingCartDTO().getId());
+                orderItemDTO.setProductDTO(productDTO);
+                orderItemDTO.setOrderDTO(userDTO.getOrderDTO());
+                orderItemDTO.setOrderDTOId(userDTO.getOrderDTO().getId());
             }
 
-            userDTO.getShoppingCartDTO().setUserDTO(userDTO);
+            userDTO.getOrderDTO().setUserDTO(userDTO);
         }
 
         if (userDTO.getProductDTOs() != null && !userDTO.getProductDTOs().isEmpty()) {
@@ -83,28 +83,28 @@ public abstract class UserMapper {
     void setAdditionalUserParameters(UserDTO userDTO, @MappingTarget User user) {
 
 
-        if (user.getShoppingCart() != null) {
+        if (user.getOrder() != null) {
 
             int i = 0;
 
-            List<ShoppingCartItemDTO> shoppingCartItemDTOList = Objects.requireNonNull(userDTO.getShoppingCartDTO()).getShoppingCartItemDTOs();
+            List<OrderItemDTO> orderItemDTOList = Objects.requireNonNull(userDTO.getOrderDTO()).getOrderItemDTOS();
 
-            for(ShoppingCartItem shoppingCartItem : user.getShoppingCart().getShoppingCartItems()) {
+            for(OrderItem orderItem : user.getOrder().getOrderItems()) {
 
                 Product product = new Product();
 
-                product.setId(shoppingCartItemDTOList.get(i).getProductDTO().getId());
+                product.setId(orderItemDTOList.get(i).getProductDTO().getId());
                 product.setCategory(categoryConverter
-                        .categoryDTOtoCategory(shoppingCartItemDTOList.get(i).getProductDTO().getCategoryDTO()));
+                        .categoryDTOtoCategory(orderItemDTOList.get(i).getProductDTO().getCategoryDTO()));
                 product.setUser(user);
-                product.setPhoto(shoppingCartItemDTOList.get(i).getProductDTO().getPhoto());
-                product.setProductStatus(shoppingCartItemDTOList.get(i).getProductDTO().getProductStatus());
+                product.setPhoto(orderItemDTOList.get(i).getProductDTO().getPhoto());
+                product.setProductStatus(orderItemDTOList.get(i).getProductDTO().getProductStatus());
 
-                shoppingCartItem.setProduct(product);
-                shoppingCartItem.setShoppingCart(user.getShoppingCart());
+                orderItem.setProduct(product);
+                orderItem.setOrder(user.getOrder());
             }
 
-            user.getShoppingCart().setUser(user);
+            user.getOrder().setUser(user);
         }
 
         if (user.getProducts() != null && !user.getProducts().isEmpty()) {

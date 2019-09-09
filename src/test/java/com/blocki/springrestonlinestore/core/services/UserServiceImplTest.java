@@ -1,17 +1,17 @@
 package com.blocki.springrestonlinestore.core.services;
 
 import com.blocki.springrestonlinestore.TestEntity;
+import com.blocki.springrestonlinestore.api.v1.mappers.OrderMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.ProductMapper;
-import com.blocki.springrestonlinestore.api.v1.mappers.ShoppingCartMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
+import com.blocki.springrestonlinestore.api.v1.models.OrderDTO;
 import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
-import com.blocki.springrestonlinestore.api.v1.models.ShoppingCartDTO;
 import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
+import com.blocki.springrestonlinestore.core.config.resourceAssemblers.OrderResourceAssembler;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.ProductResourceAssembler;
-import com.blocki.springrestonlinestore.core.config.resourceAssemblers.ShoppingCartResourceAssembler;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.UserResourceAssembler;
+import com.blocki.springrestonlinestore.core.domain.Order;
 import com.blocki.springrestonlinestore.core.domain.Product;
-import com.blocki.springrestonlinestore.core.domain.ShoppingCart;
 import com.blocki.springrestonlinestore.core.domain.User;
 import com.blocki.springrestonlinestore.core.exceptions.ResourceAlreadyExistsException;
 import com.blocki.springrestonlinestore.core.repositories.UserRepository;
@@ -35,7 +35,7 @@ public class UserServiceImplTest {
 
     private final UserMapper userConverter = Mappers.getMapper(UserMapper.class);
 
-    private final ShoppingCartMapper shoppingCartConverter = Mappers.getMapper(ShoppingCartMapper.class);
+    private final OrderMapper orderConverter = Mappers.getMapper(OrderMapper.class);
 
     private final ProductMapper productConverter = Mappers.getMapper(ProductMapper.class);
 
@@ -51,7 +51,7 @@ public class UserServiceImplTest {
     private UserResourceAssembler userResourceAssembler = new UserResourceAssembler();
 
     @Spy
-    private ShoppingCartResourceAssembler shoppingCartResourceAssembler = new ShoppingCartResourceAssembler();
+    private OrderResourceAssembler orderResourceAssembler = new OrderResourceAssembler();
 
     @Spy
     private ProductResourceAssembler productResourceAssembler = new ProductResourceAssembler();
@@ -103,12 +103,12 @@ public class UserServiceImplTest {
         Mockito.verifyNoMoreInteractions(userResourceAssembler);
 
         assertNotNull(testUserDTO);
-        assertNotNull(testUserDTO.getContent().getShoppingCartDTO());
+        assertNotNull(testUserDTO.getContent().getOrderDTO());
         assertNotNull(testUserDTO.getContent().getProductDTOs());
 
         assertEquals(testUserDTO.getContent().getId(), user.getId());
         assertEquals(testUserDTO.getContent().getProductDTOs().size(), user.getProducts().size());
-        assertEquals(testUserDTO.getContent().getShoppingCartDTO().getId(), user.getShoppingCart().getId());
+        assertEquals(testUserDTO.getContent().getOrderDTO().getId(), user.getOrder().getId());
         assertEquals(testUserDTO.getContent().getFirstName(), user.getFirstName());
         assertEquals(testUserDTO.getContent().getLastName(), user.getLastName());
         assertEquals(testUserDTO.getContent().getAddress(), user.getAddress());
@@ -141,12 +141,12 @@ public class UserServiceImplTest {
         Mockito.verifyNoMoreInteractions(userResourceAssembler);
 
         assertNotNull(testSavedUserDTO);
-        assertNotNull(testSavedUserDTO.getContent().getShoppingCartDTO());
+        assertNotNull(testSavedUserDTO.getContent().getOrderDTO());
         assertNotNull(testSavedUserDTO.getContent().getProductDTOs());
 
         assertEquals(testSavedUserDTO.getContent().getId(), user.getId());
         assertEquals(testSavedUserDTO.getContent().getProductDTOs().size(), user.getProducts().size());
-        assertEquals(testSavedUserDTO.getContent().getShoppingCartDTO().getId(), user.getShoppingCart().getId());
+        assertEquals(testSavedUserDTO.getContent().getOrderDTO().getId(), user.getOrder().getId());
         assertEquals(testSavedUserDTO.getContent().getFirstName(), user.getFirstName());
         assertEquals(testSavedUserDTO.getContent().getLastName(), user.getLastName());
         assertEquals(testSavedUserDTO.getContent().getAddress(), user.getAddress());
@@ -193,51 +193,51 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void createNewShoppingCart() {
+    public void createNewOrder() {
 
         //given
         Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
         Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(user));
 
-        ShoppingCart shoppingCart = user.getShoppingCart();
-        user.setShoppingCart(null);
+        Order order = user.getOrder();
+        user.setOrder(null);
 
         //when
-        Resource<ShoppingCartDTO> testCreatedShoppingCartDTO = userServiceImpl.createNewShoppingCart(user.getId(),
-                shoppingCartConverter.shoppingCartToShoppingCartDTO(shoppingCart));
+        Resource<OrderDTO> testCreatedOrderDTO = userServiceImpl.createNewOrder(user.getId(),
+                orderConverter.orderToOrderDTO(order));
 
         //then
         Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any());
-        Mockito.verify(shoppingCartResourceAssembler, Mockito.times(1))
-                .toResource(Mockito.any(ShoppingCartDTO.class));
+        Mockito.verify(orderResourceAssembler, Mockito.times(1))
+                .toResource(Mockito.any(OrderDTO.class));
         Mockito.verify(userRepository, Mockito.times(1)).findById(Mockito.anyLong());
 
         Mockito.verifyNoMoreInteractions(userRepository);
-        Mockito.verifyNoMoreInteractions(shoppingCartResourceAssembler);
+        Mockito.verifyNoMoreInteractions(orderResourceAssembler);
 
-        assertNotNull(testCreatedShoppingCartDTO);
-        assertNotNull(testCreatedShoppingCartDTO.getContent().getUserDTO());
-        assertNotNull(testCreatedShoppingCartDTO.getContent().getShoppingCartItemDTOs());
+        assertNotNull(testCreatedOrderDTO);
+        assertNotNull(testCreatedOrderDTO.getContent().getUserDTO());
+        assertNotNull(testCreatedOrderDTO.getContent().getOrderItemDTOS());
 
-        assertEquals(testCreatedShoppingCartDTO.getContent().getUserDTO().getId(), shoppingCart.getUser().getId());
-        assertEquals(testCreatedShoppingCartDTO.getContent().getId(), shoppingCart.getId());
-        assertEquals(testCreatedShoppingCartDTO.getContent().getUserDTOId(), shoppingCart.getUser().getId());
-        assertEquals(testCreatedShoppingCartDTO.getContent().getShoppingCartItemDTOs().size(),
-                shoppingCart.getShoppingCartItems().size());
-        assertEquals(testCreatedShoppingCartDTO.getContent().getCartStatus(), shoppingCart.getCartStatus());
-        assertEquals(testCreatedShoppingCartDTO.getContent().getCreationDate(), shoppingCart.getCreationDate());
+        assertEquals(testCreatedOrderDTO.getContent().getUserDTO().getId(), order.getUser().getId());
+        assertEquals(testCreatedOrderDTO.getContent().getId(), order.getId());
+        assertEquals(testCreatedOrderDTO.getContent().getUserDTOId(), order.getUser().getId());
+        assertEquals(testCreatedOrderDTO.getContent().getOrderItemDTOS().size(),
+                order.getOrderItems().size());
+        assertEquals(testCreatedOrderDTO.getContent().getOrderStatus(), order.getOrderStatus());
+        assertEquals(testCreatedOrderDTO.getContent().getCreationDate(), order.getCreationDate());
     }
 
     @Test(expected = ResourceAlreadyExistsException.class)
-    public void createNewShoppingCartWhenOneAlreadyExists() {
+    public void createNewOrderWhenOneAlreadyExists() {
 
         //given
         Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
         Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(user));
 
         //when
-        userServiceImpl.createNewShoppingCart(user.getId(), shoppingCartConverter
-               .shoppingCartToShoppingCartDTO(user.getShoppingCart()));
+        userServiceImpl.createNewOrder(user.getId(), orderConverter
+               .orderToOrderDTO(user.getOrder()));
 
         //then
         Mockito.verify(userRepository, Mockito.times(0)).save(Mockito.any());
@@ -311,34 +311,34 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getShoppingCartById() {
+    public void getOrderById() {
 
         //given
-        ShoppingCart shoppingCart = user.getShoppingCart();
+        Order order = user.getOrder();
         Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(user));
 
         //when
-        Resource<ShoppingCartDTO> testShoppingCartDTO = userServiceImpl.getShoppingCartById(user.getId());
+        Resource<OrderDTO> testOrderDTO = userServiceImpl.getOrderById(user.getId());
 
         //then
         Mockito.verify(userRepository, Mockito.times(1)).findById(Mockito.anyLong());
-        Mockito.verify(shoppingCartResourceAssembler, Mockito.times(1))
-                .toResource(Mockito.any(ShoppingCartDTO.class));
+        Mockito.verify(orderResourceAssembler, Mockito.times(1))
+                .toResource(Mockito.any(OrderDTO.class));
 
         Mockito.verifyNoMoreInteractions(userRepository);
-        Mockito.verifyNoMoreInteractions(shoppingCartResourceAssembler);
+        Mockito.verifyNoMoreInteractions(orderResourceAssembler);
 
-        assertNotNull(testShoppingCartDTO);
-        assertNotNull(testShoppingCartDTO.getContent().getUserDTO());
-        assertNotNull(testShoppingCartDTO.getContent().getShoppingCartItemDTOs());
+        assertNotNull(testOrderDTO);
+        assertNotNull(testOrderDTO.getContent().getUserDTO());
+        assertNotNull(testOrderDTO.getContent().getOrderItemDTOS());
 
-        assertEquals(testShoppingCartDTO.getContent().getId(), shoppingCart.getId());
-        assertEquals(testShoppingCartDTO.getContent().getUserDTO().getId(), shoppingCart.getUser().getId());
-        assertEquals(testShoppingCartDTO.getContent().
-                getShoppingCartItemDTOs().size(), shoppingCart.getShoppingCartItems().size());
-        assertEquals(testShoppingCartDTO.getContent().getCreationDate(), shoppingCart.getCreationDate());
-        assertEquals(testShoppingCartDTO.getContent().getUserDTOId(), shoppingCart.getUser().getId());
-        assertEquals(testShoppingCartDTO.getContent().getCartStatus(), shoppingCart.getCartStatus());
+        assertEquals(testOrderDTO.getContent().getId(), order.getId());
+        assertEquals(testOrderDTO.getContent().getUserDTO().getId(), order.getUser().getId());
+        assertEquals(testOrderDTO.getContent().
+                getOrderItemDTOS().size(), order.getOrderItems().size());
+        assertEquals(testOrderDTO.getContent().getCreationDate(), order.getCreationDate());
+        assertEquals(testOrderDTO.getContent().getUserDTOId(), order.getUser().getId());
+        assertEquals(testOrderDTO.getContent().getOrderStatus(), order.getOrderStatus());
     }
 
     @Test
@@ -358,12 +358,12 @@ public class UserServiceImplTest {
         Mockito.verifyNoMoreInteractions(userResourceAssembler);
 
         assertNotNull(testUserDTO);
-        assertNotNull(testUserDTO.getContent().getShoppingCartDTO());
+        assertNotNull(testUserDTO.getContent().getOrderDTO());
         assertNotNull(testUserDTO.getContent().getProductDTOs());
 
         assertEquals(testUserDTO.getContent().getId(), user.getId());
         assertEquals(testUserDTO.getContent().getProductDTOs().size(), user.getProducts().size());
-        assertEquals(testUserDTO.getContent().getShoppingCartDTO().getId(), user.getShoppingCart().getId());
+        assertEquals(testUserDTO.getContent().getOrderDTO().getId(), user.getOrder().getId());
         assertEquals(testUserDTO.getContent().getFirstName(), user.getFirstName());
         assertEquals(testUserDTO.getContent().getLastName(), user.getLastName());
         assertEquals(testUserDTO.getContent().getAddress(), user.getAddress());

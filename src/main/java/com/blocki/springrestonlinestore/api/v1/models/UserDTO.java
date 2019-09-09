@@ -39,11 +39,11 @@ public class UserDTO {
     @JsonManagedReference
     private List<ProductDTO> productDTOs = new ArrayList<>();
 
-    @JsonProperty("shopping_cart")
+    @JsonProperty("order")
     @JsonManagedReference
     @Nullable
     @ToString.Exclude
-    private ShoppingCartDTO shoppingCartDTO;
+    private OrderDTO orderDTO;
 
     @NotBlank(message = "First name field value cannot be null or contain only blank characters")
     @Size(min = 1, max = 32, message = "field's value must have between 1 and 32 characters")

@@ -32,8 +32,8 @@ public class UserMapperTest {
         //then
         assertNotNull(userDTO);
         assertNotNull(userDTO.getProductDTOs());
-        assertNotNull(userDTO.getShoppingCartDTO());
-        assertNotNull(userDTO.getShoppingCartDTO().getShoppingCartItemDTOs());
+        assertNotNull(userDTO.getOrderDTO());
+        assertNotNull(userDTO.getOrderDTO().getOrderItemDTOS());
 
         assertEquals(userDTO.getId(), user.getId());
         assertEquals(userDTO.getFirstName(), user.getFirstName());
@@ -46,7 +46,7 @@ public class UserMapperTest {
         assertEquals(userDTO.getUsername(), user.getUsername());
         assertEquals(userDTO.getGender(), user.getGender());
         assertEquals(userDTO.getProductDTOs().size(), user.getProducts().size());
-        assertEquals(userDTO.getShoppingCartDTO().getId(), user.getShoppingCart().getId());
+        assertEquals(userDTO.getOrderDTO().getId(), user.getOrder().getId());
 
         assertArrayEquals(userDTO.getPassword(), user.getPassword());
     }
@@ -63,7 +63,7 @@ public class UserMapperTest {
         //then
         assertNotNull(TestUser);
         assertNotNull(TestUser.getProducts());
-        assertNotNull(TestUser.getShoppingCart());
+        assertNotNull(TestUser.getOrder());
 
         assertEquals(TestUser.getId(), userDTO.getId());
         assertEquals(TestUser.getFirstName(), userDTO.getFirstName());
@@ -79,8 +79,8 @@ public class UserMapperTest {
         assert userDTO.getProductDTOs() != null;
         assertEquals(TestUser.getProducts().size(), userDTO.getProductDTOs().size());
 
-        assert userDTO.getShoppingCartDTO() != null;
-        assertEquals(TestUser.getShoppingCart().getId(), userDTO.getShoppingCartDTO().getId());
+        assert userDTO.getOrderDTO() != null;
+        assertEquals(TestUser.getOrder().getId(), userDTO.getOrderDTO().getId());
 
         assertArrayEquals(TestUser.getPassword(), userDTO.getPassword());
     }

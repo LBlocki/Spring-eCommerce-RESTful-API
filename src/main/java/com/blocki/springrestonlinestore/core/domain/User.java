@@ -24,7 +24,7 @@ public class User extends BaseEntity {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @ToString.Exclude
-    private ShoppingCart shoppingCart;
+    private Order order;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
