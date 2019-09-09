@@ -25,7 +25,7 @@ public class ShoppingCart extends BaseEntity {
     @ToString.Exclude
     private User user;
 
-    @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<ShoppingCartItem> shoppingCartItems = new ArrayList<>();
 
