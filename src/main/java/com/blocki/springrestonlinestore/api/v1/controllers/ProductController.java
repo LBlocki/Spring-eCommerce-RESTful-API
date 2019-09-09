@@ -5,17 +5,17 @@ import com.blocki.springrestonlinestore.core.services.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@RequestMapping(ProductController.PRODUCTS_BASIC_URL)
+@RequestMapping(value = ProductController.PRODUCTS_BASIC_URL, produces = "application/hal+json")
 public class ProductController {
 
-    public static final String PRODUCTS_BASIC_URL = "/api/v1/products";
+    static final String PRODUCTS_BASIC_URL = "/api/v1/products";
 
     private final ProductService productService;
 
@@ -32,20 +32,18 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Resource<ProductDTO> getProductById(@PathVariable Long id) {
+    public ResponseEntity<Resource<ProductDTO>> getProductById(@PathVariable final Long id) {
 
         if(log.isDebugEnabled()) {
 
             log.debug(ProductController.class.getName() + ":(getProductById): ID value in path: " + id  + "\n");
         }
 
-        return productService.getProductById(id);
+        return ResponseEntity.ok(productService.getProductById(id));
     }
 
     @GetMapping("/name/{productName}")
-    @ResponseStatus(HttpStatus.OK)
-    public Resource<ProductDTO> getProductByName(@PathVariable String productName) {
+    public ResponseEntity<Resource<ProductDTO>> getProductByName(@PathVariable final String productName) {
 
         if(log.isDebugEnabled()) {
 
@@ -53,12 +51,12 @@ public class ProductController {
                     ":(getProductByName): Name value in path: " + productName  + "\n");
         }
 
-        return productService.getProductByName(productName);
+        return ResponseEntity.ok(productService.getProductByName(productName));
     }
 
     @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Resource<ProductDTO> patchProduct(@PathVariable Long id, @RequestBody @Valid ProductDTO productDTO) {
+    public ResponseEntity<Resource<ProductDTO>> patchProduct(@PathVariable final Long id,
+                                                             @RequestBody @Valid final ProductDTO productDTO) {
 
         if(log.isDebugEnabled()) {
 
@@ -67,12 +65,11 @@ public class ProductController {
                     " Product passed in path:" + productDTO.toString() + "\n");
         }
 
-        return productService.patchProduct(id, productDTO);
+        return ResponseEntity.ok(productService.patchProduct(id, productDTO));
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteProductById(@PathVariable Long id) {
+    public ResponseEntity<?> deleteProductById(@PathVariable final Long id) {
 
         if(log.isDebugEnabled()) {
 
@@ -80,5 +77,7 @@ public class ProductController {
         }
 
         productService.deleteProductById(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

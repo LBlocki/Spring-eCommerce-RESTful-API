@@ -9,16 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 @Slf4j
 @RestController
-@RequestMapping(UserController.USER_CONTROLLER_BASIC_URL)
+@RequestMapping( value = UserController.USER_CONTROLLER_BASIC_URL, produces = "application/hal+json")
 public class UserController {
 
-    public static final String USER_CONTROLLER_BASIC_URL = "/api/v1/users";
+    static final String USER_CONTROLLER_BASIC_URL = "/api/v1/users";
 
     private final UserService userService;
 
@@ -35,8 +38,7 @@ public class UserController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public Resources<Resource<UserDTO>> getAllUsers() {
+    public ResponseEntity<Resources<Resource<UserDTO>>> getAllUsers() {
 
         if(log.isDebugEnabled()) {
 
@@ -44,24 +46,22 @@ public class UserController {
                     + ":(getAllUsers):Running method.\n");
         }
 
-        return userService.getAllUsers();
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Resource<UserDTO> getUserById(@PathVariable Long id) {
+    public ResponseEntity<Resource<UserDTO>> getUserById(@PathVariable final Long id) {
 
         if(log.isDebugEnabled()) {
 
             log.debug(UserController.class.getName() + ":(getUserById): ID value in path: " + id  + "\n");
         }
 
-        return userService.getUserById(id);
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 
     @GetMapping("/name/{username}")
-    @ResponseStatus(HttpStatus.OK)
-    public Resource<UserDTO> getUserByUsername(@PathVariable String username) {
+    public ResponseEntity<Resource<UserDTO>> getUserByUsername(@PathVariable final String username) {
 
         if(log.isDebugEnabled()) {
 
@@ -69,12 +69,11 @@ public class UserController {
                     ":(getUserByUsername): Name value in path: " + username  + "\n");
         }
 
-        return userService.getUserByUsername(username);
+        return ResponseEntity.ok(userService.getUserByUsername(username));
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Resource<UserDTO> createNewUser(@RequestBody @Valid UserDTO userDTO) {
+    public ResponseEntity<Resource<UserDTO>> createNewUser(@RequestBody @Valid final UserDTO userDTO) {
 
         if(log.isDebugEnabled()) {
 
@@ -82,12 +81,18 @@ public class UserController {
                     ":(createNewUser):User passed in path:" + userDTO.toString() + "\n");
         }
 
-       return userService.createNewUser(userDTO);
+        final Resource<UserDTO> userDTOResource = userService.createNewUser(userDTO);
+
+        final URI uri = MvcUriComponentsBuilder.fromController(getClass())
+                .buildAndExpand(userDTOResource.getId())
+                .toUri();
+
+        return ResponseEntity.created(uri).body(userDTOResource);
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Resource<UserDTO> updateUser(@PathVariable Long id, @RequestBody @Valid UserDTO userDTO) {
+    public ResponseEntity<Resource<UserDTO>> updateUser(@PathVariable final Long id,
+                                                        @RequestBody @Valid final UserDTO userDTO) {
 
         if(log.isDebugEnabled()) {
 
@@ -96,12 +101,12 @@ public class UserController {
                     " User passed in path:" + userDTO.toString() + "\n");
         }
 
-        return userService.updateUser(id, userDTO);
+        return ResponseEntity.ok(userService.updateUser(id, userDTO));
     }
 
     @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Resource<UserDTO> patchUser(@PathVariable Long id, @RequestBody @Valid UserDTO userDTO) {
+    public ResponseEntity<Resource<UserDTO>> patchUser(@PathVariable final Long id,
+                                                       @RequestBody @Valid final UserDTO userDTO) {
 
         if(log.isDebugEnabled()) {
 
@@ -110,12 +115,11 @@ public class UserController {
                     " User passed in path:" + userDTO.toString() + "\n");
         }
 
-        return userService.patchUser(id, userDTO);
+        return ResponseEntity.ok(userService.patchUser(id, userDTO));
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteUserById(@PathVariable Long id) {
+    public ResponseEntity<?> deleteUserById(@PathVariable final Long id) {
 
         if(log.isDebugEnabled()) {
 
@@ -123,24 +127,24 @@ public class UserController {
         }
 
         userService.deleteUserById(id);
+
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}/shoppingCart")
-    @ResponseStatus(HttpStatus.OK)
-    public  Resource<ShoppingCartDTO> getShoppingCart(@PathVariable Long id) {
+    public  ResponseEntity<Resource<ShoppingCartDTO>> getShoppingCart(@PathVariable final Long id) {
 
         if(log.isDebugEnabled()) {
 
             log.debug(UserController.class.getName() + ":(getShoppingCart): ID value in path: " + id  + "\n");
         }
 
-        return userService.getShoppingCartById(id);
+        return ResponseEntity.ok(userService.getShoppingCartById(id));
     }
 
     @PostMapping("/{id}/shoppingCart")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Resource<ShoppingCartDTO> addNewShoppingCart(@PathVariable Long id,
-                                                        @RequestBody @Valid  ShoppingCartDTO shoppingCartDTO) {
+    public ResponseEntity<Resource<ShoppingCartDTO>> addNewShoppingCart(@PathVariable final Long id,
+                                                        @RequestBody @Valid final ShoppingCartDTO shoppingCartDTO) {
 
         if(log.isDebugEnabled()) {
 
@@ -149,12 +153,20 @@ public class UserController {
                     " shoppingCart passed in path:" + shoppingCartDTO.toString() + "\n");
         }
 
-       return userService.createNewShoppingCart(id, shoppingCartDTO);
+        final Resource<ShoppingCartDTO> shoppingCartDTOResource =
+                userService.createNewShoppingCart(id, shoppingCartDTO);
+
+        final URI uri = MvcUriComponentsBuilder.fromController(getClass())
+                .path("/{id}/shoppingCart")
+                .buildAndExpand(shoppingCartDTOResource.getId())
+                .toUri();
+
+        return ResponseEntity.created(uri).body(shoppingCartDTOResource);
+
     }
 
     @GetMapping("/{id}/products")
-    @ResponseStatus(HttpStatus.OK)
-    public  Resources<Resource<ProductDTO>> getAllUsersProducts(@PathVariable Long id) {
+    public  ResponseEntity<Resources<Resource<ProductDTO>>> getAllUsersProducts(@PathVariable final Long id) {
 
         if(log.isDebugEnabled()) {
 
@@ -162,12 +174,13 @@ public class UserController {
                     + ":(getAllUsersProducts):Running method.\n");
         }
 
-        return userService.getAllProducts(id);
+        return ResponseEntity.ok(userService.getAllProducts(id));
     }
 
     @PostMapping("/{id}/products")
     @ResponseStatus(HttpStatus.CREATED)
-    public Resource<ProductDTO> addNewProductToUser(@PathVariable Long id, @RequestBody @Valid ProductDTO productDTO) {
+    public ResponseEntity<Resource<ProductDTO>> addNewProductToUser(@PathVariable final Long id,
+                                                                    @RequestBody @Valid final ProductDTO productDTO) {
 
         if(log.isDebugEnabled()) {
 
@@ -176,6 +189,15 @@ public class UserController {
                     " product passed in path:" + productDTO.toString() + "\n");
         }
 
-       return userService.createNewProduct(id, productDTO);
+        final Resource<ProductDTO> productDTOResource =
+                userService.createNewProduct(id, productDTO);
+
+        final URI uri = MvcUriComponentsBuilder.fromController(getClass())
+                .path("/{id}/products")
+                .buildAndExpand(productDTO.getId())
+                .toUri();
+
+        return ResponseEntity.created(uri).body(productDTOResource);
+
     }
 }

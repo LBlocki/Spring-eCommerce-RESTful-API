@@ -118,7 +118,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity handleConstraintViolationException(Exception exception){
+    public ResponseEntity<Object> handleConstraintViolationException(Exception exception){
 
         if(log.isDebugEnabled()) {
 

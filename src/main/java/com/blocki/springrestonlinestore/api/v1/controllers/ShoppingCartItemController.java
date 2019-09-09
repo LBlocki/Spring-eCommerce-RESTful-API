@@ -5,15 +5,15 @@ import com.blocki.springrestonlinestore.core.services.ShoppingCartItemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping(name = ShoppingCartItemController.SHOPPING_CART_ITEMS_BASIC_URL)
+@RequestMapping(value = ShoppingCartItemController.SHOPPING_CART_ITEMS_BASIC_URL, produces = "application/hal+json")
 public class ShoppingCartItemController {
 
-    public static final String SHOPPING_CART_ITEMS_BASIC_URL = "/api/v1/shoppingCartItems";
+    static final String SHOPPING_CART_ITEMS_BASIC_URL = "/api/v1/shoppingCartItems";
 
     private final ShoppingCartItemService shoppingCartItemService;
 
@@ -31,8 +31,7 @@ public class ShoppingCartItemController {
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Resource<ShoppingCartItemDTO> getShoppingCartById(@PathVariable Long id) {
+    public ResponseEntity<Resource<ShoppingCartItemDTO>> getShoppingCartById(@PathVariable final Long id) {
 
         if(log.isDebugEnabled()) {
 
@@ -40,13 +39,11 @@ public class ShoppingCartItemController {
                     + ":(getShoppingCartById): ID value in path: " + id  + "\n");
         }
 
-
-        return shoppingCartItemService.getShoppingCartItemById(id);
+        return ResponseEntity.ok(shoppingCartItemService.getShoppingCartItemById(id));
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteShoppingCartById(@PathVariable Long id) {
+    public ResponseEntity<?> deleteShoppingCartById(@PathVariable final Long id) {
 
         if(log.isDebugEnabled()) {
 
@@ -54,5 +51,7 @@ public class ShoppingCartItemController {
         }
 
         shoppingCartItemService.getShoppingCartItemById(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

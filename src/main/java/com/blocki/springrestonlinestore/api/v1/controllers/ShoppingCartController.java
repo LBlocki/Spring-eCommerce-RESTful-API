@@ -7,17 +7,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 @Slf4j
 @RestController
-@RequestMapping(ShoppingCartController.SHOPPING_CARTS_BASIC_URL)
+@RequestMapping(value = ShoppingCartController.SHOPPING_CARTS_BASIC_URL, produces = "application/hal+json")
 public class ShoppingCartController {
 
-    public static final String SHOPPING_CARTS_BASIC_URL = "/api/v1/shoppingCarts";
+    static final String SHOPPING_CARTS_BASIC_URL = "/api/v1/shoppingCarts";
 
     private final ShoppingCartService shoppingCartService;
 
@@ -26,7 +28,7 @@ public class ShoppingCartController {
 
         if(log.isDebugEnabled()) {
 
-            log.debug(ShoppingCartController.class.getName() + ":(constructor):Injected shopping cat service:\n"
+            log.debug(ShoppingCartController.class.getName() + ":(constructor):Injected shopping cart service:\n"
                     + shoppingCartService.toString() + "\n");
         }
 
@@ -34,8 +36,7 @@ public class ShoppingCartController {
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Resource<ShoppingCartDTO> getShoppingCartById(@PathVariable Long id) {
+    public ResponseEntity<Resource<ShoppingCartDTO>> getShoppingCartById(@PathVariable final Long id) {
 
         if(log.isDebugEnabled()) {
 
@@ -43,12 +44,11 @@ public class ShoppingCartController {
                     + ":(getShoppingCartById): ID value in path: " + id  + "\n");
         }
 
-        return shoppingCartService.getShoppingCartById(id);
+        return ResponseEntity.ok(shoppingCartService.getShoppingCartById(id));
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteShoppingCartById(@PathVariable Long id) {
+    public ResponseEntity<?> deleteShoppingCartById(@PathVariable final Long id) {
 
         if(log.isDebugEnabled()) {
 
@@ -57,11 +57,12 @@ public class ShoppingCartController {
         }
 
         shoppingCartService.deleteShoppingCartById(id);
+
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{id}/actions/purchase")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Resource<ShoppingCartDTO> createPurchaseRequest(@PathVariable Long id) {
+    public ResponseEntity<Resource<ShoppingCartDTO>> createPurchaseRequest(@PathVariable final Long id) {
 
         if(log.isDebugEnabled()) {
 
@@ -69,26 +70,19 @@ public class ShoppingCartController {
                     + ":(createPurchaseRequest): Id value in path: " + id + "\n");
         }
 
-      return shoppingCartService.createPurchaseRequest(id);
+        final Resource<ShoppingCartDTO> shoppingCartDTOResource = shoppingCartService.createPurchaseRequest(id);
+
+        final URI uri = MvcUriComponentsBuilder.fromController(getClass())
+                        .path("/{id}/actions/purchase")
+                        .buildAndExpand(shoppingCartDTOResource.getId())
+                        .toUri();
+
+        return ResponseEntity.created(uri).body(shoppingCartDTOResource);
     }
-
-    @PostMapping("/{id}/actions/cancel")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void createCancellationRequest(@PathVariable Long id) {
-
-        if(log.isDebugEnabled()) {
-
-            log.debug(ShoppingCartController.class.getName()
-                    + ":(createCancellationRequest): Id value in path: " + id + "\n");
-        }
-
-        shoppingCartService.createCancellationRequest(id);
-    }
-
 
     @GetMapping("/{id}/shoppingCartItems")
-    @ResponseStatus(HttpStatus.OK)
-    public Resources<Resource<ShoppingCartItemDTO>> getAllShoppingCartItems(@PathVariable Long id) {
+    public ResponseEntity<Resources<Resource<ShoppingCartItemDTO>>> getAllShoppingCartItems(
+            @PathVariable final Long id) {
 
         if(log.isDebugEnabled()) {
 
@@ -96,13 +90,12 @@ public class ShoppingCartController {
                     + ":(getAllShoppingCartItems): Id value in path: " + id + "\n");
         }
 
-       return shoppingCartService.getAllShoppingCartItems(id);
+       return ResponseEntity.ok(shoppingCartService.getAllShoppingCartItems(id));
     }
 
     @PostMapping("/{id}/shoppingCartItems")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Resource<ShoppingCartItemDTO> createNewShoppingCartItem(
-            @PathVariable Long id, @RequestBody @Valid ShoppingCartItemDTO shoppingCartItemDTO) {
+    public ResponseEntity<Resource<ShoppingCartItemDTO>> createNewShoppingCartItem(
+            @PathVariable final Long id, @RequestBody @Valid final ShoppingCartItemDTO shoppingCartItemDTO) {
 
         if(log.isDebugEnabled()) {
 
@@ -111,6 +104,14 @@ public class ShoppingCartController {
                     " Shopping Cart item passed in path:" + shoppingCartItemDTO.toString() + "\n");
         }
 
-       return shoppingCartService.createNewShoppingCartItem(id, shoppingCartItemDTO);
+        final Resource<ShoppingCartItemDTO> shoppingCartItemDTOResource =
+                shoppingCartService.createNewShoppingCartItem(id, shoppingCartItemDTO);
+
+        final URI uri = MvcUriComponentsBuilder.fromController(getClass())
+                .path("/{id}/shoppingCartItems")
+                .buildAndExpand(shoppingCartItemDTOResource.getId())
+                .toUri();
+
+        return ResponseEntity.created(uri).body(shoppingCartItemDTOResource);
     }
 }
