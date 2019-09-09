@@ -18,7 +18,7 @@ public class User extends BaseEntity {
 
     public enum Gender {MALE, FEMALE}
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Product> products = new ArrayList<>();
 
