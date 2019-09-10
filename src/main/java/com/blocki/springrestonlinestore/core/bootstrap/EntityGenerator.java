@@ -2,14 +2,12 @@ package com.blocki.springrestonlinestore.core.bootstrap;
 
 
 import com.blocki.springrestonlinestore.core.domain.*;
-import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Random;
 
-@Component
-public class EntityGenerator {
+class EntityGenerator {
 
     // Remember that this class does not set fields that contain references to other objects
 
@@ -57,7 +55,13 @@ public class EntityGenerator {
     private static final Long[] categoryIDs = {1L, 2L, 3L, 4L, 5L};
     private static final String[] categoryNames = {"Clothes", "Electronics", "Smart Tv's", "Music", "Games"};
 
-    public User generateUser() {
+    private final Integer primeNumber;
+
+    EntityGenerator(Integer primeNumber) {
+        this.primeNumber = primeNumber;
+    }
+
+    User generateUser() {
 
         User user = new User();
 
@@ -68,22 +72,23 @@ public class EntityGenerator {
         user.setCountry(countries[randomGenerator.nextInt(countries.length)]);
         user.setPhoneNumber(phoneNumbers[randomGenerator.nextInt(phoneNumbers.length)]);
         user.setCreationDate(LocalDate.now());
-        user.setEmailAddress(emailAddresses[randomGenerator.nextInt(emailAddresses.length)]);
-        user.setUsername(usernames[randomGenerator.nextInt(usernames.length)]);
+        user.setEmailAddress(emailAddresses[randomGenerator.nextInt(emailAddresses.length)]
+                + randomGenerator.nextInt(10)*primeNumber);
+        user.setUsername(usernames[randomGenerator.nextInt(usernames.length)]+ randomGenerator.nextInt(10)*primeNumber);
         user.setPassword(passwords[randomGenerator.nextInt(passwords.length)]);
         user.setGender(genders[randomGenerator.nextInt(genders.length)]);
 
         return user;
     }
 
-    public Product generateProduct() {
+    Product generateProduct() {
 
         Product product = new Product();
 
         product.setCreationDate(LocalDate.now());
         product.setCost(costs[randomGenerator.nextInt(costs.length)]);
         product.setProductStatus(productStatuses[randomGenerator.nextInt(productStatuses.length)]);
-        product.setName(productNames[randomGenerator.nextInt(productNames.length)]);
+        product.setName(productNames[randomGenerator.nextInt(productNames.length)]+ randomGenerator.nextInt(10)*primeNumber);
         product.setId(productIDs[randomGenerator.nextInt(productIDs.length)]);
         product.setDescription(descriptions[randomGenerator.nextInt(descriptions.length)]);
         product.setPhoto(photos[randomGenerator.nextInt(photos.length)]);
@@ -91,7 +96,7 @@ public class EntityGenerator {
         return product;
     }
 
-    public Order generateOrder() {
+    Order generateOrder() {
 
         Order order = new Order();
 
@@ -102,7 +107,7 @@ public class EntityGenerator {
         return order;
     }
 
-    public OrderItem generateOrderItem() {
+    OrderItem generateOrderItem() {
 
         OrderItem orderItem = new OrderItem();
 
@@ -113,12 +118,12 @@ public class EntityGenerator {
         return orderItem;
     }
 
-    public Category generateCategory() {
+    Category generateCategory() {
 
         Category category = new Category();
 
         category.setId(categoryIDs[randomGenerator.nextInt(categoryIDs.length)]);
-        category.setName(categoryNames[randomGenerator.nextInt(categoryNames.length)]);
+        category.setName(categoryNames[randomGenerator.nextInt(categoryNames.length)]+ randomGenerator.nextInt(10)*primeNumber);
 
         return category;
     }
