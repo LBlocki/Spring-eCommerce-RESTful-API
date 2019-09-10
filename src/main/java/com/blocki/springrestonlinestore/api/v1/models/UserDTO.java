@@ -9,10 +9,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.core.Relation;
 import org.springframework.lang.Nullable;
@@ -36,6 +33,7 @@ public class UserDTO {
     @JsonProperty("products")
     @Nullable
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @JsonManagedReference
     private List<ProductDTO> productDTOs = new ArrayList<>();
 

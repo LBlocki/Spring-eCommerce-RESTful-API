@@ -18,11 +18,15 @@ public class User extends BaseEntity {
 
     public enum Gender {MALE, FEMALE}
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user",
+            cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE},
+            fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Product> products = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user",
+            cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE},
+            fetch = FetchType.LAZY)
     @ToString.Exclude
     private Order order;
 

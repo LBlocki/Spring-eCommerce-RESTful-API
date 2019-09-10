@@ -8,6 +8,7 @@ import com.blocki.springrestonlinestore.core.config.resourceAssemblers.OrderItem
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.OrderResourceAssembler;
 import com.blocki.springrestonlinestore.core.domain.Order;
 import com.blocki.springrestonlinestore.core.domain.OrderItem;
+import com.blocki.springrestonlinestore.core.repositories.OrderItemRepository;
 import com.blocki.springrestonlinestore.core.repositories.OrderRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +33,9 @@ public class OrderServiceImplTest {
 
     @Mock
     private OrderRepository orderRepository;
+
+    @Mock
+    private OrderItemRepository orderItemRepository;
 
     @InjectMocks
     private OrderServiceImpl orderService;
@@ -121,6 +125,7 @@ public class OrderServiceImplTest {
         //given
         Mockito.when(orderRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(order));
         Mockito.when(orderRepository.save(Mockito.any(Order.class))).thenReturn(order);
+        Mockito.when(orderItemRepository.save(Mockito.any(OrderItem.class))).thenReturn(order.getOrderItems().get(0));
         OrderItem orderItem = order.getOrderItems().get(0);
 
         //when

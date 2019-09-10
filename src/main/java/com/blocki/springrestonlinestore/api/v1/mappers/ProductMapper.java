@@ -22,9 +22,15 @@ public abstract class ProductMapper {
     @AfterMapping
     void setAdditionalProductDTOParameters(Product product, @MappingTarget ProductDTO productDTO) {
 
-        productDTO.setUserDTO(userConverter.userToUserDTO(product.getUser()));
+
         productDTO.setCategoryDTO(categoryConverter.categoryToCategoryDTO(product.getCategory()));
-        productDTO.setUserDTOId(product.getUser().getId());
+
+        if(product.getUser() != null) {
+
+            productDTO.setUserDTOId(product.getUser().getId());
+            productDTO.setUserDTO(userConverter.userToUserDTO(product.getUser()));
+        }
+
 
         if(log.isDebugEnabled()) {
 
@@ -35,11 +41,16 @@ public abstract class ProductMapper {
 
     @AfterMapping
     void setAdditionalProductParameters(ProductDTO productDTO, @MappingTarget Product product) {
+        
 
-        product.setUser(userConverter.userDTOToUser(productDTO.getUserDTO()));
         product.setCategory(categoryConverter.categoryDTOtoCategory(productDTO.getCategoryDTO()));
 
-        if(log.isDebugEnabled()) {
+        if(productDTO.getUserDTO() != null) {
+
+            product.setUser(userConverter.userDTOToUser(productDTO.getUserDTO()));
+        }
+
+            if(log.isDebugEnabled()) {
 
             log.debug(ProductMapper.class.getName() + ":(productDTOToProduct): productDTO:\n"
                     + productDTO.toString() + ",\n product:" + product.toString() + "\n");

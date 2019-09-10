@@ -25,9 +25,13 @@ public abstract class OrderItemMapper {
                                                     @MappingTarget OrderItemDTO orderItemDTO) {
 
         orderItemDTO.setProductDTO(productConverter.productToProductDTO(orderItem.getProduct()));
-        orderItemDTO.setOrderDTO(orderConverter
-                .orderToOrderDTO(orderItem.getOrder()));
-        orderItemDTO.setOrderDTOId(orderItem.getOrder().getId());
+
+        if(orderItem.getOrder() != null) {
+
+            orderItemDTO.setOrderDTO(orderConverter
+                    .orderToOrderDTO(orderItem.getOrder()));
+            orderItemDTO.setOrderDTOId(orderItem.getOrder().getId());
+        }
 
         if(log.isDebugEnabled()) {
 

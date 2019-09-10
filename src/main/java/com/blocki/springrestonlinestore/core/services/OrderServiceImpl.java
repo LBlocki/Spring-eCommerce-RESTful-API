@@ -1,6 +1,7 @@
 package com.blocki.springrestonlinestore.core.services;
 
 import com.blocki.springrestonlinestore.api.v1.controllers.OrderController;
+import com.blocki.springrestonlinestore.api.v1.mappers.OrderItemMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.OrderMapper;
 import com.blocki.springrestonlinestore.api.v1.models.OrderDTO;
 import com.blocki.springrestonlinestore.api.v1.models.OrderItemDTO;
@@ -8,6 +9,7 @@ import com.blocki.springrestonlinestore.core.config.resourceAssemblers.OrderItem
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.OrderResourceAssembler;
 import com.blocki.springrestonlinestore.core.domain.Order;
 import com.blocki.springrestonlinestore.core.exceptions.NotFoundException;
+import com.blocki.springrestonlinestore.core.repositories.OrderItemRepository;
 import com.blocki.springrestonlinestore.core.repositories.OrderRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +27,22 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderMapper orderConverter = Mappers.getMapper(OrderMapper.class);
+    private final OrderItemMapper orderItemConverter = Mappers.getMapper(OrderItemMapper.class);
 
     private final OrderRepository orderRepository;
     private final OrderResourceAssembler orderResourceAssembler;
     private final OrderItemResourceAssembler orderItemResourceAssembler;
 
+    private final OrderItemRepository orderItemRepository;
+
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
                             OrderResourceAssembler orderResourceAssembler,
-                            OrderItemResourceAssembler orderItemResourceAssembler) {
+                            OrderItemResourceAssembler orderItemResourceAssembler, OrderItemRepository orderItemRepository) {
         this.orderRepository = orderRepository;
         this.orderResourceAssembler = orderResourceAssembler;
         this.orderItemResourceAssembler = orderItemResourceAssembler;
+        this.orderItemRepository = orderItemRepository;
     }
 
     @Override
@@ -86,6 +92,11 @@ public class OrderServiceImpl implements OrderService {
         OrderDTO orderDTO = orderConverter.orderToOrderDTO(order);
 
         orderItemDTO.setOrderDTO(orderDTO);
+        orderItemDTO.setOrderDTOId(orderDTO.getId());
+
+        orderItemDTO = orderItemConverter.orderItemToOrderItemDTO(orderItemRepository
+                .save(orderItemConverter.orderItemDTOToOrderItem(orderItemDTO)));
+
         orderDTO.getOrderItemDTOS().add(orderItemDTO);
 
         saveOrder(orderDTO);

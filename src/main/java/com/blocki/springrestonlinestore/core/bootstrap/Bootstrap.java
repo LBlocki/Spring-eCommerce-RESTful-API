@@ -1,8 +1,14 @@
 package com.blocki.springrestonlinestore.core.bootstrap;
 
+import com.blocki.springrestonlinestore.api.v1.mappers.OrderItemMapper;
+import com.blocki.springrestonlinestore.api.v1.mappers.OrderMapper;
+import com.blocki.springrestonlinestore.api.v1.mappers.ProductMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
+import com.blocki.springrestonlinestore.api.v1.models.OrderDTO;
+import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
 import com.blocki.springrestonlinestore.core.domain.*;
 import com.blocki.springrestonlinestore.core.repositories.CategoryRepository;
+import com.blocki.springrestonlinestore.core.services.OrderService;
 import com.blocki.springrestonlinestore.core.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
@@ -10,112 +16,116 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Collections;
+import javax.transaction.Transactional;
+import java.util.Objects;
 
-@Component
 @Slf4j
+@Component
+@Transactional
 public class Bootstrap implements CommandLineRunner {
 
     private final CategoryRepository categoryRepository;
     private final UserService userService;
+    private final OrderService orderService;
 
-    private static final Long ID = 2L;
-    private static final String FIRST_NAME = "Sherlock";
-    private static final String LAST_NAME = "Holmes";
-    private static final String EMAIL_ADDRESS = "emailAdress@gmail.com";
-    private static final char[] PASSWORD = {'s','s','s','s','s','s','s'};
-    private static final User.Gender GENDER = User.Gender.MALE;
-    private static final LocalDate CREATION_DATE = LocalDate.now();
-    private static final String ADDRESS = "221B Baker Street";
-    private static final String PHONE_NUMBER = "123456789";
-    private static final String COUNTRY = "Poland";
-    private static final String USERNAME = "GreatUser";
+    private final UserMapper userConverter = Mappers.getMapper(UserMapper.class);
+    private final ProductMapper productConverter = Mappers.getMapper(ProductMapper.class);
+    private final OrderMapper orderConverter = Mappers.getMapper(OrderMapper.class);
+    private final OrderItemMapper orderItemConverter = Mappers.getMapper(OrderItemMapper.class);
+
+    private Category category;
 
     @Autowired
-    public Bootstrap(CategoryRepository categoryRepository, UserService userService) {
-        this.categoryRepository = categoryRepository;
+    public Bootstrap(CategoryRepository categoryRepository, UserService userService, OrderService orderService) {
 
+        this.categoryRepository = categoryRepository;
         this.userService = userService;
+        this.orderService = orderService;
     }
 
     @Override
     public void run(String... args) {
 
+        createUser(1,1);
+        createUser(2,1);
+        createUser(1,2);
+    }
+    void createUser(int amountOfProducts, int amountOfOrderItems) {
 
+        EntityGenerator entityGenerator = new EntityGenerator(2 * amountOfOrderItems + amountOfProducts + 10);
 
+        category = entityGenerator.generateCategory();
+        category = categoryRepository.save(category);
 
-       loadUsers();
+        User user = entityGenerator.generateUser();
+        user.setOrder(null);
 
+        UserDTO savedUserDTO = userService.createNewUser(userConverter.userToUserDTO(user)).getContent();
+
+        for(int i = 0; i < amountOfProducts; i++) {
+
+            Product product = addProduct(userConverter.userDTOToUser(savedUserDTO), i);
+
+            userService.createNewProduct(savedUserDTO.getId(), productConverter.productToProductDTO(product));
+        }
+
+        savedUserDTO = userService.getUserById(savedUserDTO.getId()).getContent();
+
+        if(amountOfOrderItems > 0) {
+
+            Order order = entityGenerator.generateOrder();
+            OrderDTO savedOrderDTO = userService
+                    .createNewOrder(savedUserDTO.getId(), orderConverter.orderToOrderDTO(order)).getContent();
+            savedUserDTO = userService.getUserById(savedUserDTO.getId()).getContent();
+
+            for(int i = 0; i < amountOfOrderItems; i++) {
+
+                UserDTO savedExtraUser = createExtraUser(i + amountOfProducts + 1);
+
+                OrderItem orderItem = entityGenerator.generateOrderItem();
+                orderItem.setProduct(productConverter
+                        .productDTOToProduct(Objects.requireNonNull(savedExtraUser.getProductDTOs()).get(0)));
+
+                orderService.createNewOrderItem(savedOrderDTO.getId(), orderItemConverter.orderItemToOrderItemDTO(orderItem));
+                savedOrderDTO = orderService.getOrderById(savedOrderDTO.getId()).getContent();
+            }
+
+            savedUserDTO.setOrderDTO(orderService.getOrderById(savedOrderDTO.getId()).getContent());
+
+            userService.patchUser(savedUserDTO.getId(), savedUserDTO);
+        }
 
     }
 
-    private void loadUsers() {
+    Product addProduct(User user, Integer primeNumber) {
 
-        Category clothes = new Category();
-        Category food =  new Category();
+        EntityGenerator entityGenerator = new EntityGenerator(primeNumber);
 
-        clothes.setId(1L);
-        clothes.setName("Clothes");
-        food.setId(2L);
-        food.setName("Food");
+        Product product = entityGenerator.generateProduct();
 
-        categoryRepository.save(clothes);
-        categoryRepository.save(food);
+        while(user.getProducts().contains(product)) {
+            product = entityGenerator.generateProduct();
+        }
 
-        User firstUser = new User();
-        firstUser.setId(1L);
-        fillUser(firstUser);
+        product.setCategory(category);
 
-        Product product = new Product();
-        product.setUser(firstUser);
-        product.setCategory(clothes);
-        product.setCreationDate(LocalDate.now());
-        product.setCost(BigDecimal.ONE);
-        product.setProductStatus(Product.ProductStatus.AVALIABLE);
-        product.setName("Product name");
-        product.setId(ID);
-        product.setDescription("This is description");
-        product.setPhoto(new Byte[]{'s'});
-
-        OrderItem orderItem = new OrderItem();
-        orderItem.setQuantity(30);
-        orderItem.setProduct(product);
-        orderItem.setTotalCost(BigDecimal.ONE);
-
-        Order order = new Order();
-        order.setOrderStatus(Order.OrderStatus.ACTIVE);
-        order.setCreationDate(LocalDate.now());
-        order.setOrderItems(Collections.singletonList(orderItem));
-        orderItem.setOrder(order);
-
-        firstUser.getProducts().add(product);
-        firstUser.setOrder(order);
-
-        User secondUser = new User();
-        secondUser.setId(2L);
-        fillUser(secondUser);
-
-        secondUser.setEmailAddress(EMAIL_ADDRESS + "f");
-        secondUser.setUsername(USERNAME + "f");
-
-        userService.createNewUser(Mappers.getMapper(UserMapper.class).userToUserDTO(firstUser));
-        userService.createNewUser(Mappers.getMapper(UserMapper.class).userToUserDTO(secondUser));
-
+        return product;
     }
 
-    private void fillUser(User userTobeFilled) {
+    UserDTO createExtraUser(Integer primeNumber) {
 
-        userTobeFilled.setFirstName(FIRST_NAME);
-        userTobeFilled.setLastName(LAST_NAME);
-        userTobeFilled.setEmailAddress(EMAIL_ADDRESS + "s");
-        userTobeFilled.setPassword(PASSWORD);
-        userTobeFilled.setGender(GENDER);
-        userTobeFilled.setCreationDate(CREATION_DATE);
-        userTobeFilled.setAddress(ADDRESS);
-        userTobeFilled.setPhoneNumber(PHONE_NUMBER);
-        userTobeFilled.setCountry(COUNTRY);
-        userTobeFilled.setUsername(USERNAME);
+        EntityGenerator entityGenerator = new EntityGenerator(primeNumber);
+
+        User user = entityGenerator.generateUser();
+
+        user.setOrder(null);
+
+        Product extraProduct = addProduct(user, primeNumber);
+
+        UserDTO savedExtraUserDTO =  userService.createNewUser(userConverter.userToUserDTO(user)).getContent();
+
+        userService.createNewProduct(savedExtraUserDTO.getId(), productConverter.productToProductDTO(extraProduct));
+
+        return userService.getUserById(savedExtraUserDTO.getId()).getContent();
     }
 }
