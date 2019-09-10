@@ -27,6 +27,7 @@ public class Order extends BaseEntity {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @CreationTimestamp

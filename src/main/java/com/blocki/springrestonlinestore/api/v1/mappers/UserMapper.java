@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
-import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -34,28 +33,29 @@ public abstract class UserMapper {
 
         if (userDTO.getOrderDTO() != null) {
 
-            int i = 0;
+            userDTO.getOrderDTO().setUserDTO(userDTO);
+            userDTO.getOrderDTO().setUserDTOId(userDTO.getId());
 
-            List<OrderItem> orderItemList = user.getOrder().getOrderItems();
+            for(OrderItem orderItem :  user.getOrder().getOrderItems()) {
 
-            for(OrderItemDTO orderItemDTO : userDTO.getOrderDTO().getOrderItemDTOS()) {
-
-                ProductDTO productDTO = new ProductDTO();
-
-                productDTO.setId(orderItemList.get(i).getProduct().getId());
-                productDTO.setCategoryDTO(categoryConverter
-                        .categoryToCategoryDTO(orderItemList.get(i).getProduct().getCategory()));
-                productDTO.setUserDTOId(userDTO.getId());
-                productDTO.setUserDTO(userDTO);
-                productDTO.setPhoto(orderItemList.get(i).getProduct().getPhoto());
-                productDTO.setProductStatus(orderItemList.get(i).getProduct().getProductStatus());
-
-                orderItemDTO.setProductDTO(productDTO);
+                OrderItemDTO orderItemDTO = new OrderItemDTO();
                 orderItemDTO.setOrderDTO(userDTO.getOrderDTO());
                 orderItemDTO.setOrderDTOId(userDTO.getOrderDTO().getId());
-            }
+                orderItemDTO.setId(orderItem.getId());
+                orderItemDTO.setQuantity(orderItem.getQuantity());
+                orderItemDTO.setTotalCost(orderItem.getTotalCost());
 
-            userDTO.getOrderDTO().setUserDTO(userDTO);
+                ProductDTO productDTO = new ProductDTO();
+                productDTO.setId(orderItem.getProduct().getId());
+                productDTO.setCategoryDTO(categoryConverter.categoryToCategoryDTO(orderItem.getProduct().getCategory()));
+                productDTO.setUserDTOId(userDTO.getId());
+                productDTO.setUserDTO(userDTO);
+                productDTO.setPhoto(orderItem.getProduct().getPhoto());
+                productDTO.setProductStatus(orderItem.getProduct().getProductStatus());
+
+                orderItemDTO.setProductDTO(productDTO);
+                userDTO.getOrderDTO().getOrderItemDTOS().add(orderItemDTO);
+            }
         }
 
         if (userDTO.getProductDTOs() != null && !userDTO.getProductDTOs().isEmpty()) {
@@ -85,26 +85,27 @@ public abstract class UserMapper {
 
         if (user.getOrder() != null) {
 
-            int i = 0;
+            user.getOrder().setUser(user);
 
-            List<OrderItemDTO> orderItemDTOList = Objects.requireNonNull(userDTO.getOrderDTO()).getOrderItemDTOS();
+            for(OrderItemDTO orderItemDTO : Objects.requireNonNull(userDTO.getOrderDTO()).getOrderItemDTOS()) {
 
-            for(OrderItem orderItem : user.getOrder().getOrderItems()) {
+                OrderItem orderItem = new OrderItem();
+                orderItem.setOrder(user.getOrder());
+                orderItem.setQuantity(orderItemDTO.getQuantity());
+                orderItem.setTotalCost(orderItemDTO.getTotalCost());
+                orderItem.setId(orderItemDTO.getId());
 
                 Product product = new Product();
-
-                product.setId(orderItemDTOList.get(i).getProductDTO().getId());
+                product.setId(orderItemDTO.getProductDTO().getId());
                 product.setCategory(categoryConverter
-                        .categoryDTOtoCategory(orderItemDTOList.get(i).getProductDTO().getCategoryDTO()));
+                        .categoryDTOtoCategory(orderItemDTO.getProductDTO().getCategoryDTO()));
                 product.setUser(user);
-                product.setPhoto(orderItemDTOList.get(i).getProductDTO().getPhoto());
-                product.setProductStatus(orderItemDTOList.get(i).getProductDTO().getProductStatus());
+                product.setPhoto(orderItemDTO.getProductDTO().getPhoto());
+                product.setProductStatus(orderItemDTO.getProductDTO().getProductStatus());
 
                 orderItem.setProduct(product);
-                orderItem.setOrder(user.getOrder());
+                user.getOrder().getOrderItems().add(orderItem);
             }
-
-            user.getOrder().setUser(user);
         }
 
         if (user.getProducts() != null && !user.getProducts().isEmpty()) {

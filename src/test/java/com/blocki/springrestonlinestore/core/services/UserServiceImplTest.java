@@ -14,6 +14,8 @@ import com.blocki.springrestonlinestore.core.domain.Order;
 import com.blocki.springrestonlinestore.core.domain.Product;
 import com.blocki.springrestonlinestore.core.domain.User;
 import com.blocki.springrestonlinestore.core.exceptions.ResourceAlreadyExistsException;
+import com.blocki.springrestonlinestore.core.repositories.OrderRepository;
+import com.blocki.springrestonlinestore.core.repositories.ProductRepository;
 import com.blocki.springrestonlinestore.core.repositories.UserRepository;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -43,6 +45,12 @@ public class UserServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private OrderRepository orderRepository;
+
+    @Mock
+    private ProductRepository productRepository;
 
     @InjectMocks
     private UserServiceImpl userServiceImpl;
@@ -133,7 +141,7 @@ public class UserServiceImplTest {
 
         //then
         Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any());
-        Mockito.verify(userRepository, Mockito.times(1)).findById(Mockito.anyLong());
+        Mockito.verify(userRepository, Mockito.times(1)).findUserByUsername(Mockito.any());
         Mockito.verify(userResourceAssembler, Mockito.times(1))
                 .toResource(Mockito.any(UserDTO.class));
 
@@ -166,6 +174,7 @@ public class UserServiceImplTest {
         //given
         Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
         Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findUserByUsername(Mockito.any())).thenReturn(Optional.of(user));
 
         //when
         userServiceImpl.createNewUser(userConverter.userToUserDTO(user));
@@ -197,6 +206,7 @@ public class UserServiceImplTest {
 
         //given
         Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
+        Mockito.when(orderRepository.save(Mockito.any(Order.class))).thenReturn(user.getOrder());
         Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(user));
 
         Order order = user.getOrder();
@@ -254,6 +264,7 @@ public class UserServiceImplTest {
 
         //given
         Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
+        Mockito.when(productRepository.save(Mockito.any(Product.class))).thenReturn(user.getProducts().get(0));
         Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(user));
 
         Product product = user.getProducts().get(0);

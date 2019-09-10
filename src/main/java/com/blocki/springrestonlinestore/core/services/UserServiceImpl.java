@@ -14,6 +14,8 @@ import com.blocki.springrestonlinestore.core.domain.Product;
 import com.blocki.springrestonlinestore.core.domain.User;
 import com.blocki.springrestonlinestore.core.exceptions.NotFoundException;
 import com.blocki.springrestonlinestore.core.exceptions.ResourceAlreadyExistsException;
+import com.blocki.springrestonlinestore.core.repositories.OrderRepository;
+import com.blocki.springrestonlinestore.core.repositories.ProductRepository;
 import com.blocki.springrestonlinestore.core.repositories.UserRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,8 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final OrderRepository orderRepository;
+    private final ProductRepository productRepository;
 
     private final UserMapper userConverter = Mappers.getMapper(UserMapper.class);
     private final ProductMapper productConverter = Mappers.getMapper(ProductMapper.class);
@@ -44,10 +48,13 @@ public class UserServiceImpl implements UserService {
 
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserResourceAssembler userResourceAssembler,
+    public UserServiceImpl(UserRepository userRepository, OrderRepository orderRepository,
+                           ProductRepository productRepository, UserResourceAssembler userResourceAssembler,
                            ProductResourceAssembler productResourceAssembler, OrderResourceAssembler orderResourceAssembler) {
 
         this.userRepository = userRepository;
+        this.orderRepository = orderRepository;
+        this.productRepository = productRepository;
         this.userResourceAssembler = userResourceAssembler;
         this.productResourceAssembler = productResourceAssembler;
         this.orderResourceAssembler = orderResourceAssembler;
@@ -102,9 +109,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public Resource<UserDTO> createNewUser(UserDTO userDTO) {
 
-        if(userDTO.getId() != null && userRepository.findById(userDTO.getId()).isPresent()) {
+        if(userDTO.getUsername() != null && userRepository.findUserByUsername(userDTO.getUsername()).isPresent()) {
 
-            throw new ResourceAlreadyExistsException("User with this Id value already exists");
+            throw new ResourceAlreadyExistsException("User with this username value already exists");
         }
 
        return saveUser(userDTO);
@@ -183,7 +190,7 @@ public class UserServiceImpl implements UserService {
 
                        for( ProductDTO productDTO : userDTO.getProductDTOs()) {
 
-                           products.add(productConverter.productDTOToProduct(productDTO));
+                           products.add(productRepository.save(productConverter.productDTOToProduct(productDTO)));
                        }
 
                        user.setProducts(products);
@@ -192,7 +199,7 @@ public class UserServiceImpl implements UserService {
 
                    if(userDTO.getOrderDTO() != null) {
 
-                      user.setOrder(orderConverter.orderDTOToOrder(userDTO.getOrderDTO()));
+                      user.setOrder(orderRepository.save(orderConverter.orderDTOToOrder(userDTO.getOrderDTO())));
                    }
 
                    return saveUser(userConverter.userToUserDTO(user));
@@ -218,8 +225,11 @@ public class UserServiceImpl implements UserService {
             throw new ResourceAlreadyExistsException("Order already exists. You need to delete current order before creating a new one");
         }
 
-        userDTO.setOrderDTO(orderDTO);
         orderDTO.setUserDTO(userDTO);
+        orderDTO.setUserDTOId(userDTO.getId());
+        orderDTO = orderConverter.orderToOrderDTO(orderRepository.save(orderConverter.orderDTOToOrder(orderDTO)));
+
+        userDTO.setOrderDTO(orderDTO);
         saveUser(userDTO);
 
         return orderResourceAssembler.toResource(orderDTO);
@@ -236,8 +246,12 @@ public class UserServiceImpl implements UserService {
             throw new ResourceAlreadyExistsException("Product is already assigned to this user");
         }
 
-        Objects.requireNonNull(userDTO.getProductDTOs()).add(productDTO);
+        productDTO.setUserDTO(userDTO);
         productDTO.setUserDTOId(userDTO.getId());
+        productDTO = productConverter.productToProductDTO(productRepository
+                .save(productConverter.productDTOToProduct(productDTO)));
+
+        Objects.requireNonNull(userDTO.getProductDTOs()).add(productDTO);
         saveUser(userDTO);
 
         return productResourceAssembler.toResource(productDTO);

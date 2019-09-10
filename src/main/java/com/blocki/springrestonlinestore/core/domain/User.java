@@ -22,7 +22,7 @@ public class User extends BaseEntity {
     @ToString.Exclude
     private List<Product> products = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude
     private Order order;
 

@@ -27,8 +27,11 @@ public abstract class OrderMapper {
     void setAdditionalOrderDTOParameters(Order order, @MappingTarget
             OrderDTO orderDTO) {
 
-        orderDTO.setUserDTO(userConverter.userToUserDTO(order.getUser()));
-        orderDTO.setUserDTOId(order.getUser().getId());
+        if(order.getUser() != null) {
+
+            orderDTO.setUserDTO(userConverter.userToUserDTO(order.getUser()));
+            orderDTO.setUserDTOId(order.getUser().getId());
+        }
 
         int i = 0;
 
