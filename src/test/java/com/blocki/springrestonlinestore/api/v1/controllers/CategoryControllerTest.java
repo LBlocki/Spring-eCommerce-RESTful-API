@@ -27,6 +27,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Arrays;
 import java.util.Optional;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -92,19 +93,27 @@ public class CategoryControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(CATEGORIES_BASIC_URL).accept(MediaTypes.HAL_JSON_UTF8))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("._embedded.categories[0].id").value(testCategory.getId().intValue()))
-                .andExpect(jsonPath("._embedded.categories[0].name").value(testCategory.getName()))
-                .andExpect(jsonPath("._embedded.categories[0]._links.self.href")
-                        .value("http://localhost/api/v1/categories/" + testCategory.getId().intValue()))
-                .andExpect(jsonPath("._embedded.categories[0]._links.get_list_of_categories.href")
-                        .value("http://localhost/api/v1/categories"))
-                .andExpect(jsonPath("._embedded.categories[1].id").value(testCategory.getId().intValue()))
-                .andExpect(jsonPath("._embedded.categories[1].name").value(testCategory.getName()))
-                .andExpect(jsonPath("._embedded.categories[1]._links.self.href")
-                        .value("http://localhost/api/v1/categories/" + testCategory.getId().intValue()))
-                .andExpect(jsonPath("._embedded.categories[1]._links.get_list_of_categories.href")
-                        .value("http://localhost/api/v1/categories"))
-                .andExpect(jsonPath("$._links.self.href").value("http://localhost/api/v1/categories"));
+                .andExpect(jsonPath("$._embedded.categories[0].id",
+                        is(testCategory.getId().intValue())))
+                .andExpect(jsonPath("$._embedded.categories[0].name",
+                        is(testCategory.getName())))
+                .andExpect(jsonPath("$._embedded.categories[0]._links.self.href",
+                        is("http://localhost/api/v1/categories/" + testCategory.getId().intValue())))
+                .andExpect(jsonPath("$._embedded.categories[0]._links.get_list_of_categories.href",
+                        is("http://localhost/api/v1/categories")))
+                .andExpect(jsonPath("$._embedded.categories[1].id",
+                        is(testCategory.getId().intValue())))
+                .andExpect(jsonPath("$._embedded.categories[1].name",
+                        is(testCategory.getName())))
+                .andExpect(jsonPath("$._embedded.categories[1]._links.self.href",
+                        is("http://localhost/api/v1/categories/" + testCategory.getId().intValue())))
+                .andExpect(jsonPath("$._embedded.categories[1]._links.get_list_of_categories.href",
+                        is("http://localhost/api/v1/categories")))
+                .andExpect(jsonPath("$._links.self.href",
+                        is("http://localhost/api/v1/categories")));
+
+        Mockito.verify(categoryRepository, Mockito.times(1)).findAll();
+        Mockito.verifyNoMoreInteractions(categoryRepository);
     }
 
     @Test
@@ -116,11 +125,16 @@ public class CategoryControllerTest {
                 .accept(MediaTypes.HAL_JSON_UTF8))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_UTF8_VALUE))
-                .andExpect(jsonPath(".id").value(testCategory.getId().intValue()))
-                .andExpect(jsonPath(".name").value(testCategory.getName()))
-                .andExpect(jsonPath("._links.self.href")
-                        .value("http://localhost/api/v1/categories/" + testCategory.getId().intValue()))
-                .andExpect(jsonPath("._links.get_list_of_categories.href")
-                        .value("http://localhost/api/v1/categories"));
+                .andExpect(jsonPath("$.id",
+                        is(testCategory.getId().intValue())))
+                .andExpect(jsonPath("$.name",
+                        is(testCategory.getName())))
+                .andExpect(jsonPath("$._links.self.href",
+                        is("http://localhost/api/v1/categories/" + testCategory.getId().intValue())))
+                .andExpect(jsonPath("$._links.get_list_of_categories.href",
+                        is("http://localhost/api/v1/categories")));
+
+        Mockito.verify(categoryRepository, Mockito.times(1)).findById(Mockito.anyLong());
+        Mockito.verifyNoMoreInteractions(categoryRepository);
     }
 }
