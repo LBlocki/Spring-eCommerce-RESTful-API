@@ -1,12 +1,12 @@
 package com.blocki.springrestonlinestore.core.services;
 
-import com.blocki.springrestonlinestore.TestEntity;
 import com.blocki.springrestonlinestore.api.v1.mappers.OrderMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.ProductMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
 import com.blocki.springrestonlinestore.api.v1.models.OrderDTO;
 import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
 import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
+import com.blocki.springrestonlinestore.core.bootstrap.TestEntityGenerator;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.OrderResourceAssembler;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.ProductResourceAssembler;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.UserResourceAssembler;
@@ -33,7 +33,7 @@ import static org.junit.Assert.*;
 
 public class UserServiceImplTest {
 
-    private final TestEntity testEntity = new TestEntity();
+    private final TestEntityGenerator testEntityGenerator = new TestEntityGenerator();
 
     private final UserMapper userConverter = Mappers.getMapper(UserMapper.class);
 
@@ -69,7 +69,7 @@ public class UserServiceImplTest {
 
         MockitoAnnotations.initMocks(this);
 
-        user = testEntity.getUser();
+        user = testEntityGenerator.generateUser();
     }
 
     @Test

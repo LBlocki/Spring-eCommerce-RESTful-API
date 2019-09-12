@@ -1,7 +1,7 @@
 package com.blocki.springrestonlinestore.api.v1.mappers;
 
-import com.blocki.springrestonlinestore.TestEntity;
 import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
+import com.blocki.springrestonlinestore.core.bootstrap.TestEntityGenerator;
 import com.blocki.springrestonlinestore.core.domain.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,14 +13,14 @@ public class UserMapperTest {
 
 
     private final UserMapper userConverter = Mappers.getMapper(UserMapper.class);
-    private final TestEntity testEntity = new TestEntity();
+    private final TestEntityGenerator testEntityGenerator = new TestEntityGenerator();
 
     private User user;
 
     @Before
     public void setUp() {
 
-        user = testEntity.getUser();
+        user = testEntityGenerator.generateUser();
     }
 
     @Test

@@ -1,7 +1,7 @@
 package com.blocki.springrestonlinestore.api.v1.mappers;
 
-import com.blocki.springrestonlinestore.TestEntity;
 import com.blocki.springrestonlinestore.api.v1.models.CategoryDTO;
+import com.blocki.springrestonlinestore.core.bootstrap.TestEntityGenerator;
 import com.blocki.springrestonlinestore.core.domain.Category;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,14 +13,14 @@ import static org.junit.Assert.assertNotNull;
 public class CategoryMapperTest {
 
     private final CategoryMapper categoryConverter = Mappers.getMapper(CategoryMapper.class);
-    private final TestEntity testEntity = new TestEntity();
+    private final TestEntityGenerator testEntityGenerator = new TestEntityGenerator();
 
     private Category category;
 
     @Before
     public void setUp() {
 
-        category = testEntity.getCategory();
+        category = testEntityGenerator.generateCategory();
     }
 
     @Test

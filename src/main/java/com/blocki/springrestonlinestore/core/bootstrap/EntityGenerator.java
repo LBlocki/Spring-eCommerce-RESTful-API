@@ -55,13 +55,8 @@ class EntityGenerator {
     private static final Long[] categoryIDs = {1L, 2L, 3L, 4L, 5L};
     private static final String[] categoryNames = {"Clothes", "Electronics", "Smart Tv's", "Music", "Games"};
 
-    private final Integer primeNumber;
 
-    EntityGenerator(Integer primeNumber) {
-        this.primeNumber = primeNumber;
-    }
-
-    User generateUser() {
+    public User generateUser() {
 
         User user = new User();
 
@@ -73,30 +68,33 @@ class EntityGenerator {
         user.setPhoneNumber(phoneNumbers[randomGenerator.nextInt(phoneNumbers.length)]);
         user.setCreationDate(LocalDate.now());
         user.setEmailAddress(emailAddresses[randomGenerator.nextInt(emailAddresses.length)]
-                + randomGenerator.nextInt(10)*primeNumber);
-        user.setUsername(usernames[randomGenerator.nextInt(usernames.length)]+ randomGenerator.nextInt(10)*primeNumber);
+                + randomGenerator.nextInt(30)
+                +(user.getFirstName().length() * user.getLastName().length() * user.getId().intValue()));
+        user.setUsername(usernames[randomGenerator.nextInt(usernames.length)]+ randomGenerator.nextInt(30)
+                +(user.getFirstName().length() * user.getLastName().length() * user.getId().intValue()));
         user.setPassword(passwords[randomGenerator.nextInt(passwords.length)]);
         user.setGender(genders[randomGenerator.nextInt(genders.length)]);
 
         return user;
     }
 
-    Product generateProduct() {
+    public Product generateProduct() {
 
         Product product = new Product();
 
         product.setCreationDate(LocalDate.now());
         product.setCost(costs[randomGenerator.nextInt(costs.length)]);
         product.setProductStatus(productStatuses[randomGenerator.nextInt(productStatuses.length)]);
-        product.setName(productNames[randomGenerator.nextInt(productNames.length)]+ randomGenerator.nextInt(10)*primeNumber);
         product.setId(productIDs[randomGenerator.nextInt(productIDs.length)]);
         product.setDescription(descriptions[randomGenerator.nextInt(descriptions.length)]);
         product.setPhoto(photos[randomGenerator.nextInt(photos.length)]);
+        product.setName(productNames[randomGenerator.nextInt(productNames.length)]+ randomGenerator.nextInt(10)
+                *(product.getDescription().length() * randomGenerator.nextInt(30) + product.getId().intValue()));
 
         return product;
     }
 
-    Order generateOrder() {
+    public Order generateOrder() {
 
         Order order = new Order();
 
@@ -107,7 +105,7 @@ class EntityGenerator {
         return order;
     }
 
-    OrderItem generateOrderItem() {
+    public OrderItem generateOrderItem() {
 
         OrderItem orderItem = new OrderItem();
 
@@ -118,14 +116,14 @@ class EntityGenerator {
         return orderItem;
     }
 
-    Category generateCategory() {
+    public Category generateCategory() {
 
         Category category = new Category();
 
         category.setId(categoryIDs[randomGenerator.nextInt(categoryIDs.length)]);
-        category.setName(categoryNames[randomGenerator.nextInt(categoryNames.length)]+ randomGenerator.nextInt(10)*primeNumber);
+        category.setName(categoryNames[randomGenerator.nextInt(categoryNames.length)]+ randomGenerator.nextInt()
+                * category.getId().intValue() + randomGenerator.nextInt(30));
 
         return category;
     }
-
 }

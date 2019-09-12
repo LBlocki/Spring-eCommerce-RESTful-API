@@ -1,7 +1,7 @@
 package com.blocki.springrestonlinestore.core.services;
 
-import com.blocki.springrestonlinestore.TestEntity;
 import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
+import com.blocki.springrestonlinestore.core.bootstrap.TestEntityGenerator;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.ProductResourceAssembler;
 import com.blocki.springrestonlinestore.core.domain.Product;
 import com.blocki.springrestonlinestore.core.repositories.ProductRepository;
@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 
 public class ProductServiceImplTest {
 
-    private final TestEntity testEntity = new TestEntity();
+    private final TestEntityGenerator testEntityGenerator = new TestEntityGenerator();
 
     private Product product;
 
@@ -34,7 +34,7 @@ public class ProductServiceImplTest {
 
         MockitoAnnotations.initMocks(this);
 
-        product = testEntity.getProduct();
+        product = testEntityGenerator.generateProduct();
     }
 
     @Test

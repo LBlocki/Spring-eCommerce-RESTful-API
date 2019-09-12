@@ -52,7 +52,7 @@ public class Bootstrap implements CommandLineRunner {
     }
     void createUser(int amountOfProducts, int amountOfOrderItems) {
 
-        EntityGenerator entityGenerator = new EntityGenerator(2 * amountOfOrderItems + amountOfProducts + 10);
+        EntityGenerator entityGenerator = new EntityGenerator();
 
         category = entityGenerator.generateCategory();
         category = categoryRepository.save(category);
@@ -64,7 +64,7 @@ public class Bootstrap implements CommandLineRunner {
 
         for(int i = 0; i < amountOfProducts; i++) {
 
-            Product product = addProduct(userConverter.userDTOToUser(savedUserDTO), i);
+            Product product = addProduct(userConverter.userDTOToUser(savedUserDTO));
 
             userService.createNewProduct(savedUserDTO.getId(), productConverter.productToProductDTO(product));
         }
@@ -80,7 +80,7 @@ public class Bootstrap implements CommandLineRunner {
 
             for(int i = 0; i < amountOfOrderItems; i++) {
 
-                UserDTO savedExtraUser = createExtraUser(i + amountOfProducts + 1);
+                UserDTO savedExtraUser = createExtraUser();
 
                 OrderItem orderItem = entityGenerator.generateOrderItem();
                 orderItem.setProduct(productConverter
@@ -97,9 +97,9 @@ public class Bootstrap implements CommandLineRunner {
 
     }
 
-    Product addProduct(User user, Integer primeNumber) {
+    Product addProduct(User user) {
 
-        EntityGenerator entityGenerator = new EntityGenerator(primeNumber);
+        EntityGenerator entityGenerator = new EntityGenerator();
 
         Product product = entityGenerator.generateProduct();
 
@@ -112,15 +112,15 @@ public class Bootstrap implements CommandLineRunner {
         return product;
     }
 
-    UserDTO createExtraUser(Integer primeNumber) {
+    UserDTO createExtraUser() {
 
-        EntityGenerator entityGenerator = new EntityGenerator(primeNumber);
+        EntityGenerator entityGenerator = new EntityGenerator();
 
         User user = entityGenerator.generateUser();
 
         user.setOrder(null);
 
-        Product extraProduct = addProduct(user, primeNumber);
+        Product extraProduct = addProduct(user);
 
         UserDTO savedExtraUserDTO =  userService.createNewUser(userConverter.userToUserDTO(user)).getContent();
 
