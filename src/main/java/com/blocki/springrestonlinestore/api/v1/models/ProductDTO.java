@@ -7,10 +7,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.hateoas.core.Relation;
@@ -34,6 +31,7 @@ public class ProductDTO {
     @NotNull(message = "User field cannot be null")
     @JsonBackReference
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private UserDTO userDTO;
 
     @NotNull(message = "Owner_id field cannot be null")

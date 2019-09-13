@@ -20,6 +20,7 @@ public class Product extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "seller_id", nullable = false)
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private User user;
 
     @ManyToOne

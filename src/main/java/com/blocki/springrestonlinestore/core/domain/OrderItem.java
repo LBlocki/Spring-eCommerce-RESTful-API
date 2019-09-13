@@ -18,11 +18,13 @@ public class OrderItem extends  BaseEntity {
     @ManyToOne
     @JoinColumn(name = "product_id")
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Product product;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Order order;
 
     @Column(nullable = false)
