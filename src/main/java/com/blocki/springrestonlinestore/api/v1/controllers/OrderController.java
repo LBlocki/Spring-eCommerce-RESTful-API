@@ -5,6 +5,7 @@ import com.blocki.springrestonlinestore.api.v1.models.OrderItemDTO;
 import com.blocki.springrestonlinestore.core.services.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.net.URI;
 
 @Slf4j
 @RestController
+@ExposesResourceFor(value = OrderDTO.class)
 @RequestMapping(value = OrderController.ORDERS_BASIC_URL, produces = "application/hal+json")
 public class OrderController {
 

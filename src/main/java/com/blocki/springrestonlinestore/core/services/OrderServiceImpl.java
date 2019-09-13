@@ -120,6 +120,8 @@ public class OrderServiceImpl implements OrderService {
                 linkTo(methodOn(OrderController.class)
                         .getOrderById(id)).withRel("get order item's order").withType("GET"),
                 linkTo(methodOn(OrderController.class)
-                        .getAllOrderItems(id)).withSelfRel().withType("GET"));
+                        .getAllOrderItems(id)).withSelfRel().withType("GET"),
+                linkTo(methodOn(OrderController.class).createNewOrderItem(orderDTO.getId(), new OrderItemDTO()))
+                        .withRel("create_order_item").withType("POST"));
     }
 }
