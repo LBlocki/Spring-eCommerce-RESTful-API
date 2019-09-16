@@ -20,15 +20,14 @@ public class Order extends BaseEntity {
 
     public enum OrderStatus { ACTIVE, COMPLETED, ERROR }
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private User user;
 
     @OneToMany(mappedBy = "order",
-            cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE},
-            fetch = FetchType.LAZY)
+            cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<OrderItem> orderItems = new ArrayList<>();

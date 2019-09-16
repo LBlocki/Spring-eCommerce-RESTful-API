@@ -26,7 +26,7 @@ public class User extends BaseEntity {
     private List<Product> products = new ArrayList<>();
 
     @OneToOne(mappedBy = "user",
-            cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})
+            cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Order order;

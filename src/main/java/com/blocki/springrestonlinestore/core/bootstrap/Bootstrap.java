@@ -46,11 +46,10 @@ public class Bootstrap implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        createUser(1,1);
-        createUser(2,1);
-        createUser(1,2);
+        createUser();
+
     }
-    void createUser(int amountOfProducts, int amountOfOrderItems) {
+    void createUser() {
 
         EntityGenerator entityGenerator = new EntityGenerator();
 
@@ -62,39 +61,29 @@ public class Bootstrap implements CommandLineRunner {
 
         UserDTO savedUserDTO = userService.createNewUser(userConverter.userToUserDTO(user)).getContent();
 
-        for(int i = 0; i < amountOfProducts; i++) {
+        Product product = addProduct(userConverter.userDTOToUser(savedUserDTO));
 
-            Product product = addProduct(userConverter.userDTOToUser(savedUserDTO));
-
-            userService.createNewProduct(savedUserDTO.getId(), productConverter.productToProductDTO(product));
-        }
+        userService.createNewProduct(savedUserDTO.getId(), productConverter.productToProductDTO(product));
 
         savedUserDTO = userService.getUserById(savedUserDTO.getId()).getContent();
 
-        if(amountOfOrderItems > 0) {
+        Order order = entityGenerator.generateOrder();
+        OrderDTO savedOrderDTO = userService
+                .createNewOrder(savedUserDTO.getId(), orderConverter.orderToOrderDTO(order)).getContent();
+        savedUserDTO = userService.getUserById(savedUserDTO.getId()).getContent();
 
-            Order order = entityGenerator.generateOrder();
-            OrderDTO savedOrderDTO = userService
-                    .createNewOrder(savedUserDTO.getId(), orderConverter.orderToOrderDTO(order)).getContent();
-            savedUserDTO = userService.getUserById(savedUserDTO.getId()).getContent();
+        UserDTO savedExtraUser = createExtraUser();
 
-            for(int i = 0; i < amountOfOrderItems; i++) {
+        OrderItem orderItem = entityGenerator.generateOrderItem();
+        orderItem.setProduct(productConverter
+                .productDTOToProduct(Objects.requireNonNull(savedExtraUser.getProductDTOs()).get(0)));
 
-                UserDTO savedExtraUser = createExtraUser();
+        orderService.createNewOrderItem(savedOrderDTO.getId(), orderItemConverter.orderItemToOrderItemDTO(orderItem));
+        savedOrderDTO = orderService.getOrderById(savedOrderDTO.getId()).getContent();
 
-                OrderItem orderItem = entityGenerator.generateOrderItem();
-                orderItem.setProduct(productConverter
-                        .productDTOToProduct(Objects.requireNonNull(savedExtraUser.getProductDTOs()).get(0)));
+        savedUserDTO.setOrderDTO(orderService.getOrderById(savedOrderDTO.getId()).getContent());
 
-                orderService.createNewOrderItem(savedOrderDTO.getId(), orderItemConverter.orderItemToOrderItemDTO(orderItem));
-                savedOrderDTO = orderService.getOrderById(savedOrderDTO.getId()).getContent();
-            }
-
-            savedUserDTO.setOrderDTO(orderService.getOrderById(savedOrderDTO.getId()).getContent());
-
-            userService.patchUser(savedUserDTO.getId(), savedUserDTO);
-        }
-
+        userService.patchUser(savedUserDTO.getId(), savedUserDTO);
     }
 
     Product addProduct(User user) {

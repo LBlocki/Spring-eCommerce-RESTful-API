@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
@@ -93,7 +94,7 @@ public class OrderController {
        return ResponseEntity.ok(orderService.getAllOrderItems(id));
     }
 
-    @PostMapping("/{id}/orderItems")
+    @PostMapping(value = "/{id}/orderItems", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Resource<OrderItemDTO>> createNewOrderItem(
             @PathVariable final Long id, @RequestBody @Valid final OrderItemDTO orderItemDTO) {
 

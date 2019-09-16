@@ -14,7 +14,7 @@ class EntityGenerator {
     private Random randomGenerator = new Random();
 
     //users data
-    private static final Long[] userIds = {1L, 2L, 3L, 4L, 5L};
+    private static final Long[] userIds = {1L};
     private static final String[] firstNames ={ "Michael", "Stephen", "Mia", "Patrick", "Amy"};
     private static final String[] lastNames = {"Borrows", "Angelo", "Scalleta", "Hawking", "Beethoven"};
     private static final String[] addresses = {"221B Baker Street", "Modlinska 44", "Champs-Élysées 22A",
@@ -29,7 +29,7 @@ class EntityGenerator {
     private static final User.Gender[] genders = {User.Gender.MALE, User.Gender.FEMALE};
 
     //products data
-    private static final Long[] productIDs = {1L, 2L, 3L, 4L, 5L};
+    private static final Long[] productIDs = {1L};
     private static final String[] productNames = {"Doll 300", "Ram 128 Gigabytes", "Witcher 3",
             "SSD drive 512 G", "Samsung galaxy S40"};
     private static final Product.ProductStatus[] productStatuses = {Product.ProductStatus.AVALIABLE,
@@ -42,7 +42,7 @@ class EntityGenerator {
     private static final Byte[][] photos = {{2,3,8},{5,7,2,3},{9,8,7,2,4},{1,7,3,4,78},{2,3,1, 5, 7}};
 
     //orders data
-    private static final Long[] orderIds = {1L, 2L, 3L, 4L, 5L};
+    private static final Long[] orderIds = {1L};
     private static final Order.OrderStatus[] orderStatuses ={ Order.OrderStatus.ACTIVE, Order.OrderStatus.COMPLETED};
 
     //order items data
@@ -52,11 +52,11 @@ class EntityGenerator {
             new BigDecimal(192.12), new BigDecimal(64.69), new BigDecimal(01.99)};
 
     //categories data
-    private static final Long[] categoryIDs = {1L, 2L, 3L, 4L, 5L};
+    private static final Long[] categoryIDs = {1L};
     private static final String[] categoryNames = {"Clothes", "Electronics", "Smart Tv's", "Music", "Games"};
 
 
-    public User generateUser() {
+    User generateUser() {
 
         User user = new User();
 
@@ -78,7 +78,7 @@ class EntityGenerator {
         return user;
     }
 
-    public Product generateProduct() {
+    Product generateProduct() {
 
         Product product = new Product();
 
@@ -94,7 +94,7 @@ class EntityGenerator {
         return product;
     }
 
-    public Order generateOrder() {
+    Order generateOrder() {
 
         Order order = new Order();
 
@@ -105,7 +105,7 @@ class EntityGenerator {
         return order;
     }
 
-    public OrderItem generateOrderItem() {
+    OrderItem generateOrderItem() {
 
         OrderItem orderItem = new OrderItem();
 
@@ -116,7 +116,7 @@ class EntityGenerator {
         return orderItem;
     }
 
-    public Category generateCategory() {
+    Category generateCategory() {
 
         Category category = new Category();
 
