@@ -10,7 +10,6 @@ import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.OrderResourceAssembler;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.ProductResourceAssembler;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.UserResourceAssembler;
-import com.blocki.springrestonlinestore.core.domain.Product;
 import com.blocki.springrestonlinestore.core.domain.User;
 import com.blocki.springrestonlinestore.core.exceptions.NotFoundException;
 import com.blocki.springrestonlinestore.core.exceptions.ResourceAlreadyExistsException;
@@ -23,7 +22,6 @@ import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -49,8 +47,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, OrderRepository orderRepository,
-                           ProductRepository productRepository, UserResourceAssembler userResourceAssembler,
-                           ProductResourceAssembler productResourceAssembler, OrderResourceAssembler orderResourceAssembler) {
+                           ProductRepository productRepository,UserResourceAssembler userResourceAssembler,
+                           ProductResourceAssembler productResourceAssembler,
+                           OrderResourceAssembler orderResourceAssembler) {
 
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
@@ -184,22 +183,16 @@ public class UserServiceImpl implements UserService {
                        user.setUsername(userDTO.getUsername());
                    }
 
-                   if(userDTO.getProductDTOs() != null) {
+                   if(user.getOrder() != null) {
 
-                       List<Product> products = new ArrayList<>();
-
-                       for( ProductDTO productDTO : userDTO.getProductDTOs()) {
-
-                           products.add(productRepository.save(productConverter.productDTOToProduct(productDTO)));
-                       }
-
-                       user.setProducts(products);
-
+                       orderRepository.deleteById(user.getOrder().getId());
                    }
 
-                   if(userDTO.getOrderDTO() != null) {
+                   user.setOrder(orderConverter.orderDTOToOrder(userDTO.getOrderDTO()));
 
-                      user.setOrder(orderRepository.save(orderConverter.orderDTOToOrder(userDTO.getOrderDTO())));
+                   if(user.getOrder() == null) {
+
+                       orderRepository.save(user.getOrder());
                    }
 
                    return saveUser(userConverter.userToUserDTO(user));

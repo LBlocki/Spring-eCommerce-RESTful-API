@@ -1,15 +1,16 @@
 package com.blocki.springrestonlinestore.core.services;
 
-import com.blocki.springrestonlinestore.TestEntity;
 import com.blocki.springrestonlinestore.api.v1.mappers.OrderItemMapper;
 import com.blocki.springrestonlinestore.api.v1.models.OrderDTO;
 import com.blocki.springrestonlinestore.api.v1.models.OrderItemDTO;
+import com.blocki.springrestonlinestore.core.bootstrap.TestEntityGenerator;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.OrderItemResourceAssembler;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.OrderResourceAssembler;
 import com.blocki.springrestonlinestore.core.domain.Order;
 import com.blocki.springrestonlinestore.core.domain.OrderItem;
 import com.blocki.springrestonlinestore.core.repositories.OrderItemRepository;
 import com.blocki.springrestonlinestore.core.repositories.OrderRepository;
+import com.blocki.springrestonlinestore.core.repositories.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mapstruct.factory.Mappers;
@@ -25,7 +26,7 @@ import static org.junit.Assert.assertNotNull;
 
 public class OrderServiceImplTest {
 
-    private final TestEntity testEntity = new TestEntity();
+    private final TestEntityGenerator testEntityGenerator = new TestEntityGenerator();
 
     private Order order;
 
@@ -47,13 +48,15 @@ public class OrderServiceImplTest {
     private OrderItemResourceAssembler orderItemResourceAssembler =
             new OrderItemResourceAssembler();
 
+    @Mock
+    private UserRepository userRepository;
 
     @Before
     public void setUp() {
 
         MockitoAnnotations.initMocks(this);
 
-        order = testEntity.getOrder();
+        order = testEntityGenerator.generateOrder();
     }
 
     @Test
@@ -89,11 +92,16 @@ public class OrderServiceImplTest {
     @Test
     public void deleteOrderById() {
 
+        //given
+        Mockito.when(orderRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(order));
+        Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(testEntityGenerator.generateUser()));
+
         //when
         orderService.deleteOrderById(order.getId());
 
         //then
         Mockito.verify(orderRepository, Mockito.times(1)).deleteById(Mockito.anyLong());
+        Mockito.verify(orderRepository, Mockito.times(1)).findById(Mockito.anyLong());
 
         Mockito.verifyNoMoreInteractions(orderRepository);
     }

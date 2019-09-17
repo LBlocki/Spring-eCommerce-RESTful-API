@@ -21,9 +21,9 @@ public class OrderItemResourceAssembler implements ResourceAssembler<OrderItemDT
                 linkTo(methodOn(OrderItemController.class).getOrderItemById(orderItemDTO.getId()))
                         .withSelfRel().withType("GET"),
                 linkTo(methodOn(OrderItemController.class).getOrderItemById(orderItemDTO.getId()))
-                        .withRel("delete order item").withType("DELETE"),
+                        .withRel("delete_order_item").withType("DELETE"),
                 linkTo(methodOn(OrderController.class).getAllOrderItems(orderItemDTO
-                        .getOrderDTO().getId())).withRel("get list of order items").withType("GET"));
+                        .getOrderDTO().getId())).withRel("get_order's_items").withType("GET"));
 
     }
 }

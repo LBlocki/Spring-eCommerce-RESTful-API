@@ -1,8 +1,9 @@
-package com.blocki.springrestonlinestore;
+package com.blocki.springrestonlinestore.core.bootstrap;
 
 import com.blocki.springrestonlinestore.core.domain.*;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.springframework.context.annotation.Profile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -10,7 +11,8 @@ import java.util.Arrays;
 
 @EqualsAndHashCode
 @ToString
-public class TestEntity {
+@Profile("test")
+public class TestEntityGenerator {
 
     private Category category = new Category();
     private Product product = new Product();
@@ -29,7 +31,7 @@ public class TestEntity {
     private static final String phoneNumber = "213122112";
     private static final String emailAddress = "dsadsa@asdsa.sda";
     private static final String username = "UserMyName";
-    private static final char[] password = {'q','s','t'};
+    private static final char[] password = {'q','s','t','q','q','q','q'};
     private static final User.Gender gender = User.Gender.MALE;
 
     //product data
@@ -53,7 +55,7 @@ public class TestEntity {
     private static final Long categoryID = 1L;
     private static final String categoryName = "Clothes";
 
-    public TestEntity() {
+    public TestEntityGenerator() {
 
         category.setId(categoryID);
         category.setName(categoryName);
@@ -95,21 +97,21 @@ public class TestEntity {
         orderItem.setOrder(order);
     }
 
-    public Category getCategory() { return category; }
+    public Category generateCategory() { return category; }
 
-    public Product getProduct() {
+    public Product generateProduct() {
         return product;
     }
 
-    public Order getOrder() {
+    public Order generateOrder() {
         return order;
     }
 
-    public OrderItem getOrderItem() {
+    public OrderItem generateOrderItem() {
         return orderItem;
     }
 
-    public User getUser() {
+    public User generateUser() {
         return user;
     }
 }

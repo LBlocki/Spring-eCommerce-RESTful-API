@@ -17,6 +17,6 @@ public class CategoryResourceAssembler implements ResourceAssembler<CategoryDTO,
 
         return new Resource<>(categoryDTO,
                 linkTo(methodOn(CategoryController.class).getCategoryById(categoryDTO.getId())).withSelfRel().withType("GET"),
-                linkTo(methodOn(CategoryController.class).getAllCategories()).withRel("get list of categories").withType("GET"));
+                linkTo(methodOn(CategoryController.class).getAllCategories()).withRel("get_list_of_categories").withType("GET"));
     }
 }

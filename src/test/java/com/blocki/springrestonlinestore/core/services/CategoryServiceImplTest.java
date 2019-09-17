@@ -1,7 +1,7 @@
 package com.blocki.springrestonlinestore.core.services;
 
-import com.blocki.springrestonlinestore.TestEntity;
 import com.blocki.springrestonlinestore.api.v1.models.CategoryDTO;
+import com.blocki.springrestonlinestore.core.bootstrap.TestEntityGenerator;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.CategoryResourceAssembler;
 import com.blocki.springrestonlinestore.core.domain.Category;
 import com.blocki.springrestonlinestore.core.repositories.CategoryRepository;
@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 
 public class CategoryServiceImplTest {
 
-    private final TestEntity testEntity = new TestEntity();
+    private final TestEntityGenerator testEntityGenerator = new TestEntityGenerator();
 
     private Category category;
 
@@ -37,7 +37,7 @@ public class CategoryServiceImplTest {
 
         MockitoAnnotations.initMocks(this);
 
-        category = testEntity.getCategory();
+        category = testEntityGenerator.generateCategory();
     }
 
     @Test

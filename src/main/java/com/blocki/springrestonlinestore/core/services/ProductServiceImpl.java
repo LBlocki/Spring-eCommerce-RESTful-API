@@ -2,33 +2,37 @@ package com.blocki.springrestonlinestore.core.services;
 
 import com.blocki.springrestonlinestore.api.v1.mappers.CategoryMapper;
 import com.blocki.springrestonlinestore.api.v1.mappers.ProductMapper;
-import com.blocki.springrestonlinestore.api.v1.mappers.UserMapper;
 import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.ProductResourceAssembler;
 import com.blocki.springrestonlinestore.core.domain.Product;
+import com.blocki.springrestonlinestore.core.domain.User;
 import com.blocki.springrestonlinestore.core.exceptions.NotFoundException;
 import com.blocki.springrestonlinestore.core.repositories.ProductRepository;
+import com.blocki.springrestonlinestore.core.repositories.UserRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ProductServiceImpl implements ProductService {
 
     private final ProductMapper productConverter = Mappers.getMapper(ProductMapper.class);
-    private final UserMapper userConverter = Mappers.getMapper(UserMapper.class);
     private final CategoryMapper categoryConverter = Mappers.getMapper(CategoryMapper.class);
 
     private final ProductResourceAssembler productResourceAssembler;
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public ProductServiceImpl(ProductRepository productRepository,
-                              ProductResourceAssembler productResourceAssembler) {
+                              ProductResourceAssembler productResourceAssembler, UserRepository userRepository) {
 
         this.productRepository = productRepository;
         this.productResourceAssembler = productResourceAssembler;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -100,11 +104,6 @@ public class ProductServiceImpl implements ProductService {
                         product.setCategory(categoryConverter.categoryDTOtoCategory(productDTO.getCategoryDTO()));
                     }
 
-                    if(productDTO.getUserDTOId() != null) {
-
-                      product.setUser(userConverter.userDTOToUser(productDTO.getUserDTO()));
-                    }
-
                     return saveProduct(productConverter.productToProductDTO(product));
 
                 })
@@ -113,6 +112,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProductById(Long id) {
+
+        Optional<Product> product = productRepository.findById(id);
+
+        if(product.isPresent()) {
+
+           User user = userRepository.findById(product.get().getUser().getId()).orElseThrow(NotFoundException::new);
+
+           user.getProducts().remove(product.get());
+           userRepository.save(user);
+
+        }
 
         productRepository.deleteById(id);
     }

@@ -1,7 +1,7 @@
 package com.blocki.springrestonlinestore.api.v1.mappers;
 
-import com.blocki.springrestonlinestore.TestEntity;
 import com.blocki.springrestonlinestore.api.v1.models.OrderItemDTO;
+import com.blocki.springrestonlinestore.core.bootstrap.TestEntityGenerator;
 import com.blocki.springrestonlinestore.core.domain.OrderItem;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,14 +13,14 @@ import static org.junit.Assert.assertNotNull;
 public class OrderItemMapperTest {
 
     private final OrderItemMapper orderItemConverter = Mappers.getMapper(OrderItemMapper.class);
-    private final TestEntity testEntity = new TestEntity();
+    private final TestEntityGenerator testEntityGenerator = new TestEntityGenerator();
 
     private OrderItem orderItem;
 
     @Before
     public void setUp() {
 
-       orderItem = testEntity.getOrderItem();
+       orderItem = testEntityGenerator.generateOrderItem();
     }
 
     @Test

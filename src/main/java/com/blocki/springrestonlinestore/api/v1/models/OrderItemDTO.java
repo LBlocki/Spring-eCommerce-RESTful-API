@@ -27,12 +27,11 @@ public class OrderItemDTO {
     private ProductDTO productDTO;
 
     @JsonProperty("order")
-    @NotNull(message = "Shopping Cart field value cannot be null")
     @JsonBackReference
     @ToString.Exclude
     private OrderDTO orderDTO;
 
-    @NotNull(message = "Shopping Cart id field cannot be null")
+    @NotNull(message = "Order id field cannot be null")
     @JsonProperty("order_id")
     private Long orderDTOId;
 

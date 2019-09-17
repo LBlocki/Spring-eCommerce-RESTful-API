@@ -41,6 +41,7 @@ public class UserDTO {
     @JsonManagedReference
     @Nullable
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private OrderDTO orderDTO;
 
     @NotBlank(message = "First name field value cannot be null or contain only blank characters")

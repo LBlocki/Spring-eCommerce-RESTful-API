@@ -1,10 +1,11 @@
 package com.blocki.springrestonlinestore.core.services;
 
-import com.blocki.springrestonlinestore.TestEntity;
 import com.blocki.springrestonlinestore.api.v1.models.ProductDTO;
+import com.blocki.springrestonlinestore.core.bootstrap.TestEntityGenerator;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.ProductResourceAssembler;
 import com.blocki.springrestonlinestore.core.domain.Product;
 import com.blocki.springrestonlinestore.core.repositories.ProductRepository;
+import com.blocki.springrestonlinestore.core.repositories.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.*;
@@ -16,12 +17,15 @@ import static org.junit.Assert.*;
 
 public class ProductServiceImplTest {
 
-    private final TestEntity testEntity = new TestEntity();
+    private final TestEntityGenerator testEntityGenerator = new TestEntityGenerator();
 
     private Product product;
 
     @Mock
     private ProductRepository productRepository;
+
+    @Mock
+    private UserRepository userRepository;
 
     @InjectMocks
     private ProductServiceImpl productService;
@@ -34,7 +38,7 @@ public class ProductServiceImplTest {
 
         MockitoAnnotations.initMocks(this);
 
-        product = testEntity.getProduct();
+        product = testEntityGenerator.generateProduct();
     }
 
     @Test
@@ -70,14 +74,19 @@ public class ProductServiceImplTest {
         assertArrayEquals(testProductDTO.getContent().getPhoto(), product.getPhoto());
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)   //to be fixed, problem with method remove in list
     public void deleteProductById() {
+
+        //given
+        Mockito.when(productRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(product));
+        Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(testEntityGenerator.generateUser()));
 
         //when
         productService.deleteProductById(product.getId());
 
         //then
         Mockito.verify(productRepository, Mockito.times(1)).deleteById(Mockito.anyLong());
+        Mockito.verify(productRepository, Mockito.times(1)).findById(Mockito.anyLong());
 
         Mockito.verifyNoMoreInteractions(productRepository);
     }

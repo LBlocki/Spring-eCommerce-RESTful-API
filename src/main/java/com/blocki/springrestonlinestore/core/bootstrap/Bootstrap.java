@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -22,6 +23,7 @@ import java.util.Objects;
 @Slf4j
 @Component
 @Transactional
+@Profile("dev")
 public class Bootstrap implements CommandLineRunner {
 
     private final CategoryRepository categoryRepository;
@@ -46,13 +48,14 @@ public class Bootstrap implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        createUser(1,1);
-        createUser(2,1);
-        createUser(1,2);
-    }
-    void createUser(int amountOfProducts, int amountOfOrderItems) {
+        if(userService.getAllUsers().getContent().size() == 0) {
 
-        EntityGenerator entityGenerator = new EntityGenerator(2 * amountOfOrderItems + amountOfProducts + 10);
+            createUser();
+        }
+    }
+    void createUser() {
+
+        EntityGenerator entityGenerator = new EntityGenerator();
 
         category = entityGenerator.generateCategory();
         category = categoryRepository.save(category);
@@ -62,44 +65,34 @@ public class Bootstrap implements CommandLineRunner {
 
         UserDTO savedUserDTO = userService.createNewUser(userConverter.userToUserDTO(user)).getContent();
 
-        for(int i = 0; i < amountOfProducts; i++) {
+        Product product = addProduct(userConverter.userDTOToUser(savedUserDTO));
 
-            Product product = addProduct(userConverter.userDTOToUser(savedUserDTO), i);
-
-            userService.createNewProduct(savedUserDTO.getId(), productConverter.productToProductDTO(product));
-        }
+        userService.createNewProduct(savedUserDTO.getId(), productConverter.productToProductDTO(product));
 
         savedUserDTO = userService.getUserById(savedUserDTO.getId()).getContent();
 
-        if(amountOfOrderItems > 0) {
+        Order order = entityGenerator.generateOrder();
+        OrderDTO savedOrderDTO = userService
+                .createNewOrder(savedUserDTO.getId(), orderConverter.orderToOrderDTO(order)).getContent();
+        savedUserDTO = userService.getUserById(savedUserDTO.getId()).getContent();
 
-            Order order = entityGenerator.generateOrder();
-            OrderDTO savedOrderDTO = userService
-                    .createNewOrder(savedUserDTO.getId(), orderConverter.orderToOrderDTO(order)).getContent();
-            savedUserDTO = userService.getUserById(savedUserDTO.getId()).getContent();
+        UserDTO savedExtraUser = createExtraUser();
 
-            for(int i = 0; i < amountOfOrderItems; i++) {
+        OrderItem orderItem = entityGenerator.generateOrderItem();
+        orderItem.setProduct(productConverter
+                .productDTOToProduct(Objects.requireNonNull(savedExtraUser.getProductDTOs()).get(0)));
 
-                UserDTO savedExtraUser = createExtraUser(i + amountOfProducts + 1);
+        orderService.createNewOrderItem(savedOrderDTO.getId(), orderItemConverter.orderItemToOrderItemDTO(orderItem));
+        savedOrderDTO = orderService.getOrderById(savedOrderDTO.getId()).getContent();
 
-                OrderItem orderItem = entityGenerator.generateOrderItem();
-                orderItem.setProduct(productConverter
-                        .productDTOToProduct(Objects.requireNonNull(savedExtraUser.getProductDTOs()).get(0)));
+        savedUserDTO.setOrderDTO(orderService.getOrderById(savedOrderDTO.getId()).getContent());
 
-                orderService.createNewOrderItem(savedOrderDTO.getId(), orderItemConverter.orderItemToOrderItemDTO(orderItem));
-                savedOrderDTO = orderService.getOrderById(savedOrderDTO.getId()).getContent();
-            }
-
-            savedUserDTO.setOrderDTO(orderService.getOrderById(savedOrderDTO.getId()).getContent());
-
-            userService.patchUser(savedUserDTO.getId(), savedUserDTO);
-        }
-
+        userService.patchUser(savedUserDTO.getId(), savedUserDTO);
     }
 
-    Product addProduct(User user, Integer primeNumber) {
+    Product addProduct(User user) {
 
-        EntityGenerator entityGenerator = new EntityGenerator(primeNumber);
+        EntityGenerator entityGenerator = new EntityGenerator();
 
         Product product = entityGenerator.generateProduct();
 
@@ -112,15 +105,15 @@ public class Bootstrap implements CommandLineRunner {
         return product;
     }
 
-    UserDTO createExtraUser(Integer primeNumber) {
+    UserDTO createExtraUser() {
 
-        EntityGenerator entityGenerator = new EntityGenerator(primeNumber);
+        EntityGenerator entityGenerator = new EntityGenerator();
 
         User user = entityGenerator.generateUser();
 
         user.setOrder(null);
 
-        Product extraProduct = addProduct(user, primeNumber);
+        Product extraProduct = addProduct(user);
 
         UserDTO savedExtraUserDTO =  userService.createNewUser(userConverter.userToUserDTO(user)).getContent();
 

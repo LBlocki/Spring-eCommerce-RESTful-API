@@ -1,7 +1,7 @@
 package com.blocki.springrestonlinestore.core.services;
 
-import com.blocki.springrestonlinestore.TestEntity;
 import com.blocki.springrestonlinestore.api.v1.models.OrderItemDTO;
+import com.blocki.springrestonlinestore.core.bootstrap.TestEntityGenerator;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.OrderItemResourceAssembler;
 import com.blocki.springrestonlinestore.core.domain.OrderItem;
 import com.blocki.springrestonlinestore.core.repositories.OrderItemRepository;
@@ -17,7 +17,7 @@ import static org.junit.Assert.assertNotNull;
 
 public class OrderItemServiceImplTest {
 
-    private final TestEntity testEntity = new TestEntity();
+    private final TestEntityGenerator testEntityGenerator = new TestEntityGenerator();
 
     private OrderItem orderItem;
 
@@ -36,7 +36,7 @@ public class OrderItemServiceImplTest {
 
         MockitoAnnotations.initMocks(this);
 
-        orderItem = testEntity.getOrderItem();
+        orderItem = testEntityGenerator.generateOrderItem();
     }
 
     @Test

@@ -15,14 +15,16 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class OrderItem extends  BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Product product;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Order order;
 
     @Column(nullable = false)

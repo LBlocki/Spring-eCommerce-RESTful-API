@@ -8,10 +8,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.core.Relation;
 
@@ -29,9 +26,9 @@ public class OrderDTO {
     private Long id;
 
     @JsonProperty("user_id")
-    @NotNull(message = "User field value cannot be null")
     @JsonBackReference
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private UserDTO userDTO;
 
     @NotNull(message = "Owner_id field cannot be null")
@@ -41,6 +38,7 @@ public class OrderDTO {
     @JsonProperty("order_items")
     @JsonManagedReference
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<OrderItemDTO> orderItemDTOS = new ArrayList<>();
 
     @NotNull(message = "Creation date field value cannot be null")

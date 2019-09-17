@@ -8,9 +8,11 @@ import com.blocki.springrestonlinestore.api.v1.models.OrderItemDTO;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.OrderItemResourceAssembler;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.OrderResourceAssembler;
 import com.blocki.springrestonlinestore.core.domain.Order;
+import com.blocki.springrestonlinestore.core.domain.User;
 import com.blocki.springrestonlinestore.core.exceptions.NotFoundException;
 import com.blocki.springrestonlinestore.core.repositories.OrderItemRepository;
 import com.blocki.springrestonlinestore.core.repositories.OrderRepository;
+import com.blocki.springrestonlinestore.core.repositories.UserRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
@@ -18,6 +20,7 @@ import org.springframework.hateoas.Resources;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -34,15 +37,21 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemResourceAssembler orderItemResourceAssembler;
 
     private final OrderItemRepository orderItemRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
                             OrderResourceAssembler orderResourceAssembler,
-                            OrderItemResourceAssembler orderItemResourceAssembler, OrderItemRepository orderItemRepository) {
+                            OrderItemResourceAssembler orderItemResourceAssembler,
+                            OrderItemRepository orderItemRepository, UserRepository userRepository) {
+
         this.orderRepository = orderRepository;
         this.orderResourceAssembler = orderResourceAssembler;
         this.orderItemResourceAssembler = orderItemResourceAssembler;
         this.orderItemRepository = orderItemRepository;
+
+
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -68,8 +77,17 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void deleteOrderById(Long id) {
 
-        orderRepository.deleteById(id);
+        Optional<Order> order = orderRepository.findById(id);
 
+        if(order.isPresent()) {
+
+           User  optionalUser = userRepository.findById(order.get().getUser().getId()).orElseThrow(NotFoundException::new);
+
+           optionalUser.setOrder(null);
+           userRepository.save(optionalUser);
+        }
+
+        orderRepository.deleteById(id);
     }
 
     @Override
@@ -120,6 +138,8 @@ public class OrderServiceImpl implements OrderService {
                 linkTo(methodOn(OrderController.class)
                         .getOrderById(id)).withRel("get order item's order").withType("GET"),
                 linkTo(methodOn(OrderController.class)
-                        .getAllOrderItems(id)).withSelfRel().withType("GET"));
+                        .getAllOrderItems(id)).withSelfRel().withType("GET"),
+                linkTo(methodOn(OrderController.class).createNewOrderItem(orderDTO.getId(), new OrderItemDTO()))
+                        .withRel("create_order_item").withType("POST"));
     }
 }

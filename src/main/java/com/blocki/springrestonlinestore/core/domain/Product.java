@@ -17,9 +17,10 @@ public class Product extends BaseEntity {
 
     public enum ProductStatus { AVALIABLE, OUT_OF_STOCK, ERROR }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id", nullable = false)
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private User user;
 
     @ManyToOne
