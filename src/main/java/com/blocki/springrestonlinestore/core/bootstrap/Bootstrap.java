@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -22,6 +23,7 @@ import java.util.Objects;
 @Slf4j
 @Component
 @Transactional
+@Profile("dev")
 public class Bootstrap implements CommandLineRunner {
 
     private final CategoryRepository categoryRepository;
@@ -46,8 +48,10 @@ public class Bootstrap implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        createUser();
+        if(userService.getAllUsers().getContent().size() == 0) {
 
+            createUser();
+        }
     }
     void createUser() {
 

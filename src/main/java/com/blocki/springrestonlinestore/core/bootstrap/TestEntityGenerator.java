@@ -31,7 +31,7 @@ public class TestEntityGenerator {
     private static final String phoneNumber = "213122112";
     private static final String emailAddress = "dsadsa@asdsa.sda";
     private static final String username = "UserMyName";
-    private static final char[] password = {'q','s','t'};
+    private static final char[] password = {'q','s','t','q','q','q','q'};
     private static final User.Gender gender = User.Gender.MALE;
 
     //product data

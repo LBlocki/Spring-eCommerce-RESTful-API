@@ -26,7 +26,6 @@ public class OrderDTO {
     private Long id;
 
     @JsonProperty("user_id")
-    @NotNull(message = "User field value cannot be null")
     @JsonBackReference
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

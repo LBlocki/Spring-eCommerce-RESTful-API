@@ -22,10 +22,10 @@ class EntityGenerator {
     private static final String[] countries = {"Great Britain", "Scotland", "Poland", "USA", "Germany"};
     private static final String[] phoneNumbers = {"213122112", "472640517", "284067253", "037185923", "847517005"};
     private static final String[] emailAddresses = {"myEmailAddress@gmail.com", "Angelina@gmail.com",
-            "giveMeBabyOneMoreTime@gmail.com", "allNamesTaken@o2.pl", "dontRemember@wp.pl"};
-    private static final String[] usernames = {"PolishBoy21", "UsernameLOL", "DontRememberName", "DoctorX", "Psycho"};
-    private static final char[][] passwords = {{'q','s','t'}, {'s', '2', '5', ','},
-            {'q','v','x'},{'q','s','t', 't', 't'},{'a','s','s', 'q', '1'}};
+            "OneMoreTime@gmail.com", "allNamesTaken@o2.pl", "dontRemember@wp.pl"};
+    private static final String[] usernames = {"PolishBoy21", "UsernameLOL", "DontRemember", "DoctorX", "Psycho"};
+    private static final char[][] passwords = {{'q','s','t','q','q','q','q'}, {'s', '2', '5', ',','q','q','q','q'},
+            {'q','v','x','x','x','x','x'},{'q','s','t', 't', 't','x','x','x'},{'a','s','s', 'q', '1','1','1'}};
     private static final User.Gender[] genders = {User.Gender.MALE, User.Gender.FEMALE};
 
     //products data
