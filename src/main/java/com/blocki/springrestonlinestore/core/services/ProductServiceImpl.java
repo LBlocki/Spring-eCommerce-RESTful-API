@@ -100,11 +100,6 @@ public class ProductServiceImpl implements ProductService {
                         product.setCategory(categoryConverter.categoryDTOtoCategory(productDTO.getCategoryDTO()));
                     }
 
-                    if(productDTO.getUserDTOId() != null) {
-
-                      product.setUser(userConverter.userDTOToUser(productDTO.getUserDTO()));
-                    }
-
                     return saveProduct(productConverter.productToProductDTO(product));
 
                 })

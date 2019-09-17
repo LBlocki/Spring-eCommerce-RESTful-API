@@ -28,7 +28,6 @@ public class ProductDTO {
 
     private Long id;
 
-    @NotNull(message = "User field cannot be null")
     @JsonBackReference
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

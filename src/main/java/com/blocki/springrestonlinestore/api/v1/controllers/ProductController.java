@@ -5,6 +5,7 @@ import com.blocki.springrestonlinestore.core.services.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,7 +55,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductByName(productName));
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Resource<ProductDTO>> patchProduct(@PathVariable final Long id,
                                                              @RequestBody @Valid final ProductDTO productDTO) {
 
