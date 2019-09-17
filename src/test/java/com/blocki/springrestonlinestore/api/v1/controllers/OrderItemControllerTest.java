@@ -25,7 +25,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -120,8 +119,7 @@ public class OrderItemControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$._links.delete_order_item.href", Matchers
                         .is("http://localhost/api/v1/orderItems/" + testOrderItem.getId())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$._links.get_order's_items.href", Matchers
-                        .is("http://localhost/api/v1/orders/" + testOrderItem.getOrder().getId() + "/orderItems")))
-                .andDo(MockMvcResultHandlers.print());
+                        .is("http://localhost/api/v1/orders/" + testOrderItem.getOrder().getId() + "/orderItems")));
 
         Mockito.verify(orderItemRepository, Mockito.times(1)).findById(Mockito.anyLong());
         Mockito.verifyNoMoreInteractions(orderItemRepository);
@@ -133,7 +131,6 @@ public class OrderItemControllerTest {
         mockMvc.perform(MockMvcRequestBuilders
                 .delete(ORDER_ITEMS_BASIC_URL + "/" + testOrderItem.getId())
                 .accept(MediaTypes.HAL_JSON_UTF8))
-                .andExpect(MockMvcResultMatchers.status().isNoContent())
-                .andDo(MockMvcResultHandlers.print());
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 }

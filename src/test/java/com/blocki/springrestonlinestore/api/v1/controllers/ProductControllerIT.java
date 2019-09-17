@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @Transactional
-public class ProductControllerTest {
+public class ProductControllerIT {
 
     private static final String PRODUCTS_BASIC_URL = "/api/v1/products";
 
