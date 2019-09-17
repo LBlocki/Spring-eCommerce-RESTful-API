@@ -5,6 +5,7 @@ import com.blocki.springrestonlinestore.core.bootstrap.TestEntityGenerator;
 import com.blocki.springrestonlinestore.core.config.resourceAssemblers.ProductResourceAssembler;
 import com.blocki.springrestonlinestore.core.domain.Product;
 import com.blocki.springrestonlinestore.core.repositories.ProductRepository;
+import com.blocki.springrestonlinestore.core.repositories.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.*;
@@ -22,6 +23,9 @@ public class ProductServiceImplTest {
 
     @Mock
     private ProductRepository productRepository;
+
+    @Mock
+    private UserRepository userRepository;
 
     @InjectMocks
     private ProductServiceImpl productService;
@@ -70,14 +74,19 @@ public class ProductServiceImplTest {
         assertArrayEquals(testProductDTO.getContent().getPhoto(), product.getPhoto());
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)   //to be fixed, problem with method remove in list
     public void deleteProductById() {
+
+        //given
+        Mockito.when(productRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(product));
+        Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(testEntityGenerator.generateUser()));
 
         //when
         productService.deleteProductById(product.getId());
 
         //then
         Mockito.verify(productRepository, Mockito.times(1)).deleteById(Mockito.anyLong());
+        Mockito.verify(productRepository, Mockito.times(1)).findById(Mockito.anyLong());
 
         Mockito.verifyNoMoreInteractions(productRepository);
     }

@@ -10,6 +10,7 @@ import com.blocki.springrestonlinestore.core.domain.Order;
 import com.blocki.springrestonlinestore.core.domain.OrderItem;
 import com.blocki.springrestonlinestore.core.repositories.OrderItemRepository;
 import com.blocki.springrestonlinestore.core.repositories.OrderRepository;
+import com.blocki.springrestonlinestore.core.repositories.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mapstruct.factory.Mappers;
@@ -47,6 +48,8 @@ public class OrderServiceImplTest {
     private OrderItemResourceAssembler orderItemResourceAssembler =
             new OrderItemResourceAssembler();
 
+    @Mock
+    private UserRepository userRepository;
 
     @Before
     public void setUp() {
@@ -89,11 +92,16 @@ public class OrderServiceImplTest {
     @Test
     public void deleteOrderById() {
 
+        //given
+        Mockito.when(orderRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(order));
+        Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(testEntityGenerator.generateUser()));
+
         //when
         orderService.deleteOrderById(order.getId());
 
         //then
         Mockito.verify(orderRepository, Mockito.times(1)).deleteById(Mockito.anyLong());
+        Mockito.verify(orderRepository, Mockito.times(1)).findById(Mockito.anyLong());
 
         Mockito.verifyNoMoreInteractions(orderRepository);
     }
