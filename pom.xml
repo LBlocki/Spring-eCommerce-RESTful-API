@@ -135,73 +135,120 @@
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.4</version>
 				<configuration>
-				<rules>
-				<rule>
-					<ignores>
-						<ignore>lombok.extern.slf4j.Slf4j</ignore>
-					</ignores>
-				</rule>
-				</rules>
+					<excludes>
+					<exclude>**/models/**</exclude>
+					<exclude>**/domain/**</exclude>
+					<exclude>**/config/**</exclude>
+					<exclude>**/exceptions/**</exclude>
+					<exclude>**/bootstrap/**</exclude>
+					</excludes>
 				</configuration>
 				<executions>
 					<execution>
+						<id>pre-unit-test</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
+						<configuration>
+							<destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
+							<propertyName>surefireArgLine</propertyName>
+						</configuration>
 					</execution>
 					<execution>
-						<id>report</id>
-						<phase>integration-test</phase>
+						<id>post-unit-test</id>
+						<phase>prepare-package</phase>
 						<goals>
 							<goal>report</goal>
 						</goals>
+						<configuration>
+							<dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
+							<outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>post-unit-test-for-netbeans</id>
+						<phase>package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
+							<outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>pre-integration-test</id>
+						<goals>
+							<goal>prepare-agent-integration</goal>
+						</goals>
+						<configuration>
+							<destFile>${project.build.directory}/coverage-reports/jacoco-it.exec</destFile>
+							<propertyName>testArgLine</propertyName>
+						</configuration>
+					</execution>
+					<execution>
+						<id>post-integration-test</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<dataFile>${project.build.directory}/coverage-reports/jacoco-it.exec</dataFile>
+							<outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>merge-results</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>merge</goal>
+						</goals>
+						<configuration>
+							<fileSets>
+								<fileSet>
+									<directory>${project.build.directory}/coverage-reports</directory>
+									<includes>
+										<include>*.exec</include>
+									</includes>
+								</fileSet>
+							</fileSets>
+							<destFile>${project.build.directory}/coverage-reports/jacoco.exec</destFile>
+						</configuration>
+					</execution>
+					<execution>
+						<id>post-merge-report</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<dataFile>${project.build.directory}/coverage-reports/jacoco.exec</dataFile>
+							<outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 			<plugin>
-				<!-- Separates the unit tests from the integration tests. -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
 				<configuration>
-					<!-- Skip the default running of this plug-in (or everything is run twice...see below) -->
-					<skip>true</skip>
-					<!-- Show 100% of the lines from the stack trace (doesn't work) -->
-					<trimStackTrace>false</trimStackTrace>
+					<argLine>${surefireArgLine}</argLine>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.22.2</version>
+				<configuration>
+					<argLine>${testArgLine}</argLine>
 				</configuration>
 				<executions>
 					<execution>
-						<id>unit-tests</id>
-						<phase>test</phase>
 						<goals>
-							<goal>test</goal>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
 						</goals>
-						<configuration>
-							<!-- Never skip running the tests when the test phase is invoked -->
-							<skip>false</skip>
-							<includes>
-								<!-- Include unit tests within integration-test phase. -->
-								<include>**/*Test.java</include>
-							</includes>
-							<excludes>
-								<!-- Exclude integration tests within (unit) test phase. -->
-								<exclude>**/*IT.java</exclude>
-							</excludes>
-						</configuration>
-					</execution>
-					<execution>
-						<id>integration-tests</id>
-						<phase>integration-test</phase>
-						<goals>
-							<goal>test</goal>
-						</goals>
-						<configuration>
-							<!-- Never skip running the tests when the integration-test phase is invoked -->
-							<skip>false</skip>
-							<includes>
-								<!-- Include integration tests within integration-test phase. -->
-								<include>**/*IT.java</include>
-							</includes>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>

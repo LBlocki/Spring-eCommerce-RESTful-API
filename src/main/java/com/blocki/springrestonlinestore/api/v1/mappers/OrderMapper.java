@@ -4,11 +4,9 @@ import com.blocki.springrestonlinestore.api.v1.models.OrderDTO;
 import com.blocki.springrestonlinestore.api.v1.models.OrderItemDTO;
 import com.blocki.springrestonlinestore.core.domain.Order;
 import com.blocki.springrestonlinestore.core.domain.OrderItem;
-import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
-@Slf4j
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class OrderMapper {
 
@@ -44,12 +42,6 @@ public abstract class OrderMapper {
 
             i++;
         }
-
-        if(log.isDebugEnabled()) {
-
-            log.debug(OrderMapper.class.getName() + ":(orderToOrderDTO): order:\n"
-                    + order.toString() + ",\n orderDTO:" + orderDTO.toString() + "\n");
-        }
     }
 
     @AfterMapping
@@ -67,12 +59,6 @@ public abstract class OrderMapper {
                     orderDTO.getOrderItemDTOS().get(i).getProductDTO()));
 
             i++;
-        }
-
-        if(log.isDebugEnabled()) {
-
-            log.debug(OrderMapper.class.getName() + ":(orderDTOToOrder): orderDTO:\n"
-                    + orderDTO.toString() + ",\n order:" + orderDTO.toString() + "\n");
         }
     }
 }

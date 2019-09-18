@@ -6,13 +6,11 @@ import com.blocki.springrestonlinestore.api.v1.models.UserDTO;
 import com.blocki.springrestonlinestore.core.domain.OrderItem;
 import com.blocki.springrestonlinestore.core.domain.Product;
 import com.blocki.springrestonlinestore.core.domain.User;
-import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 import java.util.Objects;
 
-@Slf4j
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class UserMapper {
 
@@ -70,13 +68,6 @@ public abstract class UserMapper {
                 product.setUserDTOId(user.getId());
             }
         }
-
-        if(log.isDebugEnabled()) {
-
-            log.debug(UserMapper.class.getName() + ":(userToUserDTO): user:\n"
-                    + user.toString() + ",\n userDTO:" + userDTO.toString() + "\n");
-        }
-
     }
 
     @AfterMapping
@@ -118,12 +109,6 @@ public abstract class UserMapper {
                     product.setCategory(categoryConverter.categoryDTOtoCategory(
                             Objects.requireNonNull(userDTO.getProductDTOs()).get(i).getCategoryDTO()));
             }
-        }
-
-        if(log.isDebugEnabled()) {
-
-            log.debug(UserMapper.class.getName() + ":(userDTOToUser): userDTO:\n"
-                    + userDTO.toString() + ",\n user:" + user.toString() + "\n");
         }
     }
 }

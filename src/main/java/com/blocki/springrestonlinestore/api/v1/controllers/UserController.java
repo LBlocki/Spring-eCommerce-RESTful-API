@@ -28,23 +28,11 @@ public class UserController {
     @Autowired
     public UserController(UserService userService) {
 
-        if(log.isDebugEnabled()) {
-
-            log.debug(UserController.class.getName() + ":(constructor):Injected user service:\n"
-                    + userService.toString() + "\n");
-        }
-
         this.userService = userService;
     }
 
     @GetMapping
     public ResponseEntity<Resources<Resource<UserDTO>>> getAllUsers() {
-
-        if(log.isDebugEnabled()) {
-
-            log.debug(UserController.class.getName()
-                    + ":(getAllUsers):Running method.\n");
-        }
 
         return ResponseEntity.ok(userService.getAllUsers());
     }
@@ -52,34 +40,17 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<Resource<UserDTO>> getUserById(@PathVariable final Long id) {
 
-        if(log.isDebugEnabled()) {
-
-            log.debug(UserController.class.getName() + ":(getUserById): ID value in path: " + id  + "\n");
-        }
-
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
     @GetMapping("/name/{username}")
     public ResponseEntity<Resource<UserDTO>> getUserByUsername(@PathVariable final String username) {
 
-        if(log.isDebugEnabled()) {
-
-            log.debug(UserController.class.getName() +
-                    ":(getUserByUsername): Name value in path: " + username  + "\n");
-        }
-
         return ResponseEntity.ok(userService.getUserByUsername(username));
     }
 
     @PostMapping
     public ResponseEntity<Resource<UserDTO>> createNewUser(@RequestBody @Valid final UserDTO userDTO) {
-
-        if(log.isDebugEnabled()) {
-
-            log.debug(UserController.class.getName() +
-                    ":(createNewUser):User passed in path:" + userDTO.toString() + "\n");
-        }
 
         final Resource<UserDTO> userDTOResource = userService.createNewUser(userDTO);
 
@@ -94,13 +65,6 @@ public class UserController {
     public ResponseEntity<Resource<UserDTO>> updateUser(@PathVariable final Long id,
                                                         @RequestBody @Valid final UserDTO userDTO) {
 
-        if(log.isDebugEnabled()) {
-
-            log.debug(OrderController.class.getName() +
-                    ":(updateUser): Id value in path: " + id + "," +
-                    " User passed in path:" + userDTO.toString() + "\n");
-        }
-
         return ResponseEntity.ok(userService.updateUser(id, userDTO));
     }
 
@@ -108,23 +72,11 @@ public class UserController {
     public ResponseEntity<Resource<UserDTO>> patchUser(@PathVariable final Long id,
                                                        @RequestBody @Valid final UserDTO userDTO) {
 
-        if(log.isDebugEnabled()) {
-
-            log.debug(OrderController.class.getName() +
-                    ":(patchUser): Id value in path: " + id + "," +
-                    " User passed in path:" + userDTO.toString() + "\n");
-        }
-
         return ResponseEntity.ok(userService.patchUser(id, userDTO));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUserById(@PathVariable final Long id) {
-
-        if(log.isDebugEnabled()) {
-
-            log.debug(UserController.class.getName() + ":(deleteUserById): ID value in path: " + id  + "\n");
-        }
 
         userService.deleteUserById(id);
 
@@ -134,24 +86,12 @@ public class UserController {
     @GetMapping("/{id}/order")
     public  ResponseEntity<Resource<OrderDTO>> getOrder(@PathVariable final Long id) {
 
-        if(log.isDebugEnabled()) {
-
-            log.debug(UserController.class.getName() + ":(getOrder): ID value in path: " + id  + "\n");
-        }
-
         return ResponseEntity.ok(userService.getOrderById(id));
     }
 
     @PostMapping("/{id}/order")
     public ResponseEntity<Resource<OrderDTO>> addNewOrder(@PathVariable final Long id,
                                                                  @RequestBody @Valid final OrderDTO orderDTO) {
-
-        if(log.isDebugEnabled()) {
-
-            log.debug(UserController.class.getName() +
-                    ":(addNewOrder): Id value in path: " + id + "," +
-                    " order passed in path:" + orderDTO.toString() + "\n");
-        }
 
         final Resource<OrderDTO> orderDTOResource =
                 userService.createNewOrder(id, orderDTO);
@@ -168,12 +108,6 @@ public class UserController {
     @GetMapping("/{id}/products")
     public  ResponseEntity<Resources<Resource<ProductDTO>>> getAllUsersProducts(@PathVariable final Long id) {
 
-        if(log.isDebugEnabled()) {
-
-            log.debug(UserController.class.getName()
-                    + ":(getAllUsersProducts):Running method.\n");
-        }
-
         return ResponseEntity.ok(userService.getAllProducts(id));
     }
 
@@ -181,13 +115,6 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Resource<ProductDTO>> addNewProductToUser(@PathVariable final Long id,
                                                                     @RequestBody @Valid final ProductDTO productDTO) {
-
-        if(log.isDebugEnabled()) {
-
-            log.debug(UserController.class.getName() +
-                    ":(addNewProductToUser): Id value in path: " + id + "," +
-                    " product passed in path:" + productDTO.toString() + "\n");
-        }
 
         final Resource<ProductDTO> productDTOResource =
                 userService.createNewProduct(id, productDTO);
