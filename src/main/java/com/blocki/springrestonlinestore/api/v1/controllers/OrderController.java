@@ -3,7 +3,6 @@ package com.blocki.springrestonlinestore.api.v1.controllers;
 import com.blocki.springrestonlinestore.api.v1.models.OrderDTO;
 import com.blocki.springrestonlinestore.api.v1.models.OrderItemDTO;
 import com.blocki.springrestonlinestore.core.services.OrderService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
@@ -15,7 +14,6 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import javax.validation.Valid;
 import java.net.URI;
 
-@Slf4j
 @RestController
 @RequestMapping(value = OrderController.ORDERS_BASIC_URL, produces = "application/hal+json")
 public class OrderController {
@@ -27,35 +25,17 @@ public class OrderController {
     @Autowired
     public OrderController(OrderService orderService) {
 
-        if(log.isDebugEnabled()) {
-
-            log.debug(OrderController.class.getName() + ":(constructor):Injected order service:\n"
-                    + orderService.toString() + "\n");
-        }
-
         this.orderService = orderService;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Resource<OrderDTO>> getOrderById(@PathVariable final Long id) {
 
-        if(log.isDebugEnabled()) {
-
-            log.debug(OrderController.class.getName()
-                    + ":(getOrderById): ID value in path: " + id  + "\n");
-        }
-
         return ResponseEntity.ok(orderService.getOrderById(id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteOrderById(@PathVariable final Long id) {
-
-        if(log.isDebugEnabled()) {
-
-            log.debug(OrderController.class.getName()
-                    + ":(deleteOrderById): Id value in path: " + id + "\n");
-        }
 
         orderService.deleteOrderById(id);
 
@@ -64,12 +44,6 @@ public class OrderController {
 
     @PostMapping("/{id}/actions/purchase")
     public ResponseEntity<Resource<OrderDTO>> createPurchaseRequest(@PathVariable final Long id) {
-
-        if(log.isDebugEnabled()) {
-
-            log.debug(OrderController.class.getName()
-                    + ":(createPurchaseRequest): Id value in path: " + id + "\n");
-        }
 
         final Resource<OrderDTO> orderDTOResource = orderService.createPurchaseRequest(id);
 
@@ -85,25 +59,12 @@ public class OrderController {
     public ResponseEntity<Resources<Resource<OrderItemDTO>>> getAllOrderItems(
             @PathVariable final Long id) {
 
-        if(log.isDebugEnabled()) {
-
-            log.debug(OrderController.class.getName()
-                    + ":(getAllOrderItems): Id value in path: " + id + "\n");
-        }
-
        return ResponseEntity.ok(orderService.getAllOrderItems(id));
     }
 
     @PostMapping(value = "/{id}/orderItems", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Resource<OrderItemDTO>> createNewOrderItem(
             @PathVariable final Long id, @RequestBody @Valid final OrderItemDTO orderItemDTO) {
-
-        if(log.isDebugEnabled()) {
-
-            log.debug(OrderController.class.getName() +
-                    ":(createNewOrderItem): Id value in path: " + id + "," +
-                    " order item passed in path:" + orderItemDTO.toString() + "\n");
-        }
 
         final Resource<OrderItemDTO> orderItemDTOResource =
                 orderService.createNewOrderItem(id, orderItemDTO);

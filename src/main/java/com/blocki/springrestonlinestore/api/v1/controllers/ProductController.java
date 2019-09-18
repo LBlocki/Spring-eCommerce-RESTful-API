@@ -23,34 +23,17 @@ public class ProductController {
     @Autowired
     public ProductController(ProductService productService) {
 
-        if(log.isDebugEnabled()) {
-
-            log.debug(ProductController.class.getName() + ":(constructor):Injected product service:\n"
-                    + productService.toString() + "\n");
-        }
-
         this.productService = productService;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Resource<ProductDTO>> getProductById(@PathVariable final Long id) {
 
-        if(log.isDebugEnabled()) {
-
-            log.debug(ProductController.class.getName() + ":(getProductById): ID value in path: " + id  + "\n");
-        }
-
         return ResponseEntity.ok(productService.getProductById(id));
     }
 
     @GetMapping("/name/{productName}")
     public ResponseEntity<Resource<ProductDTO>> getProductByName(@PathVariable final String productName) {
-
-        if(log.isDebugEnabled()) {
-
-            log.debug(ProductController.class.getName() +
-                    ":(getProductByName): Name value in path: " + productName  + "\n");
-        }
 
         return ResponseEntity.ok(productService.getProductByName(productName));
     }
@@ -59,23 +42,11 @@ public class ProductController {
     public ResponseEntity<Resource<ProductDTO>> patchProduct(@PathVariable final Long id,
                                                              @RequestBody @Valid final ProductDTO productDTO) {
 
-        if(log.isDebugEnabled()) {
-
-            log.debug(ProductController.class.getName() +
-                    ":(patchProduct): Id value in path: " + id + "," +
-                    " Product passed in path:" + productDTO.toString() + "\n");
-        }
-
         return ResponseEntity.ok(productService.patchProduct(id, productDTO));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProductById(@PathVariable final Long id) {
-
-        if(log.isDebugEnabled()) {
-
-            log.debug(ProductController.class.getName() + ":(deleteProductById): Id value in path: " + id + "\n");
-        }
 
         productService.deleteProductById(id);
 
