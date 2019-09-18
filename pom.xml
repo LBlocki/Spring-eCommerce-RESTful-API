@@ -137,11 +137,9 @@
 				<configuration>
 				<rules>
 				<rule>
-					<instrumentation>
-						<ignoreMethodAnnotations>
-							<ignoreMethodAnnotation>lombok.Generated</ignoreMethodAnnotation>
-						</ignoreMethodAnnotations>
-					</instrumentation>
+					<ignores>
+						<ignore>lombok.extern.slf4j.Slf4j</ignore>
+					</ignores>
 				</rule>
 				</rules>
 				</configuration>
