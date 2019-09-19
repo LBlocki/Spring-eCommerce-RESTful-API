@@ -1,5 +1,5 @@
-= My REST API
-v{version}, Tom Hombergs, {date}
+= E-commerce REST-API
+v{1}, Łukasz Błocki, {19.09.2019}
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
@@ -11,18 +11,158 @@ v{version}, Tom Hombergs, {date}
 
 [introduction]
 == Introduction
-... some warm introductory words... .
+Hi, this is my api documentation for 1 version of the project.
 
-== Creating a Project
+== Calls concerning User
 
-=== Example Request
-include::{snippets}/api/v1/categories/http-request.adoc[]
+=== Getting list of all users
+.request
+include::{snippets}/users/getAllUsers/http-request.adoc[]
+.response
+include::{snippets}/users/getAllUsers/http-response.adoc[]
 
-=== Example Response
-include::{snippets}/api/v1/categories/http-response.adoc[]
+=== Getting user using user's id
+.request
+include::{snippets}/users/getUserById/http-request.adoc[]
+.response
+include::{snippets}/users/getUserById/http-response.adoc[]
 
-=== Example Request 2
-include::{snippets}/api/v1/categories/2/http-request.adoc[]
+=== Getting user using user's username
+.request
+include::{snippets}/users/getUserByUsername/http-request.adoc[]
+.response
+include::{snippets}/users/getUserByUsername/http-response.adoc[]
 
-=== Example Response 2
-include::{snippets}/api/v1/categories/2/http-response.adoc[]
+=== Creating new user
+.request
+include::{snippets}/users/createNewUser/http-request.adoc[]
+.response
+include::{snippets}/users/createNewUser/http-response.adoc[]
+
+=== Updating user
+.request
+include::{snippets}/users/updateUser/http-request.adoc[]
+.response
+include::{snippets}/users/updateUser/http-response.adoc[]
+
+=== Patching user
+.request
+include::{snippets}/users/patchUser/http-request.adoc[]
+.response
+include::{snippets}/users/patchUser/http-response.adoc[]
+
+=== Deleting user
+.request
+include::{snippets}/users/deleteUserById/http-request.adoc[]
+.response
+include::{snippets}/users/deleteUserById/http-response.adoc[]
+
+=== Getting user's order
+.request
+include::{snippets}/users/getOrder/http-request.adoc[]
+.response
+include::{snippets}/users/getOrder/http-response.adoc[]
+
+=== Creating new order for the user
+.request
+include::{snippets}/users/addNewOrder/http-request.adoc[]
+.response
+include::{snippets}/users/addNewOrder/http-response.adoc[]
+
+=== Getting user's products
+.request
+include::{snippets}/users/getAllUsersProducts/http-request.adoc[]
+.response
+include::{snippets}/users/getAllUsersProducts/http-response.adoc[]
+
+=== Creating new product for the user
+.request
+include::{snippets}/users/addNewProductToUser/http-request.adoc[]
+.response
+include::{snippets}/users/addNewProductToUser/http-response.adoc[]
+
+== Calls concerning Product
+
+=== Getting product using product's id
+.request
+include::{snippets}/products/getProductById/http-request.adoc[]
+.response
+include::{snippets}/products/getProductById/http-response.adoc[]
+
+=== Getting product using product's name
+.request
+include::{snippets}/products/getProductByName/http-request.adoc[]
+.response
+include::{snippets}/products/getProductByName/http-response.adoc[]
+
+=== Patching product
+.request
+include::{snippets}/products/patchProduct/http-request.adoc[]
+.response
+include::{snippets}/products/patchProduct/http-response.adoc[]
+
+=== Deleting product
+.request
+include::{snippets}/products/deleteProductById/http-request.adoc[]
+.response
+include::{snippets}/products/deleteProductById/http-response.adoc[]
+
+== Calls concerning Order
+
+=== Getting order using order's id
+.request
+include::{snippets}/orders/getOrderById/http-request.adoc[]
+.response
+include::{snippets}/orders/getOrderById/http-response.adoc[]
+
+=== Deleting order
+.request
+include::{snippets}/orders/deleteOrderById/http-request.adoc[]
+.response
+include::{snippets}/orders/deleteOrderById/http-response.adoc[]
+
+=== Creating purchase request for the order
+.request
+include::{snippets}/orders/createPurchaseRequest/http-request.adoc[]
+.response
+include::{snippets}/orders/createPurchaseRequest/http-response.adoc[]
+
+=== Getting list of all order items
+.request
+include::{snippets}/orders/getAllOrderItems/http-request.adoc[]
+.response
+include::{snippets}/orders/getAllOrderItems/http-response.adoc[]
+
+=== Creating new order item
+.request
+include::{snippets}/orders/createNewOrderItem/http-request.adoc[]
+.response
+include::{snippets}/orders/createNewOrderItem/http-response.adoc[]
+
+== Calls concerning Order Item
+
+=== Getting order item using order item's id
+.request
+include::{snippets}/orderItems/getOrderItemById/http-request.adoc[]
+.response
+include::{snippets}/orderItems/getOrderItemById/http-response.adoc[]
+
+=== Deleting order item
+.request
+include::{snippets}/orderItems/deleteOrderItemById/http-request.adoc[]
+.response
+include::{snippets}/orderItems/deleteOrderItemById/http-response.adoc[]
+
+== Calls concerning Category
+
+=== Getting list of all categories
+.request
+include::{snippets}/categories/getAllCategories/http-request.adoc[]
+.response
+include::{snippets}/categories/getAllCategories/http-response.adoc[]
+
+=== Getting category using category's id
+.request
+include::{snippets}/categories/getCategoryById/http-request.adoc[]
+.response
+include::{snippets}/categories/getCategoryById/http-response.adoc[]

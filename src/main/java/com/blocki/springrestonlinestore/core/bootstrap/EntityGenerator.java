@@ -46,7 +46,7 @@ class EntityGenerator {
     private static final Order.OrderStatus[] orderStatuses ={ Order.OrderStatus.ACTIVE, Order.OrderStatus.COMPLETED};
 
     //order items data
-    private static final Long[] orderItemIds = {1L, 2L, 3L, 4L, 5L};
+    private static final Long[] orderItemIds = {1L};
     private static final Integer[] quantities ={ 10, 54, 1, 9, 17};
     private static final BigDecimal[] totalCosts ={ new BigDecimal(20.1), new BigDecimal(50.62),
             new BigDecimal(192.12), new BigDecimal(64.69), new BigDecimal(01.99)};

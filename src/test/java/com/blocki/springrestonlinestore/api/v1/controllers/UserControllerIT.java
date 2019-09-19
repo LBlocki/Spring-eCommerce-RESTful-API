@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.MediaTypes;
@@ -24,6 +25,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import javax.transaction.Transactional;
 
 import static org.hamcrest.Matchers.is;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -32,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@AutoConfigureRestDocs
 public class UserControllerIT {
 
     private static final String USERS_BASIC_URL = "/api/v1/users";
@@ -66,7 +69,8 @@ public class UserControllerIT {
                 .accept(MediaTypes.HAL_JSON_UTF8))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$._embedded.users[0].id", is(testUser.getId().intValue())));
+                .andExpect(jsonPath("$._embedded.users[0].id", is(testUser.getId().intValue())))
+                .andDo(document("users/getAllUsers"));
     }
 
     @Test
@@ -87,7 +91,8 @@ public class UserControllerIT {
                 .andExpect(jsonPath("$.last_name", is(testUser.getLastName())))
                 .andExpect(jsonPath("$.phone_number", is(testUser.getPhoneNumber())))
                 .andExpect(jsonPath("$.creation_date", is(testUser.getCreationDate().toString())))
-                .andExpect(jsonPath("$._links.self.href", is("http://localhost/api/v1/users/1")));
+                .andExpect(jsonPath("$._links.self.href", is("http://localhost:8080/api/v1/users/1")))
+                .andDo(document("users/getUserById"));
     }
 
     @Test
@@ -108,7 +113,8 @@ public class UserControllerIT {
                 .andExpect(jsonPath("$.last_name", is(testUser.getLastName())))
                 .andExpect(jsonPath("$.phone_number", is(testUser.getPhoneNumber())))
                 .andExpect(jsonPath("$.creation_date", is(testUser.getCreationDate().toString())))
-                .andExpect(jsonPath("$._links.self.href", is("http://localhost/api/v1/users/1")));
+                .andExpect(jsonPath("$._links.self.href", is("http://localhost:8080/api/v1/users/1")))
+                .andDo(document("users/getUserByUsername"));
     }
 
     @Test
@@ -126,7 +132,8 @@ public class UserControllerIT {
                 .content(new ObjectMapper().writeValueAsBytes(testUser))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_UTF8_VALUE))
-                .andExpect(MockMvcResultMatchers.status().isCreated());
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andDo(document("users/createNewUser"));
     }
 
     @Test
@@ -138,7 +145,8 @@ public class UserControllerIT {
                 .content(new ObjectMapper().writeValueAsBytes(testUser))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_UTF8_VALUE))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(document("users/updateUser"));
     }
 
     @Test
@@ -150,7 +158,8 @@ public class UserControllerIT {
                 .content(new ObjectMapper().writeValueAsBytes(testUser))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_UTF8_VALUE))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(document("users/patchUser"));
     }
 
     @Test
@@ -158,7 +167,8 @@ public class UserControllerIT {
 
         mockMvc.perform(MockMvcRequestBuilders.delete(USERS_BASIC_URL + "/" + testUser.getId())
                 .accept(MediaTypes.HAL_JSON_UTF8))
-                .andExpect(MockMvcResultMatchers.status().isNoContent());
+                .andExpect(MockMvcResultMatchers.status().isNoContent())
+                .andDo(document("users/deleteUserById"));
     }
 
     @Test
@@ -168,7 +178,8 @@ public class UserControllerIT {
                 .accept(MediaTypes.HAL_JSON_UTF8))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.id", is(testUser.getOrderDTO().getId().intValue())));
+                .andExpect(jsonPath("$.id", is(testUser.getOrderDTO().getId().intValue())))
+                .andDo(document("users/getOrder"));
     }
 
     @Test
@@ -182,7 +193,8 @@ public class UserControllerIT {
                 .content(new ObjectMapper().writeValueAsBytes(testUser.getOrderDTO()))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_UTF8_VALUE))
-                .andExpect(MockMvcResultMatchers.status().isCreated());
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andDo(document("users/addNewOrder"));
     }
 
     @Test
@@ -193,7 +205,8 @@ public class UserControllerIT {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("$._embedded.products[0].id",
-                        is(testUser.getProductDTOs().get(0).getId().intValue())));
+                        is(testUser.getProductDTOs().get(0).getId().intValue())))
+                .andDo(document("users/getAllUsersProducts"));
     }
 
     @Test
@@ -207,6 +220,7 @@ public class UserControllerIT {
                 .content(new ObjectMapper().writeValueAsBytes(testUser.getProductDTOs().get(0)))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_UTF8_VALUE))
-                .andExpect(MockMvcResultMatchers.status().isCreated());
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andDo(document("users/addNewProductToUser"));
     }
 }
