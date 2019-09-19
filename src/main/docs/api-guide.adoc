@@ -1,5 +1,5 @@
-= My REST API
-v{version}, Tom Hombergs, {date}
+= E-commerce REST-API
+v{1}, Łukasz Błocki, {19.09.2019}
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
@@ -11,18 +11,73 @@ v{version}, Tom Hombergs, {date}
 
 [introduction]
 == Introduction
-... some warm introductory words... .
+Hi, this is my api documentation for 1 version of the project.
 
-== Creating a Project
+== Calls concerning user
 
-=== Example Request
-include::{snippets}/api/v1/categories/http-request.adoc[]
+=== Getting list of users
+.request
+include::{snippets}/users/getAllUsers/http-request.adoc[]
+.response
+include::{snippets}/users/getAllUsers/http-response.adoc[]
 
-=== Example Response
-include::{snippets}/api/v1/categories/http-response.adoc[]
+=== Getting user using user's id
+.request
+include::{snippets}/users/getUserById/http-request.adoc[]
+.response
+include::{snippets}/users/getUserById/http-response.adoc[]
 
-=== Example Request 2
-include::{snippets}/api/v1/categories/2/http-request.adoc[]
+=== Getting user using user's username
+.request
+include::{snippets}/users/getUserByUsername/http-request.adoc[]
+.response
+include::{snippets}/users/getUserByUsername/http-response.adoc[]
 
-=== Example Response 2
-include::{snippets}/api/v1/categories/2/http-response.adoc[]
+=== Creating new user
+.request
+include::{snippets}/users/createNewUser/http-request.adoc[]
+.response
+include::{snippets}/users/createNewUser/http-response.adoc[]
+
+=== Updating user
+.request
+include::{snippets}/users/updateUser/http-request.adoc[]
+.response
+include::{snippets}/users/updateUser/http-response.adoc[]
+
+=== Patching user
+.request
+include::{snippets}/users/patchUser/http-request.adoc[]
+.response
+include::{snippets}/users/patchUser/http-response.adoc[]
+
+=== Deleting user
+.request
+include::{snippets}/users/deleteUserById/http-request.adoc[]
+.response
+include::{snippets}/users/deleteUserById/http-response.adoc[]
+
+=== Getting user's order
+.request
+include::{snippets}/users/getOrder/http-request.adoc[]
+.response
+include::{snippets}/users/getOrder/http-response.adoc[]
+
+=== Creating new order for the user
+.request
+include::{snippets}/users/addNewOrder/http-request.adoc[]
+.response
+include::{snippets}/users/addNewOrder/http-response.adoc[]
+
+=== Getting user's products
+.request
+include::{snippets}/users/getAllUsersProducts/http-request.adoc[]
+.response
+include::{snippets}/users/getAllUsersProducts/http-response.adoc[]
+
+=== Creating new product for the user
+.request
+include::{snippets}/users/addNewProductToUser/http-request.adoc[]
+.response
+include::{snippets}/users/addNewProductToUser/http-response.adoc[]
+
