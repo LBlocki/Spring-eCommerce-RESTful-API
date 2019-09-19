@@ -64,7 +64,7 @@ public class ProductControllerIT {
                 .andExpect(jsonPath("$.category.id", is(testProduct.getCategoryDTO().getId().intValue())))
                 .andExpect(jsonPath("$.product_status", is(testProduct.getProductStatus().toString())))
                 .andExpect(jsonPath("$.creation_date", is(testProduct.getCreationDate().toString())))
-                .andExpect(jsonPath("$._links.self.href", is("http://localhost/api/v1/products/1")))
+                .andExpect(jsonPath("$._links.self.href", is("http://localhost:8080/api/v1/products/1")))
                 .andDo(document("products/getProductById"));
 
     }
@@ -84,7 +84,7 @@ public class ProductControllerIT {
                 .andExpect(jsonPath("$.category.id", is(testProduct.getCategoryDTO().getId().intValue())))
                 .andExpect(jsonPath("$.product_status", is(testProduct.getProductStatus().toString())))
                 .andExpect(jsonPath("$.creation_date", is(testProduct.getCreationDate().toString())))
-                .andExpect(jsonPath("$._links.self.href", is("http://localhost/api/v1/products/1")))
+                .andExpect(jsonPath("$._links.self.href", is("http://localhost:8080/api/v1/products/1")))
                 .andDo(document("products/getProductByName"));
     }
 
