@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.MediaTypes;
@@ -21,6 +22,7 @@ import javax.transaction.Transactional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -28,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @Transactional
+@AutoConfigureRestDocs
 public class ProductControllerIT {
 
     private static final String PRODUCTS_BASIC_URL = "/api/v1/products";
@@ -61,7 +64,8 @@ public class ProductControllerIT {
                 .andExpect(jsonPath("$.category.id", is(testProduct.getCategoryDTO().getId().intValue())))
                 .andExpect(jsonPath("$.product_status", is(testProduct.getProductStatus().toString())))
                 .andExpect(jsonPath("$.creation_date", is(testProduct.getCreationDate().toString())))
-                .andExpect(jsonPath("$._links.self.href", is("http://localhost/api/v1/products/1")));
+                .andExpect(jsonPath("$._links.self.href", is("http://localhost/api/v1/products/1")))
+                .andDo(document("products/getProductById"));
 
     }
 
@@ -80,7 +84,8 @@ public class ProductControllerIT {
                 .andExpect(jsonPath("$.category.id", is(testProduct.getCategoryDTO().getId().intValue())))
                 .andExpect(jsonPath("$.product_status", is(testProduct.getProductStatus().toString())))
                 .andExpect(jsonPath("$.creation_date", is(testProduct.getCreationDate().toString())))
-                .andExpect(jsonPath("$._links.self.href", is("http://localhost/api/v1/products/1")));
+                .andExpect(jsonPath("$._links.self.href", is("http://localhost/api/v1/products/1")))
+                .andDo(document("products/getProductByName"));
     }
 
     @Test
@@ -92,7 +97,8 @@ public class ProductControllerIT {
                 .content(new ObjectMapper().writeValueAsBytes(testProduct))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_UTF8_VALUE))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(document("products/patchProduct"));
     }
 
     @Test
@@ -100,6 +106,7 @@ public class ProductControllerIT {
 
         mockMvc.perform(MockMvcRequestBuilders.delete(PRODUCTS_BASIC_URL + "/" + testProduct.getId())
                 .accept(MediaTypes.HAL_JSON_UTF8))
-                .andExpect(MockMvcResultMatchers.status().isNoContent());
+                .andExpect(MockMvcResultMatchers.status().isNoContent())
+                .andDo(document("products/deleteProductById"));
     }
 }

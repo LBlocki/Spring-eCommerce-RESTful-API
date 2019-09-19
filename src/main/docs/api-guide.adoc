@@ -81,3 +81,33 @@ include::{snippets}/users/addNewProductToUser/http-request.adoc[]
 .response
 include::{snippets}/users/addNewProductToUser/http-response.adoc[]
 
+== Calls concerning product
+
+=== Getting product using product's id
+.request
+include::{snippets}/products/getProductById/http-request.adoc[]
+.response
+include::{snippets}/products/getProductById/http-response.adoc[]
+
+=== Getting product using product's name
+.request
+include::{snippets}/products/getProductByName/http-request.adoc[]
+.response
+include::{snippets}/products/getProductByName/http-response.adoc[]
+
+=== Patching product
+.request
+include::{snippets}/products/patchProduct/http-request.adoc[]
+.response
+include::{snippets}/products/patchProduct/http-response.adoc[]
+
+=== Deleting product
+.request
+include::{snippets}/products/deleteProductById/addNewProductToUser/http-request.adoc[]
+.response
+include::{snippets}/products/deleteProductById/addNewProductToUser/http-response.adoc[]
+
+== Calls concerning order
+
+
+
