@@ -103,11 +103,39 @@ include::{snippets}/products/patchProduct/http-response.adoc[]
 
 === Deleting product
 .request
-include::{snippets}/products/deleteProductById/addNewProductToUser/http-request.adoc[]
+include::{snippets}/products/deleteProductById/http-request.adoc[]
 .response
-include::{snippets}/products/deleteProductById/addNewProductToUser/http-response.adoc[]
+include::{snippets}/products/deleteProductById/http-response.adoc[]
 
 == Calls concerning order
 
+=== Getting order using order's id
+.request
+include::{snippets}/orders/getOrderById/http-request.adoc[]
+.response
+include::{snippets}/orders/getOrderById/http-response.adoc[]
 
+=== Deleting order
+.request
+include::{snippets}/orders/deleteOrderById/http-request.adoc[]
+.response
+include::{snippets}/orders/deleteOrderById/http-response.adoc[]
+
+=== Creating purchase request for the order
+.request
+include::{snippets}/orders/createPurchaseRequest/http-request.adoc[]
+.response
+include::{snippets}/orders/createPurchaseRequest/http-response.adoc[]
+
+=== Getting all order items
+.request
+include::{snippets}/orders/getAllOrderItems/http-request.adoc[]
+.response
+include::{snippets}/orders/getAllOrderItems/http-response.adoc[]
+
+=== Creating new order item
+.request
+include::{snippets}/orders/createNewOrderItem/http-request.adoc[]
+.response
+include::{snippets}/orders/createNewOrderItem/http-response.adoc[]
 
