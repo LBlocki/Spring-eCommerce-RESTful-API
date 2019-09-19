@@ -13,9 +13,9 @@ v{1}, Łukasz Błocki, {19.09.2019}
 == Introduction
 Hi, this is my api documentation for 1 version of the project.
 
-== Calls concerning user
+== Calls concerning User
 
-=== Getting list of users
+=== Getting list of all users
 .request
 include::{snippets}/users/getAllUsers/http-request.adoc[]
 .response
@@ -81,7 +81,7 @@ include::{snippets}/users/addNewProductToUser/http-request.adoc[]
 .response
 include::{snippets}/users/addNewProductToUser/http-response.adoc[]
 
-== Calls concerning product
+== Calls concerning Product
 
 === Getting product using product's id
 .request
@@ -107,7 +107,7 @@ include::{snippets}/products/deleteProductById/http-request.adoc[]
 .response
 include::{snippets}/products/deleteProductById/http-response.adoc[]
 
-== Calls concerning order
+== Calls concerning Order
 
 === Getting order using order's id
 .request
@@ -127,7 +127,7 @@ include::{snippets}/orders/createPurchaseRequest/http-request.adoc[]
 .response
 include::{snippets}/orders/createPurchaseRequest/http-response.adoc[]
 
-=== Getting all order items
+=== Getting list of all order items
 .request
 include::{snippets}/orders/getAllOrderItems/http-request.adoc[]
 .response
@@ -139,3 +139,30 @@ include::{snippets}/orders/createNewOrderItem/http-request.adoc[]
 .response
 include::{snippets}/orders/createNewOrderItem/http-response.adoc[]
 
+== Calls concerning Order Item
+
+=== Getting order item using order item's id
+.request
+include::{snippets}/orderItems/getOrderItemById/http-request.adoc[]
+.response
+include::{snippets}/orderItems/getOrderItemById/http-response.adoc[]
+
+=== Deleting order item
+.request
+include::{snippets}/orderItems/deleteOrderItemById/http-request.adoc[]
+.response
+include::{snippets}/orderItems/deleteOrderItemById/http-response.adoc[]
+
+== Calls concerning Category
+
+=== Getting list of all categories
+.request
+include::{snippets}/categories/getAllCategories/http-request.adoc[]
+.response
+include::{snippets}/categories/getAllCategories/http-response.adoc[]
+
+=== Getting category using category's id
+.request
+include::{snippets}/categories/getCategoryById/http-request.adoc[]
+.response
+include::{snippets}/categories/getCategoryById/http-response.adoc[]
