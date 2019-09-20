@@ -18,7 +18,7 @@ You can manage users, orders and products using CRUD operations using RESTful AP
 
    ### Using Maven ( remember that you need to be in eCommerce-server directory when excecuting maven commands )  
    
-   1.**Clone repository**  
+   1. **Clone repository**  
         ```bash  
         https://github.com/LBlocki/Spring-eCommerce-example.git  
         ```  
@@ -54,7 +54,7 @@ You can manage users, orders and products using CRUD operations using RESTful AP
         
    ### Using Docker  
    
-   1.**Clone repository**  
+   1. **Clone repository**  
         ```bash  
         https://github.com/LBlocki/Spring-eCommerce-example.git  
         ```  
