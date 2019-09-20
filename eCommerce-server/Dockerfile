@@ -1,5 +1,5 @@
 #### Stage 1: Build the application
-FROM openjdk:8u171-jdk as build
+FROM openjdk:8-jdk-alpine as build
 
 # Set the current working directory inside the image
 WORKDIR /app
@@ -14,6 +14,7 @@ COPY pom.xml .
 # Build all the dependencies in preparation to go offline.
 # This is a separate step so the dependencies will be cached unless
 # the pom.xml file has changed.
+
 RUN ./mvnw dependency:go-offline -B
 
 # Copy the project source
