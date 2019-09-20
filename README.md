@@ -24,6 +24,7 @@ You can manage users, orders and products using CRUD operations using RESTful AP
         ```  
         
    2. **Choose database**  
+   
         **If you wish to persist data use MySQL database:**  
         Create new database:  
         ```bash  
@@ -35,11 +36,12 @@ You can manage users, orders and products using CRUD operations using RESTful AP
         ```  
         Feel free to configure them. Also if you dont want
         application to add initial data at runtime change active profile from dev to anything else  
+        
         **Using H2 embedded database:**  
         It is fast and auto configured but does not persist data after shut down. Also if you dont want
         application to add initial data at runtime change active profile from dev to anything else  
         
-    3. **Excecute**  
+   3. **Excecute**  
         Run the application using maven command:  
         ```bash  
         mvn spring-boot:run  
