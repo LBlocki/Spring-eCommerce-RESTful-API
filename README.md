@@ -13,12 +13,16 @@ You can manage users, orders and products using CRUD operations using RESTful AP
    ```bash
    {root}/eCommerce-server/target/generated-docs/api-guide.html
    ```  
+   
 ## Steps to setup server side of the application ( eCommerce-server ) - for now it is entire application  
+
    ### Using Maven ( remember that you need to be in eCommerce-server directory when excecuting maven commands )  
+   
    1.**Clone repository**  
         ```bash  
         https://github.com/LBlocki/Spring-eCommerce-example.git  
         ```  
+        
    2. **Choose database**  
         **If you wish to persist data use MySQL database:**  
         Create new database:  
@@ -34,6 +38,7 @@ You can manage users, orders and products using CRUD operations using RESTful AP
         **Using H2 embedded database:**  
         It is fast and auto configured but does not persist data after shut down. Also if you dont want
         application to add initial data at runtime change active profile from dev to anything else  
+        
     3. **Excecute**  
         Run the application using maven command:  
         ```bash  
@@ -44,11 +49,14 @@ You can manage users, orders and products using CRUD operations using RESTful AP
         mvn package  
         java -jar target/{name_of_snapshot}.jar  
         ```  
+        
    ### Using Docker  
+   
    1.**Clone repository**  
         ```bash  
         https://github.com/LBlocki/Spring-eCommerce-example.git  
         ```  
+        
    2. **Choose database**  
         Docker is configured to use MySQL automatically so make sure to uncomment properties under  
         ```bash  
@@ -56,6 +64,7 @@ You can manage users, orders and products using CRUD operations using RESTful AP
         ```  
         Feel free to configure them. Also if you dont want
         application to add initial data at runtime change active profile from dev to anything else  
+        
    3. **Excecute**  
         Make sure you are in root directory. Excecute following commands  
         ```bash  
